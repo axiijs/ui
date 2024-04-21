@@ -6,7 +6,7 @@ import {
     PropTypes,
     atom,
     onEnterKey,
-    ModalContext, Atom,
+    ModalContext, Atom, reactiveSize, reactivePosition, SizeObject, PositionObject,
 } from "axii";
 
 
@@ -16,7 +16,7 @@ const SelectPropTypes = {
     options: PropTypes.rxList<any>().default(() => new RxList([])).isRequired
 }
 
-export function Select(props: ToAllowFixedPropsType<typeof SelectPropTypes> , {createElement, createPortal, context, createRxRectRef}: RenderContext) {
+export function Select(props: ToAllowFixedPropsType<typeof SelectPropTypes> , {createElement, createPortal, context, createStateFromRef}: RenderContext) {
     const {value, options, placeholder} = props as ToPropsType<typeof SelectPropTypes>
 
     const uniqueMatch = options.createUniqueMatch(false, value)
@@ -25,19 +25,21 @@ export function Select(props: ToAllowFixedPropsType<typeof SelectPropTypes> , {c
 
     const dropdowmViewport = context.get(ModalContext)?.viewport || window
     const dropdowmContainer = context.get(ModalContext)?.container || document.body
-    const viewportRectRef = createRxRectRef({size:true, target:dropdowmViewport})
+    const viewportSize = createStateFromRef(reactiveSize, undefined, dropdowmViewport)
 
     const dropdownBackgroundStyle = () => ({
         position: 'fixed',
         top: 0,
         left: 0,
-        width: viewportRectRef.current?.width,
-        height: viewportRectRef.current?.height,
+        width: viewportSize()?.width,
+        height: viewportSize()?.height,
         backgroundColor: 'transparent',
+        background: 'rgba(0,0,0,0.5)',
     })
 
     // TODO position 改成 manual
-    const rootRectRef = createRxRectRef({size: true, position: {type:'interval', duration:100}})
+    const rootSize = createStateFromRef<SizeObject>(reactiveSize)
+    const rootPosition = createStateFromRef<PositionObject>(reactivePosition, {type:'interval', duration:100})
     const optionsStyle = (() => {
         // rootRectRef.sync!()
         return {
@@ -46,8 +48,8 @@ export function Select(props: ToAllowFixedPropsType<typeof SelectPropTypes> , {c
             flexDirection: 'column',
             gap: 10,
             padding: 10,
-            top: rootRectRef.current?.top! + rootRectRef.current?.height! + 10,
-            left: rootRectRef.current?.left,
+            top: rootPosition()?.top! + rootSize()?.height! + 10,
+            left: rootPosition()?.left,
             backgroundColor: 'white',
             border: '1px solid #ccc',
         }
@@ -58,16 +60,43 @@ export function Select(props: ToAllowFixedPropsType<typeof SelectPropTypes> , {c
         optionVisible(false)
     }
 
+    const focusedOption = atom(null)
+
+    const optionNodes = uniqueMatch.map((option: any, selected: Atom<boolean>) => {
+        const focused = atom(false)
+        const hovered = atom(false)
+        const style = () => ({
+            cursor: 'pointer',
+            backgroundColor: focused() ? 'lightblue' : (hovered() ? 'lightgray' : 'white')
+        })
+        return (
+            <div
+                as="option"
+                onClick={() => onSelect(option)}
+                onkeydown={onEnterKey(() => onSelect(option))}
+                onMouseEnter={() => hovered(true)}
+                onMouseLeave={() => hovered(false)}
+                onFocusIn={[() => focused(true), () => focusedOption(option)]}
+                onFocusOut={[() => focused(false), () => focusedOption() === option && focusedOption(null)]}
+                style={style}
+                prop:focused={focused}
+                prop:value={option}
+                prop:selected={selected}
+                prop:optionVisible={optionVisible}
+            >
+                {option}
+            </div>
+        )
+    })
+
     return (
-        <div as="root" rectRef={rootRectRef}>
+        <div as="root" ref={[rootSize.ref, rootPosition.ref]}>
             <div as="displayValue" prop:value={value} prop:placeholder={placeholder} prop:optionVisible={optionVisible} onClick={() => optionVisible(true)}>{() => value() ?? placeholder()}</div>
             {
                 () => optionVisible() ? createPortal((
                     <div as="dropdownBackground" style={dropdownBackgroundStyle()}>
                         <div as="options" style={optionsStyle} prop:value={options}>
-                            {uniqueMatch.map((option: any, selected: Atom<boolean>) => (
-                                <SelectItem as="option" value={option} onSelect={onSelect} selected={selected}>{option}</SelectItem>
-                            ))}
+                            {optionNodes}
                         </div>
                     </div>
                 ), dropdowmContainer) : null
@@ -78,25 +107,3 @@ export function Select(props: ToAllowFixedPropsType<typeof SelectPropTypes> , {c
 
 Select.propTypes = SelectPropTypes
 
-
-type SelectItemProps = {
-    value: any,
-    onSelect: (value: any) => void,
-    selected: Atom<boolean>
-    children?: any
-}
-
-export function SelectItem({value, onSelect, selected, children}: SelectItemProps, {createElement}: RenderContext) {
-    return <div
-        as="item"
-        onClick={() => onSelect(value)}
-        onkeydown={onEnterKey(() => onSelect(value))}
-        prop:value={value}
-        prop:selected={selected}
-    >
-        <span>
-            {children}
-        </span>
-        <span>{() => selected() ? 'selected': ''}</span>
-    </div>
-}
