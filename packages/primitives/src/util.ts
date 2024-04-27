@@ -6,3 +6,13 @@ export function parseChildren(children: any, format:  any) {
         }
     }
 }
+
+export const ensureArray = (value: any) => {
+    return Array.isArray(value) ? value : [value]
+}
+
+export function assert(condition: boolean, message: string ) {
+    if (!condition) {
+        throw new Error(message)
+    }
+}

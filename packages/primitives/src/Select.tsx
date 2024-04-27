@@ -6,7 +6,7 @@ import {
     PropTypes,
     atom,
     onEnterKey,
-    ModalContext, Atom, reactiveSize, reactivePosition, SizeObject, PositionObject,
+    ModalContext, Atom, reactiveSize, reactivePosition, SizeObject, PositionObject, createSelection,
 } from "axii";
 
 
@@ -19,7 +19,7 @@ const SelectPropTypes = {
 export function Select(props: ToAllowFixedPropsType<typeof SelectPropTypes> , {createElement, createPortal, context, createStateFromRef}: RenderContext) {
     const {value, options, placeholder} = props as ToPropsType<typeof SelectPropTypes>
 
-    const uniqueMatch = options.createUniqueMatch(false, value)
+    const optionsWithSelected = createSelection(options, value)
 
     const optionVisible = atom(false)
 
@@ -62,7 +62,7 @@ export function Select(props: ToAllowFixedPropsType<typeof SelectPropTypes> , {c
 
     const focusedOption = atom(null)
 
-    const optionNodes = uniqueMatch.map((option: any, selected: Atom<boolean>) => {
+    const optionNodes = optionsWithSelected.map(([option, selected ]:[any,Atom<boolean> ]) => {
         const focused = atom(false)
         const hovered = atom(false)
         const style = () => ({
