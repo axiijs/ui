@@ -33,8 +33,6 @@ export function Select(props: ToAllowFixedPropsType<typeof SelectPropTypes> , {c
         left: 0,
         width: viewportSize()?.width,
         height: viewportSize()?.height,
-        backgroundColor: 'transparent',
-        background: 'rgba(0,0,0,0.5)',
     })
 
     // TODO position 改成 manual
@@ -64,22 +62,17 @@ export function Select(props: ToAllowFixedPropsType<typeof SelectPropTypes> , {c
 
     const optionNodes = optionsWithSelected.map(([option, selected ]:[any,Atom<boolean> ]) => {
         const focused = atom(false)
-        const hovered = atom(false)
-        const style = () => ({
+        const optionStyle = () => ({
             cursor: 'pointer',
-            backgroundColor: focused() ? 'lightblue' : (hovered() ? 'lightgray' : 'white')
         })
         return (
             <div
                 as="option"
                 onClick={() => onSelect(option)}
                 onkeydown={onEnterKey(() => onSelect(option))}
-                onMouseEnter={() => hovered(true)}
-                onMouseLeave={() => hovered(false)}
                 onFocusIn={[() => focused(true), () => focusedOption(option)]}
                 onFocusOut={[() => focused(false), () => focusedOption() === option && focusedOption(null)]}
-                style={style}
-                prop:focused={focused}
+                style={optionStyle}
                 prop:value={option}
                 prop:selected={selected}
                 prop:optionVisible={optionVisible}
