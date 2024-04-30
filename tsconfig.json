@@ -20,7 +20,8 @@
     "rootDir": ".",
     "paths": {
       "@framework": ["./src"],
-      "@ui": ["./packages/primitives/src"],
+      "@primitive": ["./packages/primitives/src"],
+      "axii-ui": ["./packages/components/src"]
     },
     "jsx": "react",
     "jsxFactory": "createElement",
