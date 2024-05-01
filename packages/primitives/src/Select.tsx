@@ -1,12 +1,12 @@
 import {
     RenderContext,
     RxList,
-    ToAllowFixedPropsType,
-    ToPropsType,
+    FixedCompatiblePropsType,
+    PropsType,
     PropTypes,
     atom,
     onEnterKey,
-    ModalContext, Atom, reactiveSize, reactivePosition, SizeObject, PositionObject, createSelection,
+    ModalContext, Atom, reactiveSize, createReactivePosition, SizeObject, PositionObject, createSelection,
 } from "axii";
 
 
@@ -16,8 +16,8 @@ const SelectPropTypes = {
     options: PropTypes.rxList<any>().default(() => new RxList([])).isRequired
 }
 
-export function Select(props: ToAllowFixedPropsType<typeof SelectPropTypes> , {createElement, createPortal, context, createStateFromRef}: RenderContext) {
-    const {value, options, placeholder} = props as ToPropsType<typeof SelectPropTypes>
+export function Select(props: FixedCompatiblePropsType<typeof SelectPropTypes> , {createElement, createPortal, context, createStateFromRef}: RenderContext) {
+    const {value, options, placeholder} = props as PropsType<typeof SelectPropTypes>
 
     const optionsWithSelected = createSelection(options, value)
 
@@ -25,7 +25,7 @@ export function Select(props: ToAllowFixedPropsType<typeof SelectPropTypes> , {c
 
     const dropdowmViewport = context.get(ModalContext)?.viewport || window
     const dropdowmContainer = context.get(ModalContext)?.container || document.body
-    const viewportSize = createStateFromRef(reactiveSize, undefined, dropdowmViewport)
+    const viewportSize = createStateFromRef(reactiveSize, dropdowmViewport)
 
     const dropdownBackgroundStyle = () => ({
         position: 'fixed',
@@ -37,7 +37,7 @@ export function Select(props: ToAllowFixedPropsType<typeof SelectPropTypes> , {c
 
     // TODO position 改成 manual
     const rootSize = createStateFromRef<SizeObject>(reactiveSize)
-    const rootPosition = createStateFromRef<PositionObject>(reactivePosition, {type:'interval', duration:100})
+    const rootPosition = createStateFromRef<PositionObject>(createReactivePosition({type:'interval', duration:100}) )
     const optionsStyle = (() => {
         // rootRectRef.sync!()
         return {

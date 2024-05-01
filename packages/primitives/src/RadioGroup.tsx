@@ -1,4 +1,4 @@
-import {atom, Atom, PropTypes, RenderContext, ToAllowFixedPropsType, ToPropsType} from "axii";
+import {atom, Atom, PropTypes, RenderContext, FixedCompatiblePropsType, PropsType} from "axii";
 import {colors, gaps} from "./style.js";
 
 
@@ -7,8 +7,8 @@ const RadioGroupPropTypes = {
     value: PropTypes.any.default(() => atom(null)),
 }
 
-export function RadioGroup(props: ToAllowFixedPropsType<typeof RadioGroupPropTypes>, {createElement}: RenderContext)  {
-    const {options, value} = props as ToPropsType<typeof RadioGroupPropTypes>
+export function RadioGroup(props: FixedCompatiblePropsType<typeof RadioGroupPropTypes>, {createElement}: RenderContext)  {
+    const {options, value} = props as PropsType<typeof RadioGroupPropTypes>
     const radioWithSelected = options.createSelection( value)
 
     const containerStyle = {
