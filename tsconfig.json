@@ -3,7 +3,7 @@
     "baseUrl": ".",
     "outDir": "dist",
     "sourceMap": true,
-    "target": "es2016",
+    "target": "es2017",
     "newLine": "LF",
     "useDefineForClassFields": false,
     "module": "esnext",
@@ -19,8 +19,8 @@
     "types": ["node"],
     "rootDir": ".",
     "paths": {
-      "@framework": ["./src"],
       "@primitive": ["./packages/primitives/src"],
+      "@theme": ["./packages/theme/src"],
       "axii-ui": ["./packages/components/src"]
     },
     "jsx": "react",

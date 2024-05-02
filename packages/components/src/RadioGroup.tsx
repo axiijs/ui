@@ -1,4 +1,4 @@
-import {atom, Atom, PropTypes, RenderContext, ToAllowFixedPropsType, ToPropsType} from "axii";
+import {atom, Atom, FixedCompatiblePropsType, PropTypes, RenderContext, PropsType} from "axii";
 import {colors, gaps} from "./style.js";
 
 
@@ -7,8 +7,8 @@ const RadioGroupPropTypes = {
     value: PropTypes.any.default(() => atom(null)),
 }
 
-export function RadioGroup(props: ToAllowFixedPropsType<typeof RadioGroupPropTypes>, {createElement}: RenderContext)  {
-    const {options, value} = props as ToPropsType<typeof RadioGroupPropTypes>
+export function RadioGroup(props: FixedCompatiblePropsType<typeof RadioGroupPropTypes>, {createElement}: RenderContext)  {
+    const {options, value} = props as PropsType<typeof RadioGroupPropTypes>
     const radioWithSelected = options.createSelection( value)
 
     const containerStyle = {
@@ -18,7 +18,7 @@ export function RadioGroup(props: ToAllowFixedPropsType<typeof RadioGroupPropTyp
 
     return <div as='root' style={containerStyle}>
         {radioWithSelected.map(([option, selected]) => {
-            return <BlockOption as='option' selected={selected} option={option} $root:onClick={()=>value(option)}/>
+            return <RadioOption as='option' selected={selected} option={option} $root:onClick={()=>value(option)}/>
         })}
     </div>
 }
@@ -59,7 +59,7 @@ export function RadioOption({selected, option}:RadioOptionProps, {createElement}
         <div style={dotStyle}>
             {() => selected() ? <div style={{width: dotSize-dotBorderSize*2-dotPadding*2, height: dotSize-dotBorderSize*2-dotPadding*2, borderRadius: (dotSize-dotBorderSize*2-dotPadding*2)/2, background: colors.primaryBlue}}/> : null}
         </div>
-        <div>{option.label}</div>
+        <div>{option.label || option}</div>
     </div>)
 }
 

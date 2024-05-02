@@ -9,7 +9,8 @@ import {
     RenderContext,
     RxList
 } from "axii";
-import {colors, gaps} from "./style.js";
+import {gaps} from "./style.js";
+import {pattern} from '@theme'
 
 
 const TabPropTypes = {
@@ -37,8 +38,6 @@ export function Tabs(props: FixedCompatiblePropsType<typeof TabPropTypes>, {crea
         const rect = currentPosRef()?.current?.getBoundingClientRect()
         const rootRect = rootRef.current?.getBoundingClientRect()!
 
-        console.log(111, currentPosRef()?.current)
-        console.log(222, currentPosRef()?.current?.getBoundingClientRect())
         return {
             position:'absolute',
             bottom: 0,
@@ -46,7 +45,7 @@ export function Tabs(props: FixedCompatiblePropsType<typeof TabPropTypes>, {crea
             width: rect?.width||0,
             left: (rect&&rootRect) ? (rect.left - rootRect.left):0,
             transition: 'all 0.3s',
-            backgroundColor: colors.primaryBlue,
+            backgroundColor: pattern('black').interactable().active().color(),
         }
     }
 
