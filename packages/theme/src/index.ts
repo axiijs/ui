@@ -324,6 +324,9 @@ export const scen = {
                 normal(inverted = false) {
                     return inverted ? 'none' : pattern().color()
                 },
+                focused(inverted = false) {
+                    return inverted ? 'none' : pattern().interactable().active().color()
+                },
                 success() {
                     return pattern().feature().success().color()
                 },
@@ -345,3 +348,7 @@ export const scen = {
 }
 
 type TextType = 'text' | 'description' | 'auxiliary' | 'heading'
+
+export function classname(name:string, ...status: any[]) {
+    return name
+}

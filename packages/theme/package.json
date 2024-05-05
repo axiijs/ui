@@ -10,6 +10,6 @@
   "license": "ISC",
   "dependencies": {
     "@ant-design/colors": "^7.0.2",
-    "axii": "^2.4.7"
+    "axii": "^2.4.8"
   }
 }
