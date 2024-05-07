@@ -42,22 +42,9 @@ export function RadioOption({selected, option}:RadioOptionProps, {createElement}
         cursor: 'pointer',
     }
 
-    const dotSize = 16
-    const dotPadding = 2
-    const dotBorderSize = 1
-
-    const dotStyle = () => ({
-        width: dotSize,
-        height: dotSize,
-        borderRadius: dotSize/2,
-        padding:dotPadding,
-        boxSizing:'border-box',
-        background: 'transparent',
-        border: `${dotBorderSize}px solid ${selected() ? colors.primaryBlue: '#fff'}`,
-    })
     return (<div as='root' style={containerStyle}>
-        <div style={dotStyle}>
-            {() => selected() ? <div style={{width: dotSize-dotBorderSize*2-dotPadding*2, height: dotSize-dotBorderSize*2-dotPadding*2, borderRadius: (dotSize-dotBorderSize*2-dotPadding*2)/2, background: colors.primaryBlue}}/> : null}
+        <div as='dotContainer'>
+            {() => selected() ? <div as="dot"/> : null}
         </div>
         <div>{option.label || option}</div>
     </div>)

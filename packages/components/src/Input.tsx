@@ -22,15 +22,14 @@ export function Input({ value, placeholder, prefix, affix}: InputProps, {createE
 
     return <div as="root" style={containerStyle}>
         {() => prefix() && <div as="prefix">{prefix}</div>}
-        <div as="prefix"></div>
         <input as="main" value={value} placeholder={placeholder} onInput={onInput} style={inputStyle} spellcheck={false}/>
         {() => affix() && <div as="affix">{affix}</div>}
     </div>
 }
 
 Input.propTypes = {
-    value: PropTypes.string.default(() => atom('')),
-    placeholder: PropTypes.string.default(() => atom('')),
-    prefix: PropTypes.string.default(() => atom(null)),
-    affix: PropTypes.string.default(() => atom(null)),
+    value: PropTypes.atom<string>().default(() => atom('')),
+    placeholder: PropTypes.atom<string>().default(() => atom('')),
+    prefix: PropTypes.atom<string>().default(() => atom(null)),
+    affix: PropTypes.atom<string>().default(() => atom(null)),
 }

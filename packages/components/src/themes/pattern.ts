@@ -1,4 +1,3 @@
-import {matrixMatch, createPattern} from './pattern/util.js'
 import {
     colors,
     spaceValues,
@@ -9,16 +8,10 @@ import {
     shadows,
     fontWeights,
     borderRadius,
-    PRIMARY_COLOR
-} from './pattern/basic.js';
-import {INDEX} from './pattern/case.js'
-
-// 正色是黑色
-// 主色是蓝色
-// 反色不管什么情况都是白色
-
-
-const valueRules = (primaryColor: string) => ({
+} from './util/basic.js';
+import {matrixMatch} from './util/util.js'
+import {INDEX} from './util/case.js'
+export const valueRules = (primaryColor: string) => ({
     // 颜色类，受交互状态、反色等规则影响。
     // 字体颜色
     color({interactable, stress, inverted, active, interact, feature}: any, offset = 0, color = primaryColor) {
@@ -66,8 +59,8 @@ const valueRules = (primaryColor: string) => ({
          *     1.2.1.1 interacting 是 变亮一点。否，正常
          */
         const matrix = [
-            [undefined, undefined, undefined, undefined, 'transparent'],
-            [undefined, INDEX.active.active, undefined, undefined, colors.gray(-6)],
+            [undefined, undefined, undefined, undefined, colors.gray(-6)],
+            [undefined, INDEX.active.inactive, undefined, undefined, colors.gray(-3)],
             [INDEX.inverted, undefined, undefined, undefined, colors[color](offset)],
             [INDEX.inverted, INDEX.active.inactive, undefined, undefined, colors[color](-3 + offset)],
             [INDEX.inverted, INDEX.active.active, undefined, undefined, colors[color](offset)],
@@ -79,6 +72,9 @@ const valueRules = (primaryColor: string) => ({
         ]
 
         return matrixMatch([inverted, active, interact, feature], matrix)
+    },
+    borderColor() {
+        return colors.gray(-2)
     },
     // 遮罩颜色
     maskColor() {
@@ -139,12 +135,4 @@ const valueRules = (primaryColor: string) => ({
         return matrixMatch([zIndex], matrix)
     }
 })
-
-
-/***************
- * export
- **************/
-export function pattern(primaryColor: string = PRIMARY_COLOR) {
-    return createPattern(INDEX, valueRules(primaryColor))
-}
 

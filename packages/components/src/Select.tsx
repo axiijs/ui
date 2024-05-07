@@ -14,7 +14,6 @@ export function SelectOption(props: any, {createElement}: RenderContext) {
     const hovered = atom(false)
 
     const optionStyle = () => ({
-        cursor: 'pointer',
         background: hovered() ? colors.primaryBlue : 'transparent',
     })
 
@@ -41,9 +40,8 @@ export const selectOptionsStyle = {
     border: '1px solid #ccc',
 }
 
-export const selectStyle = {
+export const selectOptionProps = {
     '$option:_use': SelectOption,
-    '$options:style': selectOptionsStyle
 }
 
-export const Select = bindProps(ISelect, selectStyle)
+export const Select = bindProps(ISelect, selectOptionProps)

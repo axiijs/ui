@@ -12,22 +12,11 @@ export function Checkbox(props: FixedCompatiblePropsType<typeof CheckboxPropType
         alignItems: 'center',
         justifyContent: 'center',
         cursor: 'pointer',
-        width: 22,
-        height: 22,
-        borderRadius: '50%',
-        outline: value() ? 'none' : '1px solid #DCDCDC',
-        background: value() ? '#253FFD' : 'rgba(42,44,51,.7)',
     })
 
-    const dotStyle = () => ({
-        width: 10,
-        height: 10,
-        borderRadius: '50%',
-        background: value() ? '#fff' : 'transparent',
-    })
 
     return <div as='root' style={containerStyle} onClick={() => value(!value())}>
-        <div as='main' style={dotStyle}></div>
+        <div as='main'></div>
     </div>
 }
 

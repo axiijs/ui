@@ -1,12 +1,17 @@
 import {
-    RenderContext,
-    RxList,
+    atom,
+    Atom,
+    createReactivePosition,
+    createSelection,
     FixedCompatiblePropsType,
+    ModalContext,
+    onEnterKey,
+    PositionObject,
     PropsType,
     PropTypes,
-    atom,
-    onEnterKey,
-    ModalContext, Atom, reactiveSize, createReactivePosition, SizeObject, PositionObject, createSelection,
+    reactiveSize,
+    RenderContext,
+    RxList,
 } from "axii";
 
 
@@ -36,7 +41,6 @@ export function Select(props: FixedCompatiblePropsType<typeof SelectPropTypes> ,
     })
 
     // TODO position 改成 manual
-    const rootSize = createStateFromRef<SizeObject>(reactiveSize)
     const rootPosition = createStateFromRef<PositionObject>(createReactivePosition({type:'interval', duration:100}) )
     const optionsStyle = (() => {
         // rootRectRef.sync!()
@@ -44,12 +48,8 @@ export function Select(props: FixedCompatiblePropsType<typeof SelectPropTypes> ,
             position: 'absolute',
             display: 'flex',
             flexDirection: 'column',
-            gap: 10,
-            padding: 10,
-            top: rootPosition()?.top! + rootSize()?.height! + 10,
+            top: rootPosition()?.bottom!,
             left: rootPosition()?.left,
-            backgroundColor: 'white',
-            border: '1px solid #ccc',
         }
     })
 
@@ -62,9 +62,7 @@ export function Select(props: FixedCompatiblePropsType<typeof SelectPropTypes> ,
 
     const optionNodes = optionsWithSelected.map(([option, selected ]:[any,Atom<boolean> ]) => {
         const focused = atom(false)
-        const optionStyle = () => ({
-            cursor: 'pointer',
-        })
+
         return (
             <div
                 as="option"
@@ -72,7 +70,6 @@ export function Select(props: FixedCompatiblePropsType<typeof SelectPropTypes> ,
                 onkeydown={onEnterKey(() => onSelect(option))}
                 onFocusIn={[() => focused(true), () => focusedOption(option)]}
                 onFocusOut={[() => focused(false), () => focusedOption() === option && focusedOption(null)]}
-                style={optionStyle}
                 prop:value={option}
                 prop:selected={selected}
                 prop:optionVisible={optionVisible}
@@ -83,8 +80,17 @@ export function Select(props: FixedCompatiblePropsType<typeof SelectPropTypes> ,
     })
 
     return (
-        <div as="root" ref={[rootSize.ref, rootPosition.ref]}>
-            <div as="displayValue" prop:value={value} prop:placeholder={placeholder} prop:optionVisible={optionVisible} onClick={() => optionVisible(true)}>{() => value() ?? placeholder()}</div>
+        <div as="root" ref={[rootPosition.ref]} onClick={() => optionVisible(true)}>
+            <div as="displayValueContainer" >
+                <div
+                    as="displayValue"
+                    prop:value={value}
+                    prop:placeholder={placeholder}
+                    prop:optionVisible={optionVisible}
+                 >
+                    {() => value() ?? placeholder()}
+                </div>
+            </div>
             {
                 () => optionVisible() ? createPortal((
                     <div as="dropdownBackground" style={dropdownBackgroundStyle()}>
