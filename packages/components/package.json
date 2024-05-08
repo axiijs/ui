@@ -9,9 +9,15 @@
   "author": "",
   "license": "ISC",
   "peerDependencies": {
-    "axii": "^2.4.11"
+    "axii": "^2.4.13"
   },
   "dependencies": {
-    "@ant-design/colors": "^7.0.2"
+    "@ant-design/colors": "^7.0.2",
+    "@types/chroma-js": "^2.4.4",
+    "chroma-js": "^2.4.2",
+    "dayjs": "^1.11.11"
+  },
+  "devDependencies": {
+    "unplugin-macros": "^0.13.0"
   }
 }

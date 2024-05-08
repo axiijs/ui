@@ -1,5 +1,4 @@
 import {atom, Atom, PropTypes, reactiveFocused, RenderContext} from "axii";
-import {colors, gaps} from "./style.js";
 
 type TextareaProps = {
     value: Atom<string>
@@ -12,9 +11,6 @@ export function Textarea({value, placeholder}: TextareaProps, {createElement, cr
 
     const containerStyle = () => ({
         borderRadius: 8,
-        background: colors.inputBg,
-        padding: gaps.small,
-        outline: focused() ? `1px solid ${colors.primaryBlue}` : 'none',
         display: 'flex',
         flexDirection: 'column',
     })

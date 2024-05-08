@@ -1,4 +1,13 @@
-import {atom, createSelection, FixedCompatiblePropsType, PropsType, PropTypes, RenderContext, RxList} from "axii";
+import {
+    atom,
+    Component,
+    createSelection,
+    FixedCompatiblePropsType,
+    PropsType,
+    PropTypes,
+    RenderContext,
+    RxList
+} from "axii";
 
 
 const TabPropTypes = {
@@ -6,7 +15,7 @@ const TabPropTypes = {
     current: PropTypes.atom<any>().default(() => atom<any>(null)).isRequired,
 }
 
-export function Tabs(props: FixedCompatiblePropsType<typeof TabPropTypes>, {createElement, createRef}: RenderContext) {
+export const Tabs: Component = function (props: FixedCompatiblePropsType<typeof TabPropTypes>, {createElement, createRef}: RenderContext) {
     const {options, current} = props as PropsType<typeof TabPropTypes>
 
     const optionsMatch = createSelection(options, current)

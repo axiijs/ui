@@ -1,10 +1,10 @@
-import {atom, PropTypes, RenderContext, FixedCompatiblePropsType, PropsType} from "axii";
+import {atom, PropTypes, RenderContext, FixedCompatiblePropsType, PropsType, Component} from "axii";
 
 const CheckboxPropTypes = {
     value: PropTypes.atom<boolean>().default(() => atom(false)).isRequired,
 }
 
-export function Checkbox(props: FixedCompatiblePropsType<typeof CheckboxPropTypes> , {createElement}: RenderContext) {
+export const Checkbox: Component = function(props: FixedCompatiblePropsType<typeof CheckboxPropTypes> , {createElement}: RenderContext) {
     const { value } = props as PropsType<typeof CheckboxPropTypes>
 
     const containerStyle = () => ({

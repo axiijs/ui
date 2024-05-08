@@ -1,5 +1,4 @@
-import {atom, Atom, FixedCompatiblePropsType, PropTypes, RenderContext, PropsType} from "axii";
-import {colors, gaps} from "./style.js";
+import {atom, Atom, FixedCompatiblePropsType, PropTypes, RenderContext, PropsType, Component} from "axii";
 
 
 const RadioGroupPropTypes = {
@@ -13,7 +12,6 @@ export function RadioGroup(props: FixedCompatiblePropsType<typeof RadioGroupProp
 
     const containerStyle = {
         display: 'flex',
-        gap: gaps.medium,
     }
 
     return <div as='root' style={containerStyle}>
@@ -34,10 +32,9 @@ type RadioOptionProps = {
     }
 }
 
-export function RadioOption({selected, option}:RadioOptionProps, {createElement}: RenderContext) {
+export const RadioOption: Component = function ({selected, option}:RadioOptionProps, {createElement}: RenderContext) {
     const containerStyle={
         display: 'flex',
-        gap: gaps.small,
         alignItems: 'center',
         cursor: 'pointer',
     }
@@ -58,18 +55,8 @@ type BlockOptionProps = {
     }
 }
 
-export function BlockOption({selected, option}: BlockOptionProps, {createElement}: RenderContext) {
-    const style = () => ({
-        color: '#fff',
-        borderRadius: 4,
-        padding: `${gaps.small}px ${gaps.large}px`,
-        cursor: 'pointer',
-        background: selected() ? colors.primaryBlue : colors.itemBg,
-        '&:hover': {
-            background: colors.primaryBlue
-        }
-    })
-    return <div as='root' props:selected={selected} props:option={option} style={style}>
+export const BlockOption: Component = function ({selected, option}: BlockOptionProps, {createElement}: RenderContext) {
+    return <div as='root' props:selected={selected} props:option={option} >
         {option.label}
     </div>
 }

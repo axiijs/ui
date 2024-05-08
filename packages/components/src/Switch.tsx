@@ -1,10 +1,10 @@
-import {atom, FixedCompatiblePropsType, PropsType, PropTypes, RenderContext} from "axii";
+import {atom, Component, FixedCompatiblePropsType, PropsType, PropTypes, RenderContext} from "axii";
 
 const SwitchPropTypes = {
     value: PropTypes.atom<boolean>().default(() => atom(false)).isRequired,
 }
 
-export function Switch(props: FixedCompatiblePropsType<typeof SwitchPropTypes> , {createElement}: RenderContext) {
+export const Switch:Component = function(props: FixedCompatiblePropsType<typeof SwitchPropTypes> , {createElement}: RenderContext) {
     const { value } = props as PropsType<typeof SwitchPropTypes>
 
     const containerStyleBase = {

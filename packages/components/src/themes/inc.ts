@@ -1,24 +1,39 @@
 import {Input} from "../Input.js";
 import {Select} from "../Select.js";
-import {Component, reactiveFocused, RenderContext, atomComputed, mergeProp} from "axii";
+import {atomComputed, mergeProp, reactiveFocused, RenderContext} from "axii";
 import {
+    createCommon,
+    percent, ThemeColors,
+} from "./common.js";
+import {Checkbox} from "../Checkbox.js";
+import {BlockOption, RadioOption} from "../RadioGroup.js";
+import {Switch} from "../Switch.js";
+import {Tabs} from "../Tabs.js";
+import {Calendar} from "../Calendar.js";
+import { genColors } from './util/color.macro.js' with { type: 'macro'}
+
+const zincThemeColors = genColors('#333333')
+const roseThemeColors = genColors('#e11d48')
+
+const themeColors = new ThemeColors(zincThemeColors)
+themeColors.injectVars()
+
+setTimeout(() => {
+    themeColors.replaceColors(roseThemeColors)
+}, 1000)
+
+const {
     colors,
     enclosedContainer,
     interactableTextField,
     modalContainer,
-    paddingContainer, percent,
+    paddingContainer,
     raisedContainer,
     sizes,
     supportiveTextField
-} from "./common.js";
-import {Checkbox} from "../Checkbox.js";
-import {BlockOption, RadioOption} from "../RadioGroup.js";
-import {gaps} from "../style.js";
-import {Switch} from "../Switch.js";
-import {Tabs} from "../Tabs.js";
+} = createCommon(themeColors.inputColorVars)
 
-
-(Input as Component).boundProps = [function({}, {createStateFromRef}: RenderContext) {
+Input.boundProps = [function({}, {createStateFromRef}: RenderContext) {
     const focused = createStateFromRef(reactiveFocused)
     // TODO 继承 form status? 还是放在 createForm 里面？
     return {
@@ -52,7 +67,7 @@ import {Tabs} from "../Tabs.js";
     }
 }];
 
-(Select as Component).boundProps = [...(Select as Component).boundProps!, function({}, {createElement}: RenderContext) {
+Select.boundProps = [...Select.boundProps!, function({}, {createElement}: RenderContext) {
     return {
         '$root:style': {
             ...enclosedContainer,
@@ -81,7 +96,7 @@ import {Tabs} from "../Tabs.js";
     }
 }];
 
-(Checkbox as Component).boundProps = [...((Checkbox as Component).boundProps||[]), function({ value }, {createElement}: RenderContext) {
+Checkbox.boundProps = [...(Checkbox.boundProps||[]), function({ value }, {createElement}: RenderContext) {
     return {
         '$root:style': () => ({
             cursor: 'pointer',
@@ -90,16 +105,20 @@ import {Tabs} from "../Tabs.js";
             borderRadius: '50%',
             outline: value() ? `1px solid ${colors.line.border.focused()}` :`1px solid ${colors.line.border.normal()}` ,
         }),
-        '$main:style': () => ({
-            width: sizes.thing.box().div(2),
-            height: sizes.thing.box().div(2),
+        '$main:style': () => [{
+            width: 0,
+            height: 0,
             borderRadius: '50%',
+            transition: 'height 0.3s, width 0.3s',
             background: value() ? colors.background.item.active() : 'transparent',
-        }),
+        }, {
+            width: value() ? sizes.thing.box().div(2) :0,
+            height: value() ? sizes.thing.box().div(2): 0,
+        }],
     }
 }];
 
-(RadioOption as Component).boundProps = [...((RadioOption as Component).boundProps||[]), function({ selected }, {createElement}: RenderContext) {
+RadioOption.boundProps = [...(RadioOption.boundProps||[]), function({ selected }, {createElement}: RenderContext) {
     return {
         '$dotContainer:style': () => ({
             width: sizes.thing.box(),
@@ -112,23 +131,28 @@ import {Tabs} from "../Tabs.js";
             background: 'transparent',
             border: `1px solid ${selected() ? colors.line.border.focused() : colors.line.border.normal() }`,
         }),
-        '$dot:style': () => ({
-            width: selected() ? sizes.thing.box().div(2) : 0,
-            height: selected() ? sizes.thing.box().div(2) : 0,
-            borderRadius: '50%',
-            background: colors.background.item.active(),
-            transition: 'all 1s',
-        })
+        '$dot:style': () => {
+            return [{
+                width: 0,
+                height: 0,
+                borderRadius: '50%',
+                background: selected() ? colors.background.item.active() : 'transparent',
+                transition: 'height 0.3s, width 0.3s',
+            },{
+                width: selected() ? sizes.thing.box().div(2) : 0,
+                height: selected() ? sizes.thing.box().div(2) : 0,
+            }]
+        }
 
     }
 }];
 
-(BlockOption as Component).boundProps = [...((BlockOption as Component).boundProps||[]), function({ selected }, {createElement}: RenderContext) {
+BlockOption.boundProps = [...(BlockOption.boundProps||[]), function({ selected }, {createElement}: RenderContext) {
     return {
         '$root:style': () => ({
             color: '#fff',
             borderRadius: 4,
-            padding: `${gaps.small}px ${gaps.large}px`,
+            padding: `${sizes.thing.text()}px ${sizes.thing.text().mul(2)}px`,
             cursor: 'pointer',
             background: selected() ? colors.background.item.active() : 'transparent',
             '&:hover': {
@@ -138,7 +162,7 @@ import {Tabs} from "../Tabs.js";
     }
 }];
 
-(Switch as Component).boundProps = [...((Switch as Component).boundProps||[]), function({ value }, {createElement}: RenderContext) {
+Switch.boundProps = [...(Switch.boundProps||[]), function({ value }, {createElement}: RenderContext) {
     const gap = sizes.thing.box().sub(sizes.thing.inner())
 
     return {
@@ -146,7 +170,7 @@ import {Tabs} from "../Tabs.js";
             width: sizes.thing.box().mul(2),
             height: sizes.thing.box(),
             borderRadius: sizes.thing.box().div(2),
-            transition: 'all 0.3s',
+            transition: 'margin-left 0.3s, background 0.3s',
             background: value() ? colors.background.item.active() : colors.background.item.normal(),
         }),
         '$main:style': () => ({
@@ -166,7 +190,7 @@ import {Tabs} from "../Tabs.js";
 }];
 
 
-(Tabs as Component).boundProps = [...((Tabs as Component).boundProps||[]), function({ current, options }, {createElement, createRxRef, createRef}: RenderContext) {
+Tabs.boundProps = [...(Tabs.boundProps||[]), function({ current, options }, {createElement, createRxRef, createRef}: RenderContext) {
 
     const optionsToPosRef = options.map((option:any) => {
         // CAUTION 一定要用 createRxRef，否则用 createRxRef 的时候，ref 第一次 attach 不会触发 style 计算。
@@ -197,7 +221,6 @@ import {Tabs} from "../Tabs.js";
         '$head:style': () => {
             const rect = currentRect()
             const rootRect = rootRef.current?.getBoundingClientRect()!
-            console.log((rect&&rootRect) ? (rect.left - rootRect.left):0, rect, rootRef.current)
             return ({
                 ...raisedContainer,
                 position: 'absolute',
@@ -229,3 +252,103 @@ import {Tabs} from "../Tabs.js";
         },
     }
 }];
+
+Calendar.boundProps = [...(Calendar.boundProps||[]), function({ value }, {createElement}: RenderContext) {
+    return {
+        '$root:style': {
+            ...enclosedContainer,
+            ...paddingContainer,
+            display: 'inline-flex',
+            flexDirection: 'column',
+            alignItems: 'stretch',
+            background: colors.background.box.normal(),
+        },
+        '$head:style': {
+            color: colors.text.normal(false,'auxiliary'),
+        },
+        '$control:style': {
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'space-between',
+            marginBottom: sizes.space.inner(),
+        },
+        '$leftControl:style': {
+            cursor: 'pointer',
+            display: 'flex',
+            alignItems: 'center',
+            gap: sizes.space.gap().div(2),
+        },
+        '$rightControl:style': {
+            cursor: 'pointer',
+            display: 'flex',
+            alignItems: 'center',
+            gap: sizes.space.gap().div(2),
+        },
+        '$lastMonth:style': {
+            ...interactableTextField,
+            ...enclosedContainer,
+            color: colors.text.normal(false, 'auxiliary'),
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            width: sizes.thing.inner(),
+            height: sizes.thing.inner(),
+        },
+        '$nextMonth:style': {
+            ...interactableTextField,
+            ...enclosedContainer,
+            color: colors.text.normal(false, 'auxiliary'),
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            width: sizes.thing.inner(),
+            height: sizes.thing.inner(),
+        },
+        '$lastYear:style': {
+            ...interactableTextField,
+            ...enclosedContainer,
+            color: colors.text.normal(false, 'auxiliary'),
+
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            width: sizes.thing.inner(),
+            height: sizes.thing.inner(),
+        },
+        '$nextYear:style': {
+            ...interactableTextField,
+            ...enclosedContainer,
+            color: colors.text.normal(false, 'auxiliary'),
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            width: sizes.thing.inner(),
+            height: sizes.thing.inner(),
+        },
+        '$date:style': {
+            padding:0,
+            margin:0,
+            borderWidth:0,
+        },
+        '$displayDate:style_': (_:any, { date }: any) =>  {
+            return () => ({
+                color: (date.isLastMonth || date.isNextMonth) ? colors.text.disabled() : colors.text.normal(),
+                // color: (date.isLastMonth || date.isNextMonth) ? 'red': colors.text.normal(),
+                cursor: 'pointer',
+                left:0,
+                right:0,
+                top:0,
+                bottom:0,
+                display: 'flex',
+                height: sizes.thing.box(),
+                width: sizes.thing.box(),
+                borderRadius: sizes.thing.box().div(4),
+                alignItems: 'center',
+                justifyContent: 'center',
+                '&:hover': {
+                    background: colors.background.item.normal()
+                }
+            })
+        }
+    }
+}]

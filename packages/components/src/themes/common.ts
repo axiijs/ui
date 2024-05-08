@@ -1,12 +1,23 @@
 import {StyleSize} from 'axii'
 import {createPattern} from "./util/util.js";
 import {INDEX} from "./util/case.js";
-import {valueRules} from "./pattern.js";
+import {InputColors, valueRules} from "./pattern.js";
+import {genColors} from "./util/color.macro.js";
 
-const PRIMARY_COLOR = 'black'
 
-function pattern(primaryColor: string = PRIMARY_COLOR) {
-    return createPattern(INDEX, valueRules(primaryColor))
+
+
+const shadows = [
+    '0 -6px 16px -8px rgba(0, 0, 0, 0.08), 0 -9px 28px 0 rgba(0, 0, 0, 0.05), 0 -12px 48px 16px rgba(0, 0, 0, 0.03)',
+    '0 6px 16px -8px rgba(0, 0, 0, 0.08), 0 9px 28px 0 rgba(0, 0, 0, 0.05), 0 12px 48px 16px rgba(0, 0, 0, 0.03)',
+    '0 3px 6px -4px rgba(0, 0, 0, 0.12), 0 6px 16px 0 rgba(0, 0, 0, 0.08), 0 9px 28px 8px rgba(0, 0, 0, 0.05)',
+    '-6px 0 16px -8px rgba(0, 0, 0, 0.08), -9px 0 28px 0 rgba(0, 0, 0, 0.05), -12px 0 48px 16px rgba(0, 0, 0, 0.03)',
+    '6px 0 16px -8px rgba(0, 0, 0, 0.08), 9px 0 28px 0 rgba(0, 0, 0, 0.05), 12px 0 48px 16px rgba(0, 0, 0, 0.03)',
+]
+
+
+function pattern(inputColors: InputColors) {
+    return createPattern(INDEX, valueRules(inputColors))
 }
 
 export function px(value: number) {
@@ -33,231 +44,301 @@ type flexRowProps = {
 
 type TextType = 'text' | 'description' | 'auxiliary' | 'heading'
 
-export const sizes =  {
-    font: {
-        heading(level: number) {
-            return rem(2 + level)
-        },
-        text() {
-            return rem(1)
-        },
-        // 出错信息等
-        description() {
-            return rem(0)
-        },
-        // 辅助文字  placeholder 等都算
-        auxiliary() {
-            return rem(-1)
-        },
-    },
-    thing: {
-        box() {
-            return rem(2)
-        },
-        text() {
-            return rem(1)
-        },
-        inner(level: number = 2) {
-            return rem(2).sub(2, 'px')
-        }
-    },
-    space: {
-        padding(value: number= 1) {
-            // 和外部的 border 之间的距离
-            return rem(value)
-        },
-        gap(){
-            // item 之间的具体距离
-            return rem(1)
-        },
-        inner(level: number = 2) {
-            // 内部的 item 和自己的 border 之间的距离
-            return px(2)
-        }
-    },
-}
+export function createCommon(inputColors: InputColors) {
 
-export const colors =  {
-    text: {
-        normal(inverted = false, type: TextType = 'text') {
-            const offset = type === 'text' ? 0 : (type === 'description' ? -1 : -2)
-            return inverted ? pattern().inverted().color(offset) : pattern().color(offset)
-        },
-        disabled(inverted = false) {
-            return inverted ? pattern().inverted().inactive().color() : pattern().inactive().color()
-        },
-        active(inverted = false) {
-            return inverted ? pattern().inverted().active().color() : pattern().active().color()
-        },
-        success() {
-            return pattern().feature().success().color()
-        },
-        warning() {
-            return pattern().feature().warning().color()
-        },
-        danger() {
-            return pattern().feature().danger().color()
-        },
-        info() {
-            return pattern().feature().info().color()
-        },
-    },
-    background: {
-        box: {
-            normal() {
-                return pattern().bgColor()
+     const sizes =  {
+        font: {
+            heading(level: number) {
+                return rem(2 + level)
             },
-
-            disabled() {
-                return pattern().inactive().bgColor()
+            text() {
+                return rem(1)
             },
-            active() {
-                return pattern().inverted().active().bgColor()
+            // 出错信息等
+            description() {
+                return rem(0)
             },
-            success() {
-                return pattern().feature().success().bgColor()
-            },
-            warning() {
-                return pattern().feature().warning().bgColor()
-            },
-            danger() {
-                return pattern().feature().danger().bgColor()
-            },
-            info() {
-                return pattern().feature().info().bgColor()
+            // 辅助文字  placeholder 等都算
+            auxiliary() {
+                return rem(-1)
             },
         },
-        item: {
-            normal() {
-                return pattern().inactive().bgColor()
+        thing: {
+            box() {
+                return rem(2)
             },
-            active() {
-                return pattern().inverted().active().bgColor()
+            text() {
+                return rem(1)
             },
-            disabled() {
-                return pattern().inactive().color()
-            },
-        }
-    },
-    line: {
-        border: {
-            normal(inverted = false) {
-                return inverted ? 'none' : pattern().borderColor()
-            },
-            focused(inverted = false) {
-                return inverted ? 'none' : pattern().interactable().active().color()
-            },
-            success() {
-                return pattern().feature().success().color()
-            },
-            warning() {
-                return pattern().feature().warning().color()
-            },
-            danger() {
-                return pattern().feature().danger().color()
-            },
-            info() {
-                return pattern().feature().info().color()
-            },
+            inner(level: number = 2) {
+                return rem(2).sub(4, 'px')
+            }
         },
-        separator() {
-            return pattern().separateColor()
+        space: {
+            padding(value: number= 1) {
+                // 和外部的 border 之间的距离
+                return rem(value)
+            },
+            gap(){
+                // item 之间的具体距离
+                return rem(1)
+            },
+            inner(level: number = 2) {
+                // 内部的 item 和自己的 border 之间的距离
+                return px(2)
+            }
+        },
+        radius: {
+            item() {
+                return rem(0.5)
+            },
+            box() {
+                return rem(1)
+            },
+            panel() {
+                return rem(2)
+            }
         }
     }
-}
 
-export const layout = {
-    flexRow({gap, align, justify}: flexRowProps) {
-        return {
-            display: 'flex',
-            flexDirection: 'row',
-            gap,
-            alignItems: align,
-            justifyContent: justify,
+     const colors = ({
+        text: {
+            normal(inverted = false, type: TextType = 'text') {
+                const offset = type === 'text' ? 0 : (type === 'description' ? -2 : -4)
+                return inverted ? pattern(inputColors).inverted().color(offset) : pattern(inputColors).color(offset)
+            },
+            disabled(inverted = false) {
+                return inverted ? pattern(inputColors).inverted().interactable().inactive().color() : pattern(inputColors).interactable().inactive().color()
+            },
+            active(inverted = false) {
+                return inverted ? pattern(inputColors).inverted().active().color() : pattern(inputColors).active().color()
+            },
+            success() {
+                return pattern(inputColors).feature().success().color()
+            },
+            warning() {
+                return pattern(inputColors).feature().warning().color()
+            },
+            danger() {
+                return pattern(inputColors).feature().danger().color()
+            },
+            info() {
+                return pattern(inputColors).feature().info().color()
+            },
+        },
+        background: {
+            box: {
+                normal() {
+                    return pattern(inputColors).bgColor()
+                },
+                disabled() {
+                    return pattern(inputColors).inactive().bgColor()
+                },
+                active() {
+                    return pattern(inputColors).inverted().active().bgColor()
+                },
+                success() {
+                    return pattern(inputColors).feature().success().bgColor()
+                },
+                warning() {
+                    return pattern(inputColors).feature().warning().bgColor()
+                },
+                danger() {
+                    return pattern(inputColors).feature().danger().bgColor()
+                },
+                info() {
+                    return pattern(inputColors).feature().info().bgColor()
+                },
+            },
+            item: {
+                normal() {
+                    return pattern(inputColors).inactive().bgColor()
+                },
+                active() {
+                    return pattern(inputColors).inverted().active().bgColor()
+                },
+                disabled() {
+                    return pattern(inputColors).inactive().color()
+                },
+            }
+        },
+        line: {
+            border: {
+                normal(inverted = false) {
+                    return inverted ? 'none' : pattern(inputColors).borderColor()
+                },
+                focused(inverted = false) {
+                    return inverted ? 'none' : pattern(inputColors).interactable().active().color()
+                },
+                success() {
+                    return pattern(inputColors).feature().success().color()
+                },
+                warning() {
+                    return pattern(inputColors).feature().warning().color()
+                },
+                danger() {
+                    return pattern(inputColors).feature().danger().color()
+                },
+                info() {
+                    return pattern(inputColors).feature().info().color()
+                },
+            },
+            separator() {
+                return pattern(inputColors).separateColor()
+            }
         }
-    },
-    flexColumn({gap, align, justify}: flexRowProps) {
-        return {
-            display: 'flex',
-            flexDirection: 'column',
-            gap,
-            alignItems: align,
-            justifyContent: justify,
-        }
-    },
-    center() {
-        return {
-            display: 'flex',
-            justifyContent: 'center',
-            alignItems: 'center',
-        }
-    },
-    rowCenter() {
-        return {
-            display: 'flex',
-            flexDirection: 'row',
-            alignItems: 'center',
-        }
-    },
-    columnCenter() {
-        return {
-            display: 'flex',
-            flexDirection: 'column',
-            alignItems: 'center',
-        }
-    },
-    twoSide(column = false) {
-        return {
-            display: 'flex',
-            flexDirection: column ? 'column' : 'row',
-            justifyContent: 'space-between',
+    })
+
+     const layout = {
+        flexRow({gap, align, justify}: flexRowProps) {
+            return {
+                display: 'flex',
+                flexDirection: 'row',
+                gap,
+                alignItems: align,
+                justifyContent: justify,
+            }
+        },
+        flexColumn({gap, align, justify}: flexRowProps) {
+            return {
+                display: 'flex',
+                flexDirection: 'column',
+                gap,
+                alignItems: align,
+                justifyContent: justify,
+            }
+        },
+        center() {
+            return {
+                display: 'flex',
+                justifyContent: 'center',
+                alignItems: 'center',
+            }
+        },
+        rowCenter() {
+            return {
+                display: 'flex',
+                flexDirection: 'row',
+                alignItems: 'center',
+            }
+        },
+        columnCenter() {
+            return {
+                display: 'flex',
+                flexDirection: 'column',
+                alignItems: 'center',
+            }
+        },
+        twoSide(column = false) {
+            return {
+                display: 'flex',
+                flexDirection: column ? 'column' : 'row',
+                justifyContent: 'space-between',
+            }
         }
     }
-}
 
-export const paddingContainer = {
-    padding: rem(1),
-}
+     const paddingContainer = {
+        padding: rem(1),
+    }
 
 // 正文
-export const textField = {
+     const textField = {
 
-}
+    }
 
-export const supportiveTextField = {
-    background: colors.background.item.normal(),
-}
-
-export const labelTextField = {
-
-}
-
-export const descriptionTextField = {
-
-}
-
-export const interactableTextField = {
-    cursor: 'pointer',
-    '&:hover': {
+     const supportiveTextField = {
         background: colors.background.item.normal(),
+    }
+
+     const labelTextField = {
+
+    }
+
+     const descriptionTextField = {
+
+    }
+
+     const interactableTextField = {
+        cursor: 'pointer',
+        '&:hover': {
+            background: colors.background.item.normal(),
+        }
+    }
+
+     const enclosedContainer = {
+        borderRadius: rem(0.5),
+        overflow: 'hidden',
+        border: `1px solid ${colors.line.border.normal()}`,
+    }
+
+
+
+     const modalContainer = {
+        ...enclosedContainer,
+        boxShadow: shadows[4],
+        background: colors.background.box.normal(),
+    }
+
+     const raisedContainer = {
+        ...enclosedContainer,
+        boxShadow: shadows[0],
+        background: colors.background.box.normal(),
+    }
+
+
+    return {
+colors,
+        sizes,
+        layout,
+        paddingContainer,
+        textField,
+        supportiveTextField,
+        labelTextField,
+        descriptionTextField,
+        interactableTextField,
+        enclosedContainer,
+        modalContainer,
+        raisedContainer,
     }
 }
 
-export const enclosedContainer = {
-    borderRadius: rem(0.5),
-    overflow: 'hidden',
-    border: `1px solid ${colors.line.border.normal()}`,
+function getColorVar(type:string, index:number) {
+    return `--color-${type}-${index}`
 }
 
-export const modalContainer = {
-    ...enclosedContainer,
-    boxShadow: pattern().shadow(6),
-    background: colors.background.box.normal(),
+
+export class ThemeColors {
+    public inputColorVars!: InputColors
+    public varsToColors: {[key:string]: string} = {}
+    constructor(public inputColors: InputColors) {
+        this.genVars()
+        console.log(this.inputColorVars)
+        console.log(this.varsToColors)
+    }
+    genVars() {
+        this.inputColorVars = {} as InputColors
+        this.varsToColors = {}
+        for(let key in this.inputColors) {
+            const colorType = key as keyof InputColors
+            this.inputColorVars[colorType] = [[], this.inputColors[colorType as keyof InputColors][1]]
+            this.inputColors[colorType as keyof InputColors][0].forEach((color:string, index:number) => {
+                const varName = getColorVar(colorType, index)
+                this.varsToColors[varName] = color
+                this.inputColorVars[colorType][0][index] = `var(${varName})`
+            })
+        }
+    }
+    injectVars() {
+        for(let varName in this.varsToColors) {
+            document.documentElement.style.setProperty(varName, this.varsToColors[varName])
+        }
+    }
+    replaceColors(inputColors: InputColors) {
+        this.inputColors = inputColors
+        this.genVars()
+        this.injectVars()
+    }
 }
 
-export const raisedContainer = {
-    ...enclosedContainer,
-    boxShadow: pattern().shadow(2),
-    background: colors.background.box.normal(),
-}
 

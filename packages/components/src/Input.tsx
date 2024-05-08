@@ -1,4 +1,4 @@
-import {Atom, atom, PropTypes, RenderContext} from "axii";
+import {Atom, atom, Component, PropTypes, RenderContext} from "axii";
 
 type InputProps = {
     value: Atom<string>
@@ -7,7 +7,7 @@ type InputProps = {
     affix?: Atom<any>
 }
 
-export function Input({ value, placeholder, prefix, affix}: InputProps, {createElement}: RenderContext) {
+export const Input: Component = function({ value, placeholder, prefix, affix}: InputProps, {createElement}: RenderContext) {
     const containerStyle = () => ({
         display: 'flex',
     })
