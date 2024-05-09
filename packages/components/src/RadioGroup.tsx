@@ -6,7 +6,7 @@ const RadioGroupPropTypes = {
     value: PropTypes.any.default(() => atom(null)),
 }
 
-export function RadioGroup(props: FixedCompatiblePropsType<typeof RadioGroupPropTypes>, {createElement}: RenderContext)  {
+export const RadioGroup: Component = function(props: FixedCompatiblePropsType<typeof RadioGroupPropTypes>, {createElement}: RenderContext)  {
     const {options, value} = props as PropsType<typeof RadioGroupPropTypes>
     const radioWithSelected = options.createSelection( value)
 

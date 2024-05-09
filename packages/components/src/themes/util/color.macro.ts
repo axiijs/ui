@@ -14,6 +14,7 @@ export function genColors(primaryColor:string = 'black'): InputColors {
         ], 4],
         gray: [[
             blackScale(0).hex(),
+            blackScale(.05).hex(),
             blackScale(.1).hex(),
             blackScale(.2).hex(),
             blackScale(.3).hex(),
@@ -24,7 +25,7 @@ export function genColors(primaryColor:string = 'black'): InputColors {
             blackScale(.8).hex(),
             blackScale(.9).hex(),
             blackScale(1).hex(),
-        ], 4],
+        ], 5],
         primary: [[
             chroma(primaryColor).brighten(4).hex(),
             chroma(primaryColor).brighten(3).hex(),

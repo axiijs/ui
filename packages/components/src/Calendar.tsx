@@ -2,6 +2,10 @@ import {atom, PropTypes, RenderContext, FixedCompatiblePropsType, PropsType, ato
 import dayjs from 'dayjs'
 import weekdayPlugin from 'dayjs/plugin/isoWeek'
 import { Dayjs } from 'dayjs'
+import Left from 'axii-icon/Left'
+import Right from  'axii-icon/Right'
+import DoubleLeft from 'axii-icon/DoubleLeft'
+import DoubleRight from 'axii-icon/DoubleRight'
 dayjs.extend(weekdayPlugin)
 
 const CalendarPropTypes = {
@@ -24,7 +28,6 @@ export const Calendar: Component = function(props: FixedCompatiblePropsType<type
     const days: Atom<{year: number, month: number, date: number}[][]> = atomComputed(() => {
         const startDay = dayjs(value()).startOf('month')
         const endDay = dayjs(value()).endOf('month')
-        console.log('recompute', value())
 
 
         const dates: DateType[] = Array(endDay.date()).fill(0).map((_, i) => ({
@@ -72,7 +75,6 @@ export const Calendar: Component = function(props: FixedCompatiblePropsType<type
             return result
         }, [[]] as {year: number, month: number, date: number}[][])
 
-        console.log(datesGroupByWeek)
         return datesGroupByWeek
     })
 
@@ -96,13 +98,21 @@ export const Calendar: Component = function(props: FixedCompatiblePropsType<type
         <div as={'root'}>
             <div as={'control'}>
                 <div as={'leftControl'}>
-                    <span as={'lastYear'} onClick={lastYear}>{'<<'}</span>
-                    <span as={'lastMonth'} onClick={lastMonth}>{'<'}</span>
+                    <span as={'lastYear'} onClick={lastYear}>
+                        <DoubleLeft />
+                    </span>
+                    <span as={'lastMonth'} onClick={lastMonth}>
+                        <Left />
+                    </span>
                 </div>
                 <span as={'displayValue'}>{() => value().format('YYYY-MM-DD')}</span>
                 <div as={'rightControl'}>
-                    <span as={'nextMonth'} onClick={nextMonth}>{'>'}</span>
-                    <span as={'nextYear'} onClick={nextYear}>{'>>'}</span>
+                    <span as={'nextMonth'} onClick={nextMonth}>
+                        <Right />
+                    </span>
+                    <span as={'nextYear'} onClick={nextYear}>
+                        <DoubleRight />
+                    </span>
                 </div>
             </div>
             <table as={'table'}>

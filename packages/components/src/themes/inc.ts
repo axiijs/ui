@@ -1,39 +1,35 @@
 import {Input} from "../Input.js";
 import {Select} from "../Select.js";
-import {atomComputed, mergeProp, reactiveFocused, RenderContext} from "axii";
-import {
-    createCommon,
-    percent, ThemeColors,
-} from "./common.js";
+import {atomComputed, mergeProp, reactiveFocused, RenderContext, StyleSize} from "axii";
+import {createCommon, percent, ThemeColors,} from "./common.js";
 import {Checkbox} from "../Checkbox.js";
-import {BlockOption, RadioOption} from "../RadioGroup.js";
+import {BlockOption, RadioGroup, RadioOption} from "../RadioGroup.js";
 import {Switch} from "../Switch.js";
 import {Tabs} from "../Tabs.js";
 import {Calendar} from "../Calendar.js";
-import { genColors } from './util/color.macro.js' with { type: 'macro'}
+import {genColors} from './util/color.macro.js' with {type: 'macro'}
+import {Button} from "../Button.js";
+import {AccordionItem} from "../Accordion.js";
 
 const zincThemeColors = genColors('#333333')
-const roseThemeColors = genColors('#e11d48')
-
 const themeColors = new ThemeColors(zincThemeColors)
 themeColors.injectVars()
 
-setTimeout(() => {
-    themeColors.replaceColors(roseThemeColors)
-}, 1000)
-
 const {
     colors,
+    layout,
     enclosedContainer,
     interactableTextField,
     modalContainer,
     paddingContainer,
     raisedContainer,
     sizes,
-    supportiveTextField
+    transitions,
+    supportiveTextField,
+    textBox
 } = createCommon(themeColors.inputColorVars)
 
-Input.boundProps = [function({}, {createStateFromRef}: RenderContext) {
+Input.boundProps = [function ({}, {createStateFromRef}: RenderContext) {
     const focused = createStateFromRef(reactiveFocused)
     // TODO 继承 form status? 还是放在 createForm 里面？
     return {
@@ -41,25 +37,25 @@ Input.boundProps = [function({}, {createStateFromRef}: RenderContext) {
             const base = enclosedContainer
             return {
                 ...base,
-                borderRadius:8,
+                borderRadius: sizes.radius.item(),
                 overflow: 'hidden',
-                border: focused() ? `1px solid ${colors.line.border.focused()}`: base.border
+                border: focused() ? `1px solid ${colors.line.border.focused()}` : base.border
             }
         },
         '$main:style': {
             borderWidth: 0,
             outline: 'none',
-            ...paddingContainer,
+            padding: [0, sizes.space.padding()],
             placeholderColor: colors.text.normal(false, 'auxiliary'),
             color: colors.text.normal(),
         },
         '$prefix:style': {
-            ...paddingContainer,
+            ...textBox,
             ...supportiveTextField,
             borderRight: enclosedContainer.border
         },
         '$affix:style': {
-            ...paddingContainer,
+            ...textBox,
             ...supportiveTextField,
             borderLeft: enclosedContainer.border
         },
@@ -67,13 +63,13 @@ Input.boundProps = [function({}, {createStateFromRef}: RenderContext) {
     }
 }];
 
-Select.boundProps = [...Select.boundProps!, function({}, {createElement}: RenderContext) {
+Select.boundProps = [...Select.boundProps!, function ({}, {createElement}: RenderContext) {
     return {
         '$root:style': {
             ...enclosedContainer,
-            ...paddingContainer,
+            ...textBox,
             cursor: 'pointer',
-            borderRadius: 8,
+            borderRadius: sizes.radius.item(),
         },
         '$displayValue:style': {
             display: 'flex',
@@ -89,21 +85,21 @@ Select.boundProps = [...Select.boundProps!, function({}, {createElement}: Render
         },
         '$option': {
             '$displayOption:style': {
-                ...paddingContainer,
                 ...interactableTextField,
+                ...textBox,
             }
         }
     }
 }];
 
-Checkbox.boundProps = [...(Checkbox.boundProps||[]), function({ value }, {createElement}: RenderContext) {
+Checkbox.boundProps = [...(Checkbox.boundProps || []), function ({value}, {createElement}: RenderContext) {
     return {
         '$root:style': () => ({
             cursor: 'pointer',
-            width: sizes.thing.box(),
-            height: sizes.thing.box(),
+            width: sizes.thing.item(),
+            height: sizes.thing.item(),
             borderRadius: '50%',
-            outline: value() ? `1px solid ${colors.line.border.focused()}` :`1px solid ${colors.line.border.normal()}` ,
+            outline: value() ? `1px solid ${colors.line.border.focused()}` : `1px solid ${colors.line.border.normal()}`,
         }),
         '$main:style': () => [{
             width: 0,
@@ -112,24 +108,36 @@ Checkbox.boundProps = [...(Checkbox.boundProps||[]), function({ value }, {create
             transition: 'height 0.3s, width 0.3s',
             background: value() ? colors.background.item.active() : 'transparent',
         }, {
-            width: value() ? sizes.thing.box().div(2) :0,
-            height: value() ? sizes.thing.box().div(2): 0,
+            width: value() ? sizes.thing.item().div(2) : 0,
+            height: value() ? sizes.thing.item().div(2) : 0,
         }],
     }
 }];
 
-RadioOption.boundProps = [...(RadioOption.boundProps||[]), function({ selected }, {createElement}: RenderContext) {
+RadioGroup.boundProps = [...(RadioGroup.boundProps || []), function ({}, {createElement}: RenderContext) {
     return {
+        '$root:style': () => ({
+            gap: sizes.space.gap(),
+        }),
+    }
+}]
+
+RadioOption.boundProps = [...(RadioOption.boundProps || []), function ({selected}, {createElement}: RenderContext) {
+    return {
+        '$root:style': () => ({
+            gap: sizes.space.inner(),
+        }),
         '$dotContainer:style': () => ({
-            width: sizes.thing.box(),
-            height: sizes.thing.box(),
+            width: sizes.thing.item(),
+            height: sizes.thing.item(),
+            gap: sizes.space.inner(),
             borderRadius: '50%',
             boxSizing: 'border-box',
             display: 'flex',
             alignItems: 'center',
             justifyContent: 'center',
             background: 'transparent',
-            border: `1px solid ${selected() ? colors.line.border.focused() : colors.line.border.normal() }`,
+            border: `1px solid ${selected() ? colors.line.border.focused() : colors.line.border.normal()}`,
         }),
         '$dot:style': () => {
             return [{
@@ -138,20 +146,20 @@ RadioOption.boundProps = [...(RadioOption.boundProps||[]), function({ selected }
                 borderRadius: '50%',
                 background: selected() ? colors.background.item.active() : 'transparent',
                 transition: 'height 0.3s, width 0.3s',
-            },{
-                width: selected() ? sizes.thing.box().div(2) : 0,
-                height: selected() ? sizes.thing.box().div(2) : 0,
+            }, {
+                width: selected() ? sizes.thing.item().div(2) : 0,
+                height: selected() ? sizes.thing.item().div(2) : 0,
             }]
         }
 
     }
 }];
 
-BlockOption.boundProps = [...(BlockOption.boundProps||[]), function({ selected }, {createElement}: RenderContext) {
+BlockOption.boundProps = [...(BlockOption.boundProps || []), function ({selected}, {createElement}: RenderContext) {
     return {
         '$root:style': () => ({
             color: '#fff',
-            borderRadius: 4,
+            borderRadius: sizes.radius.item(),
             padding: `${sizes.thing.text()}px ${sizes.thing.text().mul(2)}px`,
             cursor: 'pointer',
             background: selected() ? colors.background.item.active() : 'transparent',
@@ -162,14 +170,14 @@ BlockOption.boundProps = [...(BlockOption.boundProps||[]), function({ selected }
     }
 }];
 
-Switch.boundProps = [...(Switch.boundProps||[]), function({ value }, {createElement}: RenderContext) {
-    const gap = sizes.thing.box().sub(sizes.thing.inner())
+Switch.boundProps = [...(Switch.boundProps || []), function ({value}, {createElement}: RenderContext) {
+    const gap = sizes.thing.item().sub(sizes.thing.inner())
 
     return {
         '$root:style': () => ({
-            width: sizes.thing.box().mul(2),
-            height: sizes.thing.box(),
-            borderRadius: sizes.thing.box().div(2),
+            width: sizes.thing.item().mul(2),
+            height: sizes.thing.item(),
+            borderRadius: sizes.thing.item().div(2),
             transition: 'margin-left 0.3s, background 0.3s',
             background: value() ? colors.background.item.active() : colors.background.item.normal(),
         }),
@@ -179,7 +187,7 @@ Switch.boundProps = [...(Switch.boundProps||[]), function({ value }, {createElem
             width: sizes.thing.inner(),
             height: sizes.thing.inner(),
             marginLeft: value() ?
-                sizes.thing.box().mul(2).sub(sizes.thing.inner()).sub(gap):
+                sizes.thing.item().mul(2).sub(sizes.thing.inner()).sub(sizes.space.inner()) :
                 gap
             ,
             transition: 'all 0.3s',
@@ -190,9 +198,13 @@ Switch.boundProps = [...(Switch.boundProps||[]), function({ value }, {createElem
 }];
 
 
-Tabs.boundProps = [...(Tabs.boundProps||[]), function({ current, options }, {createElement, createRxRef, createRef}: RenderContext) {
+Tabs.boundProps = [...(Tabs.boundProps || []), function ({current, options}, {
+    createElement,
+    createRxRef,
+    createRef
+}: RenderContext) {
 
-    const optionsToPosRef = options.map((option:any) => {
+    const optionsToPosRef = options.map((option: any) => {
         // CAUTION 一定要用 createRxRef，否则用 createRxRef 的时候，ref 第一次 attach 不会触发 style 计算。
         const ref = createRxRef()
         return {option, ref}
@@ -200,8 +212,7 @@ Tabs.boundProps = [...(Tabs.boundProps||[]), function({ current, options }, {cre
 
     const rootRef = createRef()
     const currentRect = atomComputed(() => {
-        const rect =  optionsToPosRef.get(current())?.ref.current.getBoundingClientRect()
-        console.log(rect)
+        const rect = optionsToPosRef.get(current())?.ref.current.getBoundingClientRect()
         return rect
     })
 
@@ -212,7 +223,7 @@ Tabs.boundProps = [...(Tabs.boundProps||[]), function({ current, options }, {cre
             boxSizing: 'border-box',
             display: 'inline-flex',
             alignItems: 'stretch',
-            borderRadius: sizes.thing.box().div(2),
+            borderRadius: sizes.radius.box(),
             background: colors.background.item.normal(),
         },
         '$tabs:style': {
@@ -227,24 +238,24 @@ Tabs.boundProps = [...(Tabs.boundProps||[]), function({ current, options }, {cre
                 top: 0,
                 bottom: 0,
                 margin: 'auto 0',
-                left: (rect&&rootRect) ? (rect.left - rootRect.left):0,
+                left: (rect && rootRect) ? sizes.space.inner().add(rect.left - rootRect.left, 'px') : 0,
                 opacity: current() ? 1 : 0,
                 boxSizing: 'border-box',
-                height: percent(100).sub(sizes.space.inner().mul(5)),
-                width: rect?.width||0,
-                borderRadius: sizes.thing.box().div(2),
+                height: percent(100).sub(sizes.space.inner().mul(2)),
+                width: rect ? (new StyleSize(rect.width!, 'px').sub(sizes.space.inner().mul(2))) : 0,
+                borderRadius: sizes.radius.item(),
                 transition: 'all 0.3s',
             })
         },
-        '$tab:ref_':(_:any, { tab }: any) => {
+        '$tab:ref_': (_: any, {tab}: any) => {
             return mergeProp('ref', _, optionsToPosRef.get(tab)!.ref!)
         },
         '$tab:style_': () => {
             return {
                 cursor: 'pointer',
                 padding: sizes.space.padding(),
-                borderRadius: sizes.thing.box().div(2),
-                zIndex:2,
+                borderRadius: sizes.radius.item(),
+                zIndex: 2,
                 '&:hover': {
                     // background: colors.background.item.normal()
                 }
@@ -253,7 +264,7 @@ Tabs.boundProps = [...(Tabs.boundProps||[]), function({ current, options }, {cre
     }
 }];
 
-Calendar.boundProps = [...(Calendar.boundProps||[]), function({ value }, {createElement}: RenderContext) {
+Calendar.boundProps = [...(Calendar.boundProps || []), function ({value}, {createElement}: RenderContext) {
     return {
         '$root:style': {
             ...enclosedContainer,
@@ -264,7 +275,7 @@ Calendar.boundProps = [...(Calendar.boundProps||[]), function({ value }, {create
             background: colors.background.box.normal(),
         },
         '$head:style': {
-            color: colors.text.normal(false,'auxiliary'),
+            color: colors.text.normal(false, 'auxiliary'),
         },
         '$control:style': {
             display: 'flex',
@@ -287,68 +298,134 @@ Calendar.boundProps = [...(Calendar.boundProps||[]), function({ value }, {create
         '$lastMonth:style': {
             ...interactableTextField,
             ...enclosedContainer,
+            ...transitions.button('left'),
+            useSelect: 'none',
             color: colors.text.normal(false, 'auxiliary'),
             display: 'flex',
             alignItems: 'center',
             justifyContent: 'center',
-            width: sizes.thing.inner(),
-            height: sizes.thing.inner(),
+            width: sizes.thing.item(),
+            height: sizes.thing.item(),
         },
         '$nextMonth:style': {
             ...interactableTextField,
             ...enclosedContainer,
+            ...transitions.button('right'),
+            useSelect: 'none',
+
             color: colors.text.normal(false, 'auxiliary'),
             display: 'flex',
             alignItems: 'center',
             justifyContent: 'center',
-            width: sizes.thing.inner(),
-            height: sizes.thing.inner(),
+            width: sizes.thing.item(),
+            height: sizes.thing.item(),
         },
         '$lastYear:style': {
             ...interactableTextField,
             ...enclosedContainer,
-            color: colors.text.normal(false, 'auxiliary'),
+            ...transitions.button('left'),
+            useSelect: 'none',
 
+            color: colors.text.normal(false, 'auxiliary'),
             display: 'flex',
             alignItems: 'center',
             justifyContent: 'center',
-            width: sizes.thing.inner(),
-            height: sizes.thing.inner(),
+            width: sizes.thing.item(),
+            height: sizes.thing.item(),
         },
         '$nextYear:style': {
             ...interactableTextField,
             ...enclosedContainer,
+            ...transitions.button('right'),
+            useSelect: 'none',
             color: colors.text.normal(false, 'auxiliary'),
             display: 'flex',
             alignItems: 'center',
             justifyContent: 'center',
-            width: sizes.thing.inner(),
-            height: sizes.thing.inner(),
+            width: sizes.thing.item(),
+            height: sizes.thing.item(),
         },
         '$date:style': {
-            padding:0,
-            margin:0,
-            borderWidth:0,
+            padding: 0,
+            margin: 0,
+            borderWidth: 0,
         },
-        '$displayDate:style_': (_:any, { date }: any) =>  {
+        '$displayDate:style_': (_: any, {date}: any) => {
             return () => ({
                 color: (date.isLastMonth || date.isNextMonth) ? colors.text.disabled() : colors.text.normal(),
                 // color: (date.isLastMonth || date.isNextMonth) ? 'red': colors.text.normal(),
                 cursor: 'pointer',
-                left:0,
-                right:0,
-                top:0,
-                bottom:0,
+                left: 0,
+                right: 0,
+                top: 0,
+                bottom: 0,
                 display: 'flex',
                 height: sizes.thing.box(),
                 width: sizes.thing.box(),
-                borderRadius: sizes.thing.box().div(4),
+                borderRadius: sizes.radius.item(),
                 alignItems: 'center',
                 justifyContent: 'center',
                 '&:hover': {
                     background: colors.background.item.normal()
                 }
             })
+        }
+    }
+}]
+
+// Button
+Button.boundProps = [function ({}, {createElement}: RenderContext) {
+    return {
+        '$root:style': {
+            ...raisedContainer,
+            ...textBox,
+            cursor: 'pointer',
+            useSelect: 'none',
+            borderRadius: sizes.radius.item(),
+            background: colors.background.box.normal(),
+            color: colors.text.normal(),
+            '&:hover': {
+                // background: colors.background.item.active()
+            },
+            transition: 'all 0.1s',
+            '&:active': {
+                // 往右往下移动一点
+                transform: 'translate(1px, 1px)'
+            }
+        }
+    }
+}]
+
+AccordionItem.boundProps = [function ({visible}: any, {createRxRef}: RenderContext) {
+
+    return {
+        '$root:style': {
+            borderBottom: `1px solid ${colors.line.border.normal()}`,
+            '&:last-child': {
+                borderBottom: 0
+            }
+        },
+        '$head:style': {
+            alignItems: 'center',
+            padding: [sizes.space.padding(), 0],
+            cursor: 'pointer',
+            '&:hover': {
+                textDecoration: 'underline'
+            }
+        },
+        '$title:style': {
+            fontWeight: 500,
+        },
+        '$handle:style': () => ({
+            ...layout.rowCenter(),
+            transform: visible() ? 'rotate(-90deg)' : 'rotate(0deg)',
+            transition: 'transform .3s',
+        }),
+        '$contentContainer:style': {
+            transition: 'height .3s',
+        },
+        '$content:style': {
+            paddingBottom: sizes.space.padding(),
         }
     }
 }]

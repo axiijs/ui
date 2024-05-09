@@ -2,9 +2,6 @@ import {StyleSize} from 'axii'
 import {createPattern} from "./util/util.js";
 import {INDEX} from "./util/case.js";
 import {InputColors, valueRules} from "./pattern.js";
-import {genColors} from "./util/color.macro.js";
-
-
 
 
 const shadows = [
@@ -45,7 +42,6 @@ type flexRowProps = {
 type TextType = 'text' | 'description' | 'auxiliary' | 'heading'
 
 export function createCommon(inputColors: InputColors) {
-
      const sizes =  {
         font: {
             heading(level: number) {
@@ -67,15 +63,18 @@ export function createCommon(inputColors: InputColors) {
             box() {
                 return rem(2)
             },
+            item() {
+                return rem(1.5)
+            },
             text() {
                 return rem(1)
             },
             inner(level: number = 2) {
-                return rem(2).sub(4, 'px')
+                return sizes.thing.item().sub(sizes.space.inner())
             }
         },
         space: {
-            padding(value: number= 1) {
+            padding(value: number= .75) {
                 // 和外部的 border 之间的距离
                 return rem(value)
             },
@@ -83,9 +82,9 @@ export function createCommon(inputColors: InputColors) {
                 // item 之间的具体距离
                 return rem(1)
             },
-            inner(level: number = 2) {
+            inner(level: number = 4) {
                 // 内部的 item 和自己的 border 之间的距离
-                return px(2)
+                return px(level)
             }
         },
         radius: {
@@ -93,10 +92,10 @@ export function createCommon(inputColors: InputColors) {
                 return rem(0.5)
             },
             box() {
-                return rem(1)
+                return rem(.75)
             },
             panel() {
-                return rem(2)
+                return rem(1)
             }
         }
     }
@@ -242,9 +241,15 @@ export function createCommon(inputColors: InputColors) {
         padding: rem(1),
     }
 
-// 正文
+    // 正文
      const textField = {
 
+    }
+
+    const textBox = {
+         ...layout.rowCenter(),
+         height: sizes.thing.box(),
+        padding: [0, sizes.space.padding()]
     }
 
      const supportiveTextField = {
@@ -273,7 +278,6 @@ export function createCommon(inputColors: InputColors) {
     }
 
 
-
      const modalContainer = {
         ...enclosedContainer,
         boxShadow: shadows[4],
@@ -287,10 +291,27 @@ export function createCommon(inputColors: InputColors) {
     }
 
 
+    const transitions = {
+         button(direction: 'left' | 'right' | 'down' = 'down') {
+             return {
+                 transition: 'transform 0.1s',
+                '&:active': {
+                    transform:
+                        direction === 'left' ?
+                            'translateX(-1px)' :
+                        direction === 'right' ?
+                            'translateX(1px)' :
+                        'translate(1px, 1px)',
+                }
+             }
+         }
+    }
+
     return {
-colors,
+        colors,
         sizes,
         layout,
+        transitions,
         paddingContainer,
         textField,
         supportiveTextField,
@@ -300,6 +321,7 @@ colors,
         enclosedContainer,
         modalContainer,
         raisedContainer,
+        textBox
     }
 }
 
@@ -313,8 +335,6 @@ export class ThemeColors {
     public varsToColors: {[key:string]: string} = {}
     constructor(public inputColors: InputColors) {
         this.genVars()
-        console.log(this.inputColorVars)
-        console.log(this.varsToColors)
     }
     genVars() {
         this.inputColorVars = {} as InputColors
