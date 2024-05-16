@@ -1,13 +1,13 @@
 import {atom, Component, FixedCompatiblePropsType, PropsType, PropTypes, RenderContext} from "axii";
 
-export const DrawerPropTypes = {
+export const DialogPropTypes = {
     visible: PropTypes.atom<boolean>().default(() => atom(false)),
     children: PropTypes.any,
     container: PropTypes.any
 }
 
-export const Drawer: Component = function(props: FixedCompatiblePropsType<typeof DrawerPropTypes>, { createElement, createPortal}: RenderContext) {
-    const { visible, children, container } = props as PropsType<typeof DrawerPropTypes>
+export const Dialog: Component = function(props: FixedCompatiblePropsType<typeof DialogPropTypes>, { createElement, createPortal}: RenderContext) {
+    const { visible, children, container } = props as PropsType<typeof DialogPropTypes>
     return createPortal(() => {
         const backgroundStyle = [
             () => ({
@@ -18,13 +18,9 @@ export const Drawer: Component = function(props: FixedCompatiblePropsType<typeof
                 height: '100vh',
                 display: visible() ? 'flex' : 'none',
                 justifyContent: 'center',
-                alignItems: 'flex-end',
+                alignItems: 'center',
             }),
         ]
-
-        const contentContainerStyle = {
-            width: '100vw',
-        }
 
         return (<div
             as='root'
@@ -32,10 +28,8 @@ export const Drawer: Component = function(props: FixedCompatiblePropsType<typeof
             style={ backgroundStyle}
             onClick={() => visible(false)}
         >
-            <div
-                as={'content'}
-                style={contentContainerStyle}
-                onClick={(e:Event) => e.stopPropagation()}
+            <div as={'content'}
+                 onClick={(e:Event) => e.stopPropagation()}
             >
                 {children}
             </div>
@@ -43,4 +37,4 @@ export const Drawer: Component = function(props: FixedCompatiblePropsType<typeof
     }, container || document.body)
 }
 
-Drawer.propTypes = DrawerPropTypes
+Dialog.propTypes = DialogPropTypes

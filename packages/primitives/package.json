@@ -12,6 +12,6 @@
     "typescript": "^5.4.3"
   },
   "peerDependencies": {
-    "axii": "^2.4.0"
+    "axii": "^2.4.31"
   }
 }

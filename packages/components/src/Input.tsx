@@ -30,6 +30,6 @@ export const Input: Component = function({ value, placeholder, prefix, affix}: I
 Input.propTypes = {
     value: PropTypes.atom<string>().default(() => atom('')),
     placeholder: PropTypes.atom<string>().default(() => atom('')),
-    prefix: PropTypes.atom<string>().default(() => atom(null)),
-    affix: PropTypes.atom<string>().default(() => atom(null)),
+    prefix: PropTypes.atom<string|null>().default(() => atom(null)),
+    affix: PropTypes.atom<string|null>().default(() => atom(null)),
 }

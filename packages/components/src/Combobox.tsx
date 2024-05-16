@@ -13,16 +13,18 @@ import {
     RenderContext,
     RxList,
 } from "axii";
+import {Input} from "./Input.js";
 
 
-const SelectPropTypes = {
+const ComboboxPropTypes = {
+    search: PropTypes.atom<string>().default(() => atom('')),
     value: PropTypes.atom<any>().default(() => atom(null)).isRequired,
     placeholder: PropTypes.atom<any>().default(() => atom('')),
     options: PropTypes.rxList<any>().default(() => new RxList([])).isRequired
 }
 
-export const Select:Component = function Select(props: FixedCompatiblePropsType<typeof SelectPropTypes> , {createElement, createPortal, context, createStateFromRef}: RenderContext) {
-    const {value, options, placeholder} = props as PropsType<typeof SelectPropTypes>
+export const Combobox:Component = function Combobox(props: FixedCompatiblePropsType<typeof ComboboxPropTypes> , {createElement, createPortal, context, createStateFromRef}: RenderContext) {
+    const {value, options, placeholder, search} = props as PropsType<typeof ComboboxPropTypes>
 
     const optionsWithSelected = createSelection(options, value)
 
@@ -87,15 +89,18 @@ export const Select:Component = function Select(props: FixedCompatiblePropsType<
                     prop:value={value}
                     prop:placeholder={placeholder}
                     prop:optionVisible={optionVisible}
-                 >
+                >
                     {() => value() ?? placeholder()}
                 </div>
             </div>
             {
                 () => optionVisible() ? createPortal((
                     <div as="dropdownBackground" style={dropdownBackgroundStyle()}>
-                        <div as="options" style={optionsStyle} prop:value={options}>
-                            {optionNodes}
+                        <div as="optionsContainer" style={optionsStyle} prop:value={options}>
+                            <Input as={"search"} value={search}/>
+                            <div as={'options'}>
+                                {optionNodes}
+                            </div>
                         </div>
                     </div>
                 ), dropdowmContainer) : null
@@ -104,5 +109,5 @@ export const Select:Component = function Select(props: FixedCompatiblePropsType<
     )
 }
 
-Select.propTypes = SelectPropTypes
+Combobox.propTypes = ComboboxPropTypes
 

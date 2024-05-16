@@ -3,7 +3,7 @@
     "baseUrl": ".",
     "outDir": "dist",
     "sourceMap": true,
-    "target": "es2017",
+    "target": "es2019",
     "newLine": "LF",
     "useDefineForClassFields": false,
     "module": "esnext",
@@ -21,7 +21,9 @@
     "paths": {
       "@primitive": ["./packages/primitives/src"],
       "@theme": ["./packages/theme/src"],
-      "axii-ui": ["./packages/components/src"]
+      "axii-ui": ["./packages/components/src"],
+      "axii-ui/themes/*": ["./packages/components/src/themes/*"],
+      "axii-icon/*": ["./packages/icons/src/icons/*"]
     },
     "jsx": "react",
     "jsxFactory": "createElement",

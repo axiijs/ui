@@ -5,7 +5,7 @@ import {InputColors, valueRules} from "./pattern.js";
 
 
 const shadows = [
-    '0 -6px 16px -8px rgba(0, 0, 0, 0.08), 0 -9px 28px 0 rgba(0, 0, 0, 0.05), 0 -12px 48px 16px rgba(0, 0, 0, 0.03)',
+    '0 1px 2px 0 rgba(0,0,0,.05)',
     '0 6px 16px -8px rgba(0, 0, 0, 0.08), 0 9px 28px 0 rgba(0, 0, 0, 0.05), 0 12px 48px 16px rgba(0, 0, 0, 0.03)',
     '0 3px 6px -4px rgba(0, 0, 0, 0.12), 0 6px 16px 0 rgba(0, 0, 0, 0.08), 0 9px 28px 8px rgba(0, 0, 0, 0.05)',
     '-6px 0 16px -8px rgba(0, 0, 0, 0.08), -9px 0 28px 0 rgba(0, 0, 0, 0.05), -12px 0 48px 16px rgba(0, 0, 0, 0.03)',
@@ -39,10 +39,10 @@ type flexRowProps = {
     justify: 'start' | 'center' | 'end' | 'between' | 'around' | 'evenly'
 }
 
-type TextType = 'text' | 'description' | 'auxiliary' | 'heading'
+type TextType = 'text' | 'description' | 'supportive' | 'heading'
 
 export function createCommon(inputColors: InputColors) {
-     const sizes =  {
+    const sizes = {
         font: {
             heading(level: number) {
                 return rem(2 + level)
@@ -52,11 +52,11 @@ export function createCommon(inputColors: InputColors) {
             },
             // 出错信息等
             description() {
-                return rem(0)
+                return rem(1)
             },
             // 辅助文字  placeholder 等都算
-            auxiliary() {
-                return rem(-1)
+            supportive() {
+                return rem(.9)
             },
         },
         thing: {
@@ -74,11 +74,11 @@ export function createCommon(inputColors: InputColors) {
             }
         },
         space: {
-            padding(value: number= .75) {
+            padding(value: number = .75) {
                 // 和外部的 border 之间的距离
                 return rem(value)
             },
-            gap(){
+            gap() {
                 // item 之间的具体距离
                 return rem(1)
             },
@@ -92,15 +92,15 @@ export function createCommon(inputColors: InputColors) {
                 return rem(0.5)
             },
             box() {
-                return rem(.75)
+                return rem(.55)
             },
             panel() {
-                return rem(1)
+                return rem(.6)
             }
         }
     }
 
-     const colors = ({
+    const colors = ({
         text: {
             normal(inverted = false, type: TextType = 'text') {
                 const offset = type === 'text' ? 0 : (type === 'description' ? -2 : -4)
@@ -188,7 +188,7 @@ export function createCommon(inputColors: InputColors) {
         }
     })
 
-     const layout = {
+    const layout = {
         flexRow({gap, align, justify}: flexRowProps) {
             return {
                 display: 'flex',
@@ -237,74 +237,111 @@ export function createCommon(inputColors: InputColors) {
         }
     }
 
-     const paddingContainer = {
+    const paddingContainer = {
         padding: rem(1),
     }
 
     // 正文
-     const textField = {
-
+    const mainText = {
+        fontSize: sizes.font.text(),
+        color: colors.text.normal(),
     }
+    const textField = {}
+
 
     const textBox = {
-         ...layout.rowCenter(),
-         height: sizes.thing.box(),
+        ...layout.rowCenter(),
+        height: sizes.thing.box(),
         padding: [0, sizes.space.padding()]
     }
 
-     const supportiveTextField = {
+    const supportiveText = {
+        fontSize: sizes.font.supportive(),
+        color: colors.text.normal(false, 'supportive'),
+    }
+
+    const supportiveTextField = {
         background: colors.background.item.normal(),
     }
 
-     const labelTextField = {
+    const labelTextField = {}
 
+    const descriptionText = {
+        fontSize: sizes.font.description(),
+        color: colors.text.normal(false, 'description'),
     }
 
-     const descriptionTextField = {
+    const descriptionTextField = {}
 
-    }
-
-     const interactableTextField = {
+    const interactableTextField = {
         cursor: 'pointer',
         '&:hover': {
             background: colors.background.item.normal(),
         }
     }
 
-     const enclosedContainer = {
+    const enclosedContainer = {
         borderRadius: rem(0.5),
         overflow: 'hidden',
         border: `1px solid ${colors.line.border.normal()}`,
     }
 
 
-     const modalContainer = {
+    const modalContainer = {
         ...enclosedContainer,
         boxShadow: shadows[4],
         background: colors.background.box.normal(),
     }
 
-     const raisedContainer = {
+    const projectingContainer = {
         ...enclosedContainer,
         boxShadow: shadows[0],
         background: colors.background.box.normal(),
     }
 
+    const levitatingContainer = {
+        ...enclosedContainer,
+        boxShadow: shadows[1],
+        background: colors.background.box.normal(),
+    }
+
 
     const transitions = {
-         button(direction: 'left' | 'right' | 'down' = 'down') {
-             return {
-                 transition: 'transform 0.1s',
+        button(direction: 'left' | 'right' | 'down' = 'down') {
+            return {
+                transition: 'transform 0.1s',
                 '&:active': {
                     transform:
                         direction === 'left' ?
                             'translateX(-1px)' :
-                        direction === 'right' ?
-                            'translateX(1px)' :
-                        'translate(1px, 1px)',
+                            direction === 'right' ?
+                                'translateX(1px)' :
+                                'translate(1px, 1px)',
                 }
-             }
-         }
+            }
+        }
+    }
+
+    const listItems = {
+        '& > *' : {
+            padding: [sizes.space.padding(), sizes.space.padding(2)],
+            '&:hover': {
+                background: colors.background.item.normal(),
+                cursor: 'pointer',
+            },
+        }
+    }
+
+    const groupedListItems = {
+        '& > *': {
+            borderBottom: `1px solid ${colors.line.separator()}`,
+            '&:last-child': {
+                borderBottom: 'none'
+            },
+            '& > *': {
+                ...listItems,
+            }
+        }
     }
 
     return {
@@ -320,40 +357,50 @@ export function createCommon(inputColors: InputColors) {
         interactableTextField,
         enclosedContainer,
         modalContainer,
-        raisedContainer,
-        textBox
+        projectingContainer,
+        levitatingContainer,
+        textBox,
+        mainText,
+        descriptionText,
+        supportiveText,
+        listItems,
+        groupedListItems,
     }
 }
 
-function getColorVar(type:string, index:number) {
+function getColorVar(type: string, index: number) {
     return `--color-${type}-${index}`
 }
 
 
 export class ThemeColors {
     public inputColorVars!: InputColors
-    public varsToColors: {[key:string]: string} = {}
+    public varsToColors: { [key: string]: string } = {}
+
     constructor(public inputColors: InputColors) {
         this.genVars()
     }
+
     genVars() {
         this.inputColorVars = {} as InputColors
         this.varsToColors = {}
-        for(let key in this.inputColors) {
+        for (let key in this.inputColors) {
             const colorType = key as keyof InputColors
             this.inputColorVars[colorType] = [[], this.inputColors[colorType as keyof InputColors][1]]
-            this.inputColors[colorType as keyof InputColors][0].forEach((color:string, index:number) => {
+            this.inputColors[colorType as keyof InputColors][0].forEach((color: string, index: number) => {
                 const varName = getColorVar(colorType, index)
                 this.varsToColors[varName] = color
                 this.inputColorVars[colorType][0][index] = `var(${varName})`
             })
         }
     }
+
     injectVars() {
-        for(let varName in this.varsToColors) {
+        for (let varName in this.varsToColors) {
             document.documentElement.style.setProperty(varName, this.varsToColors[varName])
         }
     }
+
     replaceColors(inputColors: InputColors) {
         this.inputColors = inputColors
         this.genVars()
