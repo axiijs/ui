@@ -14,6 +14,7 @@ import {
     RxList,
 } from "axii";
 import {Input} from "./Input.js";
+import LoadingFour from "axii-icon/LoadingFour.js";
 
 
 const ComboboxPropTypes = {
@@ -52,6 +53,10 @@ export const Combobox:Component = function Combobox(props: FixedCompatiblePropsT
             flexDirection: 'column',
             top: rootPosition()?.bottom!,
             left: rootPosition()?.left,
+            maxHeight: viewportSize()?.height! - rootPosition()?.bottom!-20,
+            // maxHeight: `${viewportSize()?.height! - rootPosition()?.bottom!-20}px`,
+            // maxHeight: '300px',
+            overflow: 'auto',
         }
     })
 
@@ -97,10 +102,18 @@ export const Combobox:Component = function Combobox(props: FixedCompatiblePropsT
                 () => optionVisible() ? createPortal((
                     <div as="dropdownBackground" style={dropdownBackgroundStyle()}>
                         <div as="optionsContainer" style={optionsStyle} prop:value={options}>
-                            <Input as={"search"} value={search}/>
-                            <div as={'options'}>
-                                {optionNodes}
+                            <div as={'searchContainer'}>
+                                <Input as={"search"} value={search}/>
                             </div>
+                            {() => options.asyncStatus?.() ?
+                                <div as={'loadingContainer'}>
+                                    <span as={'loading'}><LoadingFour /></span>
+                                </div>
+                                 :
+                                <div as={'options'}>
+                                    {optionNodes}
+                                </div>
+                            }
                         </div>
                     </div>
                 ), dropdowmContainer) : null

@@ -16,6 +16,13 @@ import {Contextmenu} from "../Contextmenu.js";
 import {Toast} from "../Toast.js";
 import {Sonner} from "../Sonner.js";
 import {Combobox} from "../Combobox.js";
+import {DatePicker} from "../DatePicker.js";
+import dayjs from "dayjs";
+import {Textarea} from "../Textarea.js";
+import {Slider} from "../Slider.js";
+import {Dropdown} from "../Dropdown.js";
+import {Popover} from "../Popover.js";
+import {originMenuContainerStyle} from "../Menu.js";
 
 const zincThemeColors = genColors('#0F172A')
 const themeColors = new ThemeColors(zincThemeColors)
@@ -41,7 +48,132 @@ const {
 } = common
 
 
+export const menuItemStyle = {
+    ...originMenuContainerStyle['&>*'],
+    ...paddingContainer,
+    width:'100%',
+    boxSizing: 'border-box',
+    // ...layout.rowCenter(),
+    borderBottom: `1px solid ${colors.line.border.normal()}`,
+    '&:last-child': {
+        borderBottom: 0
+    },
+    '&>*:nth-child(1)': {
+        width:'100%',
+        boxSizing: 'border-box',
+        ...layout.twoSide(),
+        ...textBox,
+        ...interactableTextField,
+    }
+}
+
+export const menuContainerStyle = {
+    ...enclosedContainer,
+    ...projectingContainer,
+    overflow: 'visible',
+    '&>*': menuItemStyle
+}
+
+
 export function install() {
+    Object.assign(originMenuContainerStyle, menuContainerStyle)
+
+
+    Popover.boundProps = [function ({}, {createElement}: RenderContext) {
+        return {
+            '$content:style': {
+                ...enclosedContainer,
+                ...levitatingContainer,
+            }
+        }
+    }]
+
+    Dropdown.boundProps = [function ({}, {createElement}: RenderContext) {
+        return {
+            '$content:style': {
+                ...enclosedContainer,
+                ...levitatingContainer,
+                ...paddingContainer
+            }
+        }
+    }]
+
+    Slider.boundProps = [function ({}, {createElement}: RenderContext) {
+        return {
+            '$root:style': {
+                ...layout.columnCenter(),
+                justifyContent: 'center',
+                alignItems: 'stretch',
+                height: sizes.thing.item(),
+            },
+            '$container:style': {
+                margin: [0, sizes.thing.item().div(2)]
+            },
+            '$main:style': {
+                ...enclosedContainer,
+                ...projectingContainer,
+                cursor: 'pointer',
+                width: sizes.thing.item(),
+                height: sizes.thing.item(),
+                background: colors.background.box.normal(),
+                marginLeft: `-${sizes.thing.item().div(2)}`,
+                borderRadius: '50%',
+            },
+            '$bar:style': {
+                background: colors.background.item.normal(),
+                borderRadius: sizes.radius.item().div(2),
+                height: sizes.thing.item().div(4),
+            },
+            '$barInner:style': {
+                borderRadius: sizes.radius.item().div(2),
+                background: colors.background.item.active(),
+            }
+        }
+    }]
+
+    Textarea.boundProps = [function ({}, {createElement}: RenderContext) {
+        return {
+            '$root:style': {
+                ...enclosedContainer,
+                ...projectingContainer,
+                ...layout.columnCenter(),
+                alignItems: 'stretch',
+                borderRadius: sizes.radius.item(),
+                overflow: 'hidden',
+                padding: sizes.space.inner()
+            },
+            '$main:style': {
+                ...mainText,
+                borderWidth: 0,
+                outline: 'none',
+                color: colors.text.normal(),
+                placeholderColor: colors.text.normal(false, 'supportive'),
+            }
+        }
+    }]
+
+
+    DatePicker.boundProps = [function ({value}, {createElement}: RenderContext) {
+        return {
+            '$main': {
+                '$root:style': {
+                    ...levitatingContainer,
+                }
+            },
+            '$displayValueContainer:style': {
+                ...enclosedContainer,
+                ...projectingContainer,
+                ...textBox,
+                ...layout.rowCenter(),
+                cursor: 'pointer',
+                gap: sizes.space.inner(),
+            },
+            '$displayValueIcon:style': {
+                lineHeight: 0,
+            }
+        }
+    }]
+
     Combobox.boundProps = [...Combobox.boundProps||[], function ({}, {createElement}: RenderContext) {
         return {
             '$root:style': {
@@ -60,10 +192,32 @@ export function install() {
             '$optionsContainer:style': {
                 ...modalContainer,
             },
+            '$searchContainer:style': {
+                padding: sizes.space.inner(),
+            },
+            '$loadingContainer:style': {
+                ...paddingContainer,
+                ...layout.columnCenter(),
+            },
+            '$loading:style': {
+                // 修复 svg 下面有个额外高度的问题
+                lineHeight: 0,
+                '@keyframes': {
+                    from: {
+                        transform:'rotate(0deg)'
+                },
+                    to: {
+                        transform:'rotate(360deg)'
+                    }
+                },
+                'animation': '1s linear infinite @self',
+            },
             '$options:style': {
                 color: colors.text.normal(),
                 fontSize: sizes.font.text(),
                 lineHeight: '20px',
+                overflow: 'auto',
+                ...paddingContainer
             },
             '$option:style': {
                 ...interactableTextField,
@@ -83,8 +237,7 @@ export function install() {
             '$content:style_': (_:any, {index}:any) => {
                 return () => {
                     const translateY = `calc(-100% - ${index()*10}px)`
-                    const scale = `scaleX(${1 - index()*0.1})`
-                    console.log('scale', scale)
+                    // const scale = `scaleX(${1 - index()*0.1})`
                     return [{
                         ...enclosedContainer,
                         ...paddingContainer,
@@ -206,6 +359,7 @@ export function install() {
                 return {
                     ...enclosedContainer,
                     ...projectingContainer,
+                    height: textBox.height,
                     borderRadius: sizes.radius.item(),
                     overflow: 'hidden',
                     border: focused() ? `1px solid ${colors.line.border.focused()}` : enclosedContainer.border
@@ -250,6 +404,7 @@ export function install() {
             },
             '$options:style': {
                 ...modalContainer,
+                ...paddingContainer,
                 color: colors.text.normal(),
                 fontSize: sizes.font.text(),
                 lineHeight: '20px',
@@ -524,10 +679,14 @@ export function install() {
                 margin: 0,
                 borderWidth: 0,
             },
-            '$displayDate:style_': (_: any, {date}: any) => {
+            '$displayDate:style_': (_: any, {date, month, selected}: any) => {
+
+                const isLastMonth = dayjs(date).month() < month()-1
+                const isNextMonth = dayjs(date).month() > month()-1
+
                 return () => ({
-                    color: (date.isLastMonth || date.isNextMonth) ? colors.text.disabled() : colors.text.normal(),
-                    // color: (date.isLastMonth || date.isNextMonth) ? 'red': colors.text.normal(),
+                    color: selected() ? colors.text.active(true) : ((isLastMonth || isNextMonth) ? colors.text.disabled() : colors.text.normal()),
+                    // color: selected() ? 'white' : ((isLastMonth || isNextMonth) ? colors.text.disabled() : colors.text.normal()),
                     cursor: 'pointer',
                     left: 0,
                     right: 0,
@@ -539,15 +698,16 @@ export function install() {
                     borderRadius: sizes.radius.item(),
                     alignItems: 'center',
                     justifyContent: 'center',
+                    background: selected() ? colors.background.item.active() : 'transparent',
                     '&:hover': {
-                        background: colors.background.item.normal()
+                        background: selected() ? colors.background.item.active() : colors.background.item.normal()
                     }
                 })
             }
         }
     }]
 
-// Button
+    // Button
     Button.boundProps = [function ({}, {createElement}: RenderContext) {
         return {
             '$root:style': {

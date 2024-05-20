@@ -49,6 +49,7 @@ export const Select:Component = function Select(props: FixedCompatiblePropsType<
             display: 'flex',
             flexDirection: 'column',
             top: rootPosition()?.bottom!,
+            maxHeight: viewportSize()?.height! - rootPosition()?.bottom!,
             left: rootPosition()?.left,
         }
     })

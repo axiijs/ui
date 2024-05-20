@@ -35,6 +35,7 @@ export const valueRules = (inputColors: InputColors) => {
                 [undefined, undefined, undefined, undefined, undefined, undefined, colors.black(offset)],  // 正常情况下是褐色
                 [undefined, INDEX.stressed, undefined, undefined, undefined, undefined, colors.black(1 + offset)], // 强调的时候黑色变深
                 [INDEX.interactable, undefined, INDEX.inverted, undefined, undefined, undefined, colors.gray(-6)], // 反色
+                [INDEX.interactable, undefined, INDEX.inverted, INDEX.active.active, undefined, undefined, colors.gray(-6)], // 反色
                 [INDEX.interactable, undefined, undefined, undefined, undefined, undefined, colors.black(offset)], // 可交互时，默认颜色是正色
                 [INDEX.interactable, undefined, undefined, INDEX.active.active, undefined, undefined, colors.primary(offset)], // 可交互并且激活时，显示的是主色。
                 [INDEX.interactable, undefined, undefined, INDEX.active.inactive, undefined, undefined, colors.gray()], // 可交互，但未激活是灰色

@@ -1,13 +1,14 @@
-import {atom, Component, FixedCompatiblePropsType, PropsType, PropTypes, RenderContext} from "axii";
+import {atom, Component, FixedCompatiblePropsType, ModalContext, PropsType, PropTypes, RenderContext} from "axii";
 
 export const DrawerPropTypes = {
     visible: PropTypes.atom<boolean>().default(() => atom(false)),
     children: PropTypes.any,
-    container: PropTypes.any
 }
 
-export const Drawer: Component = function(props: FixedCompatiblePropsType<typeof DrawerPropTypes>, { createElement, createPortal}: RenderContext) {
-    const { visible, children, container } = props as PropsType<typeof DrawerPropTypes>
+export const Drawer: Component = function(props: FixedCompatiblePropsType<typeof DrawerPropTypes>, { createElement, context,createPortal}: RenderContext) {
+    const { visible, children } = props as PropsType<typeof DrawerPropTypes>
+    const container = context.get(ModalContext)?.container || document.body
+
     return createPortal(() => {
         const backgroundStyle = [
             () => ({

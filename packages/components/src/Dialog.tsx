@@ -1,13 +1,15 @@
-import {atom, Component, FixedCompatiblePropsType, PropsType, PropTypes, RenderContext} from "axii";
+import {atom, Component, FixedCompatiblePropsType, ModalContext, PropsType, PropTypes, RenderContext} from "axii";
 
 export const DialogPropTypes = {
     visible: PropTypes.atom<boolean>().default(() => atom(false)),
-    children: PropTypes.any,
-    container: PropTypes.any
+    children: PropTypes.any
 }
 
-export const Dialog: Component = function(props: FixedCompatiblePropsType<typeof DialogPropTypes>, { createElement, createPortal}: RenderContext) {
-    const { visible, children, container } = props as PropsType<typeof DialogPropTypes>
+export const Dialog: Component = function(props: FixedCompatiblePropsType<typeof DialogPropTypes>, { createElement, createPortal, context}: RenderContext) {
+    const { visible, children } = props as PropsType<typeof DialogPropTypes>
+    const container = context.get(ModalContext)?.container || document.body
+
+
     return createPortal(() => {
         const backgroundStyle = [
             () => ({

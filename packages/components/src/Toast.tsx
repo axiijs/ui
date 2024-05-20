@@ -1,8 +1,9 @@
 import {
     atom,
-    Atom, autorun,
+    Atom,
+    autorun,
     Component,
-    FixedCompatiblePropsType,
+    FixedCompatiblePropsType, ModalContext,
     PropsType,
     PropTypes,
     RenderContext,
@@ -13,24 +14,22 @@ import {
 export const ToastPropTypes = {
     stack: PropTypes.rxList<any>().default(() => new RxList([])),
     children: PropTypes.any,
-    container: PropTypes.any,
     expireTime: PropTypes.atom<number>().default(() => atom(3000)),
 }
 
 
-export const Toast: Component = function(props: FixedCompatiblePropsType<typeof ToastPropTypes>, { createElement, createPortal}: RenderContext) {
-    const { stack, container, expireTime } = props as PropsType<typeof ToastPropTypes>
+export const Toast: Component = function(props: FixedCompatiblePropsType<typeof ToastPropTypes>, { createElement, context, createPortal}: RenderContext) {
+    const { stack, expireTime } = props as PropsType<typeof ToastPropTypes>
+    const container = context.get(ModalContext)?.container || document.body
 
     // 手动 remove 就是用户点击 toast 上的关闭按钮。
     // FIXME 因为我们同时支持手动 remove 和超时 remove。
     //  index 在已经被 remove 之后会失去响应，会不会对这里的逻辑造成什么影响？？？
     const scheduleToRemove = (index: Atom<number>) => {
-        console.log('remove', index.raw)
         stack.splice(index.raw,1)
     }
 
     const itemsWithExpired = stack.map((item, index, {onCleanup}) => {
-        const origin = index()
 
         const time = new RxTime()
         const createAt = Date.now()
@@ -43,7 +42,6 @@ export const Toast: Component = function(props: FixedCompatiblePropsType<typeof 
         })
 
         onCleanup(() => {
-            console.log('destroy', index.raw, origin, item)
             time.destroy()
         })
 
@@ -67,7 +65,7 @@ export const Toast: Component = function(props: FixedCompatiblePropsType<typeof 
                 )
             })}
         </div>)
-    }, container || document.body)
+    }, container)
 }
 
 Toast.propTypes = ToastPropTypes

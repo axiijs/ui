@@ -1,15 +1,26 @@
-import {atom, PropTypes, RenderContext, FixedCompatiblePropsType, PropsType, atomComputed, Atom, Component} from "axii";
+import {
+    atom,
+    Atom, atomComputed,
+    Component,
+    createSelection,
+    FixedCompatiblePropsType,
+    PropsType,
+    PropTypes,
+    RenderContext,
+    RxList
+} from "axii";
 import dayjs from 'dayjs'
 import weekdayPlugin from 'dayjs/plugin/isoWeek'
-import { Dayjs } from 'dayjs'
 import Left from 'axii-icon/Left'
-import Right from  'axii-icon/Right'
+import Right from 'axii-icon/Right'
 import DoubleLeft from 'axii-icon/DoubleLeft'
 import DoubleRight from 'axii-icon/DoubleRight'
+
 dayjs.extend(weekdayPlugin)
 
 const CalendarPropTypes = {
-    value: PropTypes.atom<Dayjs>().default(() => atom(dayjs(Date.now()))).isRequired,
+    value: PropTypes.atom<string>().default(() => atom(dayjs(Date.now()).format('YYYY-MM-DD'))).isRequired,
+    format: PropTypes.atom<string>().default(() => atom('YYYY-MM-DD')),
 }
 
 // TODO locale
@@ -23,76 +34,55 @@ export type DateType = {
 }
 
 export const Calendar: Component = function(props: FixedCompatiblePropsType<typeof CalendarPropTypes> , {createElement}: RenderContext) {
-    const { value } = props as PropsType<typeof CalendarPropTypes>
+    const { value, format } = props as PropsType<typeof CalendarPropTypes>
+    const month = atom(dayjs(value() || Date.now()).month())
+    const year = atom(dayjs(value() || Date.now()).year())
 
-    const days: Atom<{year: number, month: number, date: number}[][]> = atomComputed(() => {
-        const startDay = dayjs(value()).startOf('month')
-        const endDay = dayjs(value()).endOf('month')
+    const getDisplayDate = () => {
+        return dayjs(`${year()}-${month()+1}`)
+    }
 
+    const dates = new RxList(() => {
+        const startDay = getDisplayDate().startOf('month')
+        const endDay = getDisplayDate().endOf('month')
 
-        const dates: DateType[] = Array(endDay.date()).fill(0).map((_, i) => ({
-            year: value().year(),
-            month: value().month(),
-            date: i+1,
-        }))
+        const dateData: string[] = Array(endDay.date()).fill(0).map((_, i) => startDay.add(i, 'day').format(format()))
         // 往前补
         const startDayOfWeek = startDay.isoWeekday()
         if (startDayOfWeek > 1) {
-            const lastMonth = dayjs(startDay).subtract(1, 'day')
-            const lastDayOfLastMonth = lastMonth.date()
-            for( let i = startDayOfWeek - 1; i > 0; i-- ) {
-                dates.unshift({
-                    year: lastMonth.year(),
-                    month: lastMonth.month(),
-                    date: lastDayOfLastMonth - (startDayOfWeek - i - 1),
-                    isLastMonth: true
-                })
+            for( let i = 0; i < startDayOfWeek - 1;  i++ ) {
+                dateData.unshift(startDay.subtract(i+1, 'day').format(format()))
             }
         }
 
         const endDayOfWeek  = endDay.isoWeekday()
 
         if (endDayOfWeek < 7) {
-            const nextMonth = dayjs(endDay).add(1, 'day')
-            for( let i = endDayOfWeek + 1; i < 8; i++) {
-                dates.push({
-                    year: nextMonth.year(),
-                    month: nextMonth.month(),
-                    date: i - endDayOfWeek,
-                    isNextMonth: true
-                })
+            for( let i = 0; i < (7-endDayOfWeek); i++) {
+                dateData.push(endDay.add(i+1, 'day').format(format()))
             }
         }
 
-        // 每 7 个一组
-        const datesGroupByWeek = dates.reduce((result, current) => {
-            const lastGroup =  result[result.length - 1]
-            if (lastGroup.length === 7) {
-                result.push([current])
-            } else {
-                lastGroup.push(current)
-            }
-            return result
-        }, [[]] as {year: number, month: number, date: number}[][])
-
-        return datesGroupByWeek
+        return dateData
     })
 
     const lastMonth = () => {
-        value(dayjs(value()).subtract(1, 'month'))
+        month(getDisplayDate().subtract(1, 'month').month())
     }
 
     const nextMonth = () => {
-        value(dayjs(value()).add(1, 'month'))
+        month(getDisplayDate().add(1, 'month').month())
     }
 
     const lastYear = () => {
-        value(dayjs(value()).subtract(1, 'year'))
+        year(getDisplayDate().subtract(1, 'year').year())
     }
 
     const nextYear = () => {
-        value(dayjs(value()).add(1, 'year'))
+        year(getDisplayDate().add(1, 'year').year())
     }
+
+    const displayData = createSelection(dates, value)
 
     return (
         <div as={'root'}>
@@ -105,7 +95,7 @@ export const Calendar: Component = function(props: FixedCompatiblePropsType<type
                         <Left />
                     </span>
                 </div>
-                <span as={'displayValue'}>{() => value().format('YYYY-MM-DD')}</span>
+                <span as={'displayValue'}>{() => `${year()}-${month()+1}`}</span>
                 <div as={'rightControl'}>
                     <span as={'nextMonth'} onClick={nextMonth}>
                         <Right />
@@ -126,16 +116,28 @@ export const Calendar: Component = function(props: FixedCompatiblePropsType<type
                     </tr>
                 </thead>
                 <tbody as={'body'}>
-                {() => days().map(week => {
+                {() => Array(displayData.length()/7).fill(0).map((_, i) => {
                     return (
-                        <tr as={'week'}>
-                            {week.map(date => (
-                                <td as={'date'} prop:date={date}>
-                                    <span as={'displayDate'} prop:date={date}>
-                                    {date.date}
-                                    </span>
-                                </td>
-                            ))}
+                        <tr>
+                            {Array(7).fill(0).map((_, j) => {
+                                const [date, selected] = displayData.at(i*7+j) as [string, Atom<boolean>]
+                                const dataShort = dayjs(date).date()
+                                return (
+                                    <td as='date'>
+                                        <div
+                                            onClick={() => value(date)}
+                                            as={'displayDate'}
+                                            prop:selected={selected}
+                                            prop:dateShort={dataShort}
+                                            prop:date={date}
+                                            prop:year={year}
+                                            prop:month={atomComputed(() => month() + 1)}
+                                        >
+                                            {dataShort}
+                                        </div>
+                                    </td>
+                                )
+                            })}
                         </tr>
                     )
                 })}

@@ -1,55 +1,56 @@
 import {
     atom,
     Component,
-    FixedCompatiblePropsType, ModalContext,
+    FixedCompatiblePropsType,
     PropsType,
+    PositionObject,
     PropTypes,
-    reactiveSize,
     RenderContext,
-    SizeObject, withPreventDefault
+    ModalContext, SizeObject, reactiveSize
 } from "axii";
 
-export const ContextmenuPropTypes = {
-    position:PropTypes.atom<{x:number, y:number}|null>().default(() => atom(null)),
+export const DropdownPropTypes = {
+    visible: PropTypes.atom<boolean>().default(() => atom(false)),
     children: PropTypes.any,
+    targetPosition: PropTypes.atom<PositionObject|null>().default(() => atom(null)),
 }
 
-export const Contextmenu: Component = function(props: FixedCompatiblePropsType<typeof ContextmenuPropTypes>, { createElement, context, createPortal, createStateFromRef}: RenderContext) {
+export const Dropdown: Component = function(props: FixedCompatiblePropsType<typeof DropdownPropTypes>, { createElement, createPortal, context, createStateFromRef}: RenderContext) {
     const contentSize = createStateFromRef<SizeObject>(reactiveSize)
-    const { position, children } = props as PropsType<typeof ContextmenuPropTypes>
+
+    const { visible, children, targetPosition } = props as PropsType<typeof DropdownPropTypes>
     const container = context.get(ModalContext)?.container || document.body
 
     return createPortal(() => {
         const backgroundStyle = [
             () => ({
                 position: 'fixed',
-                display: position() ? 'block' : 'none',
                 top:0,
                 left:0,
                 width: '100vw',
                 height: '100vh',
+                display: visible() ? 'flex' : 'none',
             }),
         ]
 
         const contentContainerStyle = () => {
-            // 默认显示在右下角
+            // 默认显示正下方
             //  如果下方空间不够，并且 position 是在屏幕下半部分，就显示在上方
             //  如果右方空间不够，并且 position 是在屏幕右半部分，就显示在左方
             const positionObj: any = {}
-            if (position() && contentSize()){
-                const { x, y } = position()!
-                const { width, height } = contentSize()!
-                const { innerWidth, innerHeight } = window
+            if (targetPosition() && contentSize()){
+                const { left, top: y, bottom } = targetPosition()!
+                const { height } = contentSize()!
+                const { innerHeight } = window
                 if (y + height > innerHeight && y > height/2) {
-                    positionObj.bottom = innerHeight - y
+                    // 显式在上面
+                    positionObj.bottom = top
                 } else {
-                    positionObj.top = y
+                    // 显示到下面
+                    positionObj.top = bottom
                 }
-                if (x + width > innerWidth && x > width/2) {
-                    positionObj.right = innerWidth - x
-                } else {
-                    positionObj.left = x
-                }
+
+                positionObj.left = left
             }
 
             return {
@@ -64,8 +65,7 @@ export const Contextmenu: Component = function(props: FixedCompatiblePropsType<t
             as='root'
             onscroll={(e:Event)=>e.stopPropagation()}
             style={ backgroundStyle}
-            onClick={withPreventDefault(() => position(null))}
-            oncontextmenu={withPreventDefault(() => position(null))}
+            onClick={() => visible(false)}
         >
             <div
                 ref={contentSize.ref}
@@ -76,7 +76,7 @@ export const Contextmenu: Component = function(props: FixedCompatiblePropsType<t
                 {children}
             </div>
         </div>)
-    }, container)
+    }, container || document.body)
 }
 
-Contextmenu.propTypes = ContextmenuPropTypes
+Dropdown.propTypes = DropdownPropTypes

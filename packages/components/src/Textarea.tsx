@@ -1,38 +1,28 @@
-import {atom, Atom, PropTypes, reactiveFocused, RenderContext} from "axii";
+import {atom, Atom, Component, PropTypes, RenderContext} from "axii";
 
 type TextareaProps = {
     value: Atom<string>
     placeholder?: Atom<string>
 }
 
-export function Textarea({value, placeholder}: TextareaProps, {createElement, createStateFromRef}: RenderContext ) {
+export const Textarea: Component = function Textarea({value, placeholder}: TextareaProps, {createElement}: RenderContext ) {
 
-    const focused = createStateFromRef(reactiveFocused)
-
-    const containerStyle = () => ({
-        borderRadius: 8,
-        display: 'flex',
-        flexDirection: 'column',
-    })
-
-    const inputStyle = {
-        border:0,
-        outline:0,
-        background: 'transparent',
-        display: 'block',
-        grow:1,
-        color: '#fff',
-
+    const onInput = (e: Event) => {
+        const target = e.target as HTMLTextAreaElement
+        if (target.clientHeight < target.scrollHeight) {
+            target.style.height = target.scrollHeight + 'px'
+        }
+        value(target.value)
     }
 
-    return <div as="root" style={containerStyle}>
+    return <div as="root">
         <div as="header"></div>
-        <textarea as="input" value={value} onInput={(e:any) => value(e.target.value)} style={inputStyle} ref={[focused.ref]} placeholder={placeholder} spellcheck={false}/>
+        <textarea as="main" value={value} onInput={[onInput]} placeholder={placeholder}/>
         <div as="footer"></div>
     </div>
 }
 
 Textarea.propTypes = {
-    value: PropTypes.string.default(() => atom('')),
-    placeholder: PropTypes.string.default(() => atom('')),
+    value: PropTypes.atom<string>().default(() => atom('')),
+    placeholder: PropTypes.atom<string>().default(() => atom('')),
 }

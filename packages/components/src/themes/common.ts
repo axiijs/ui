@@ -88,6 +88,9 @@ export function createCommon(inputColors: InputColors) {
             }
         },
         radius: {
+            text() {
+                return rem(0.2)
+            },
             item() {
                 return rem(0.5)
             },
@@ -110,7 +113,7 @@ export function createCommon(inputColors: InputColors) {
                 return inverted ? pattern(inputColors).inverted().interactable().inactive().color() : pattern(inputColors).interactable().inactive().color()
             },
             active(inverted = false) {
-                return inverted ? pattern(inputColors).inverted().active().color() : pattern(inputColors).active().color()
+                return inverted ? pattern(inputColors).inverted().interactable().active().color() : pattern(inputColors).interactable().active().color()
             },
             success() {
                 return pattern(inputColors).feature().success().color()
@@ -238,7 +241,7 @@ export function createCommon(inputColors: InputColors) {
     }
 
     const paddingContainer = {
-        padding: rem(1),
+        padding: sizes.space.inner(),
     }
 
     // 正文
@@ -252,6 +255,7 @@ export function createCommon(inputColors: InputColors) {
     const textBox = {
         ...layout.rowCenter(),
         height: sizes.thing.box(),
+        borderRadius: sizes.radius.text(),
         padding: [0, sizes.space.padding()]
     }
 
@@ -282,7 +286,6 @@ export function createCommon(inputColors: InputColors) {
 
     const enclosedContainer = {
         borderRadius: rem(0.5),
-        overflow: 'hidden',
         border: `1px solid ${colors.line.border.normal()}`,
     }
 

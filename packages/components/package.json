@@ -9,7 +9,7 @@
   "author": "",
   "license": "ISC",
   "peerDependencies": {
-    "axii": "^2.4.31"
+    "axii": "^2.4.35"
   },
   "dependencies": {
     "@ant-design/colors": "^7.0.2",
