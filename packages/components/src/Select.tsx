@@ -3,7 +3,7 @@ import {bindProps, N_ATTR, RenderContext} from "axii";
 import {Select as ISelect} from '@primitive'
 
 
-export function SelectOption(props: any, {createElement}: RenderContext) {
+export function SelectOption(props: Parameters<typeof ISelect>[0], {createElement}: RenderContext) {
     const {value} = props
 
     return (

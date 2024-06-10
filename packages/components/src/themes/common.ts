@@ -1,5 +1,5 @@
 import {StyleSize} from 'axii'
-import {createPattern} from "./util/util.js";
+import {createPattern, createRange} from "./util/util.js";
 import {INDEX} from "./util/case.js";
 import {InputColors, valueRules} from "./pattern.js";
 
@@ -34,18 +34,26 @@ export function em(value: number = 0) {
 }
 
 type flexRowProps = {
-    gap: number,
-    align: 'start' | 'center' | 'end' | 'stretch' | 'baseline',
-    justify: 'start' | 'center' | 'end' | 'between' | 'around' | 'evenly'
+    gap?: number|StyleSize,
+    align?: 'start' | 'center' | 'end' | 'stretch' | 'baseline',
+    justify?: 'start' | 'center' | 'end' | 'between' | 'around' | 'evenly' | 'stretch'
 }
 
 type TextType = 'text' | 'description' | 'supportive' | 'heading'
 
 export function createCommon(inputColors: InputColors) {
+    const weights = createRange([100, 200, 300, 400, 500, 600, 700, 800, 900], 3)
+
     const sizes = {
-        font: {
-            heading(level: number) {
+        fontWeight(offset: number = 0) {
+            return weights(offset)
+        },
+        fontSize: {
+            heading(level: number =0) {
                 return rem(2 + level)
+            },
+            title() {
+                return rem(1.2)
             },
             text() {
                 return rem(1)
@@ -60,8 +68,8 @@ export function createCommon(inputColors: InputColors) {
             },
         },
         thing: {
-            box() {
-                return rem(2)
+            box(times: number = 1) {
+                return rem(2*times)
             },
             item() {
                 return rem(1.5)
@@ -74,22 +82,33 @@ export function createCommon(inputColors: InputColors) {
             }
         },
         space: {
-            padding(value: number = .75) {
+            panel(times: number = 1) {
+              // 和外部 panel 之间的距离
+                return rem(times)
+            },
+            padding(times: number = 1) {
                 // 和外部的 border 之间的距离
-                return rem(value)
+                return rem(.65*times)
             },
-            gap() {
+            // text 和 border 之间的距离
+            innerText(times: number = 1) {
+                return rem(.75*times)
+            },
+            itemGap(times: number = 1) {
+                return px(4*times)
+            },
+            gap(times: number = 1) {
                 // item 之间的具体距离
-                return rem(1)
+                return rem(.75 * times)
             },
-            inner(level: number = 4) {
+            inner(times: number = 1) {
                 // 内部的 item 和自己的 border 之间的距离
-                return px(level)
+                return px(4*times)
             }
         },
         radius: {
             text() {
-                return rem(0.2)
+                return rem(0.3)
             },
             item() {
                 return rem(0.5)
@@ -106,7 +125,7 @@ export function createCommon(inputColors: InputColors) {
     const colors = ({
         text: {
             normal(inverted = false, type: TextType = 'text') {
-                const offset = type === 'text' ? 0 : (type === 'description' ? -2 : -4)
+                const offset = type === 'text' ? 0 : (type === 'description' ? -2 : -6)
                 return inverted ? pattern(inputColors).inverted().color(offset) : pattern(inputColors).color(offset)
             },
             disabled(inverted = false) {
@@ -137,7 +156,10 @@ export function createCommon(inputColors: InputColors) {
                     return pattern(inputColors).inactive().bgColor()
                 },
                 active() {
-                    return pattern(inputColors).inverted().active().bgColor()
+                    return pattern(inputColors).interactable().inverted().active().bgColor()
+                },
+                focus() {
+                    return pattern(inputColors).interactable().inactive().interact().bgColor()
                 },
                 success() {
                     return pattern(inputColors).feature().success().bgColor()
@@ -210,6 +232,14 @@ export function createCommon(inputColors: InputColors) {
                 justifyContent: justify,
             }
         },
+        flexColumnStretched({gap}: flexRowProps) {
+            return {
+                display: 'flex',
+                flexDirection: 'column',
+                gap,
+                alignItems: 'stretch',
+            }
+        },
         center() {
             return {
                 display: 'flex',
@@ -217,17 +247,20 @@ export function createCommon(inputColors: InputColors) {
                 alignItems: 'center',
             }
         },
-        rowCenter() {
+        rowCenter({gap, justify}: flexRowProps = {}) {
             return {
                 display: 'flex',
                 flexDirection: 'row',
                 alignItems: 'center',
+                gap,
+                justifyContent: justify
             }
         },
-        columnCenter() {
+        columnCenter({gap}: flexRowProps = {}) {
             return {
                 display: 'flex',
                 flexDirection: 'column',
+                gap,
                 alignItems: 'center',
             }
         },
@@ -237,16 +270,48 @@ export function createCommon(inputColors: InputColors) {
                 flexDirection: column ? 'column' : 'row',
                 justifyContent: 'space-between',
             }
-        }
+        },
+        middleGrow(column = false, middleOffset = 2) {
+            return {
+                display: 'flex',
+                minHeight: 0,
+                flexDirection: column ? 'column' : 'row',
+                [`&>*:nth-child(-n+${middleOffset-1})`]: {
+                    flexGrow:0,
+                    flexShrink:0,
+                },
+                [`&>*:nth-child(${middleOffset})`]: {
+                    flexGrow:1,
+                    flexShrink:1,
+                },
+                [`&>*:nth-child(n+${middleOffset+1})`]: {
+                    flexGrow:0,
+                    flexShrink:0,
+                }
+            }
+        },
+
     }
 
-    const paddingContainer = {
+    const itemPaddingContainer = {
         padding: sizes.space.inner(),
+    }
+
+    const textPaddingContainer = {
+        padding: [sizes.space.innerText(.8), sizes.space.innerText(1.2),],
+    }
+
+    const boxPaddingContainer = {
+        padding: sizes.space.padding(),
+    }
+
+    const panelPaddingContainer = {
+        padding: sizes.space.panel(),
     }
 
     // 正文
     const mainText = {
-        fontSize: sizes.font.text(),
+        fontSize: sizes.fontSize.text(),
         color: colors.text.normal(),
     }
     const textField = {}
@@ -254,13 +319,19 @@ export function createCommon(inputColors: InputColors) {
 
     const textBox = {
         ...layout.rowCenter(),
-        height: sizes.thing.box(),
+        // height: sizes.thing.box(),
         borderRadius: sizes.radius.text(),
-        padding: [0, sizes.space.padding()]
+        padding: [sizes.space.innerText(), sizes.space.innerText()]
+    }
+
+    const iconBox = {
+        ...layout.rowCenter(),
+        borderRadius: sizes.radius.text(),
+        padding: sizes.space.innerText()
     }
 
     const supportiveText = {
-        fontSize: sizes.font.supportive(),
+        fontSize: sizes.fontSize.supportive(),
         color: colors.text.normal(false, 'supportive'),
     }
 
@@ -271,13 +342,13 @@ export function createCommon(inputColors: InputColors) {
     const labelTextField = {}
 
     const descriptionText = {
-        fontSize: sizes.font.description(),
+        fontSize: sizes.fontSize.description(),
         color: colors.text.normal(false, 'description'),
     }
 
     const descriptionTextField = {}
 
-    const interactableTextField = {
+    const interactableItem = {
         cursor: 'pointer',
         '&:hover': {
             background: colors.background.item.normal(),
@@ -287,6 +358,7 @@ export function createCommon(inputColors: InputColors) {
     const enclosedContainer = {
         borderRadius: rem(0.5),
         border: `1px solid ${colors.line.border.normal()}`,
+        overflow: 'hidden',
     }
 
 
@@ -325,6 +397,26 @@ export function createCommon(inputColors: InputColors) {
         }
     }
 
+
+
+    const separatedList = (vertical = false) => {
+        return vertical ? {
+            '& > *': {
+                borderBottom: `1px solid ${colors.line.separator()}`,
+                '&:last-child': {
+                    borderBottom: 'none'
+                }
+            }
+        } : {
+            '& > *': {
+                borderRight: `1px solid ${colors.line.separator()}`,
+                '&:last-child': {
+                    borderRight: 'none'
+                }
+            }
+        }
+    }
+
     const listItems = {
         '& > *' : {
             padding: [sizes.space.padding(), sizes.space.padding(2)],
@@ -335,39 +427,142 @@ export function createCommon(inputColors: InputColors) {
         }
     }
 
+    const listItem = {
+        ...textPaddingContainer,
+        ...interactableItem,
+        ...layout.rowCenter()
+    }
+
     const groupedListItems = {
-        '& > *': {
-            borderBottom: `1px solid ${colors.line.separator()}`,
-            '&:last-child': {
-                borderBottom: 'none'
-            },
-            '& > *': {
-                ...listItems,
-            }
+        ...separatedList(true),
+        '& > * >*': listItems,
+    }
+
+    const separator = (horizontal?:boolean, times = 1) => {
+        return horizontal ? {
+            backgroundColor: colors.line.separator(),
+            margin: [0, sizes.space.padding(times), ],
+            width: 1,
+            height: '100%',
+        } : {
+            margin: [sizes.space.padding(times), 0],
+            backgroundColor: colors.line.separator(),
+            height:1,
+            width: '100%',
         }
     }
 
+    const rawControl = {
+        border: 'none',
+        background: 'none',
+        outline: 'none',
+        padding: 0,
+        margin: 0,
+        lineHeight: 1,
+    }
+
+    const heading = (level: number = 0) => ({
+        fontSize: sizes.fontSize.heading(level),
+        fontWeight: sizes.fontWeight(4),
+        lineHeight: 1
+    })
+
+
+
+    const table = () => ({
+        ...enclosedContainer,
+        overflow: 'auto',
+        '& > table': {
+            minWidth: '100%',
+            margin: 0,
+            padding: 0,
+            borderCollapse: 'collapse',
+        },
+
+        '& > table > thead > tr': {
+            borderBottom: `1px solid ${colors.line.separator()}`,
+            '& > th': {
+                textAlign: 'left',
+                borderWidth: 0,
+                background: colors.background.item.normal(),
+                padding: sizes.space.padding(),
+            }
+        },
+        '& > table > tbody > tr': {
+            borderBottom: `1px solid ${colors.line.separator()}`,
+
+            '&:last-child': {
+                borderBottom: 'none'
+            },
+            '& > td' : {
+                border: 0,
+                padding: sizes.space.padding(),
+                // 不换行
+                whiteSpace: 'nowrap',
+            }
+
+        }
+    })
+
+    const mask = {
+        position: 'absolute',
+        top: 0,
+        left: 0,
+        right: 0,
+        bottom: 0,
+    }
+
+    const spin = (speed: number = 1) => ({
+        '@keyframes': {
+            from: { transform: 'rotate(0deg)' },
+            to: { transform: 'rotate(359deg)' }
+        },
+        lineHeight: 0,
+        animation: `@self ${speed}s linear infinite`,
+        transformOrigin: 'center center',
+    })
+
     return {
+        // primitives
         colors,
         sizes,
         layout,
         transitions,
-        paddingContainer,
-        textField,
-        supportiveTextField,
-        labelTextField,
-        descriptionTextField,
-        interactableTextField,
+        // containers
+        itemPaddingContainer,
+        textPaddingContainer,
+        boxPaddingContainer,
+        panelPaddingContainer,
         enclosedContainer,
         modalContainer,
         projectingContainer,
         levitatingContainer,
+        // text like fields
+        textField,
+        iconBox,
+        supportiveTextField,
+        labelTextField,
+        descriptionTextField,
+        interactableItem,
         textBox,
         mainText,
         descriptionText,
         supportiveText,
+        heading,
+        // list items
+        separatedList,
         listItems,
+        listItem,
         groupedListItems,
+        // other
+        mask,
+        spin,
+        rawControl,
+        separator,
+        table,
+        pattern() {
+            return pattern(inputColors)
+        }
     }
 }
 

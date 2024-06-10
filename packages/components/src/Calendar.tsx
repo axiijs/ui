@@ -1,6 +1,6 @@
 import {
     atom,
-    Atom, atomComputed,
+    Atom, computed,
     Component,
     createSelection,
     FixedCompatiblePropsType,
@@ -131,7 +131,7 @@ export const Calendar: Component = function(props: FixedCompatiblePropsType<type
                                             prop:dateShort={dataShort}
                                             prop:date={date}
                                             prop:year={year}
-                                            prop:month={atomComputed(() => month() + 1)}
+                                            prop:month={computed(() => month() + 1)}
                                         >
                                             {dataShort}
                                         </div>

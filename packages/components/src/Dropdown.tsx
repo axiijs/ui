@@ -38,7 +38,8 @@ export const Dropdown: Component = function(props: FixedCompatiblePropsType<type
             //  如果下方空间不够，并且 position 是在屏幕下半部分，就显示在上方
             //  如果右方空间不够，并且 position 是在屏幕右半部分，就显示在左方
             const positionObj: any = {}
-            if (targetPosition() && contentSize()){
+            console.log(visible(), targetPosition(), contentSize())
+            if (visible() && targetPosition() && contentSize()){
                 const { left, top: y, bottom } = targetPosition()!
                 const { height } = contentSize()!
                 const { innerHeight } = window

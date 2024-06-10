@@ -61,6 +61,7 @@ export const valueRules = (inputColors: InputColors) => {
             const matrix = [
                 [undefined, undefined, undefined, undefined, colors.gray(-6)],
                 [undefined, INDEX.active.inactive, undefined, undefined, colors.gray(-4)],
+                [undefined, INDEX.active.inactive, INDEX.interact, undefined, colors.gray(-4)],
                 [INDEX.inverted, undefined, undefined, undefined, colors.primary(offset)],
                 [INDEX.inverted, INDEX.active.inactive, undefined, undefined, colors.primary(-3 + offset)],
                 [INDEX.inverted, INDEX.active.active, undefined, undefined, colors.primary(offset)],

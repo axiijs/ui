@@ -1,6 +1,6 @@
 import {Input} from "../Input.js";
 import {Select} from "../Select.js";
-import {atomComputed, mergeProp, reactiveFocused, RenderContext, StyleSize} from "axii";
+import {computed, mergeProp, reactiveFocused, RenderContext, StyleSize} from "axii";
 import {createCommon, percent, ThemeColors,} from "./common.js";
 import {Checkbox} from "../Checkbox.js";
 import {BlockOption, RadioGroup, RadioOption} from "../RadioGroup.js";
@@ -23,6 +23,7 @@ import {Slider} from "../Slider.js";
 import {Dropdown} from "../Dropdown.js";
 import {Popover} from "../Popover.js";
 import {originMenuContainerStyle} from "../Menu.js";
+import {Avatar} from "../Avatar.js";
 
 const zincThemeColors = genColors('#0F172A')
 const themeColors = new ThemeColors(zincThemeColors)
@@ -33,9 +34,10 @@ const {
     colors,
     layout,
     enclosedContainer,
-    interactableTextField,
+    interactableItem,
     modalContainer,
-    paddingContainer,
+    itemPaddingContainer,
+    textPaddingContainer,
     projectingContainer,
     levitatingContainer,
     sizes,
@@ -45,12 +47,13 @@ const {
     mainText,
     descriptionText,
     // supportiveText
+    rawControl
 } = common
 
 
 export const menuItemStyle = {
     ...originMenuContainerStyle['&>*'],
-    ...paddingContainer,
+    ...itemPaddingContainer,
     width:'100%',
     boxSizing: 'border-box',
     // ...layout.rowCenter(),
@@ -63,7 +66,7 @@ export const menuItemStyle = {
         boxSizing: 'border-box',
         ...layout.twoSide(),
         ...textBox,
-        ...interactableTextField,
+        ...interactableItem,
     }
 }
 
@@ -76,8 +79,31 @@ export const menuContainerStyle = {
 
 
 export function install() {
-    Object.assign(originMenuContainerStyle, menuContainerStyle)
 
+    Avatar.boundProps = [function ({}, {createElement}: RenderContext) {
+        return {
+            '$root:style': {
+                height: sizes.thing.box(1.5),
+                width: sizes.thing.box(1.5),
+
+                borderRadius: '50%',
+                overflow: 'hidden',
+                background: colors.background.item.normal(),
+                ...common.layout.center()
+            },
+            '$alt:style': {
+                fontSize: sizes.thing.box(.75),
+                lineHeight: 1,
+            },
+            '$image:style': {
+                width: '100%',
+                height: '100%',
+            }
+        }
+    }]
+
+
+    Object.assign(originMenuContainerStyle, menuContainerStyle)
 
     Popover.boundProps = [function ({}, {createElement}: RenderContext) {
         return {
@@ -93,7 +119,6 @@ export function install() {
             '$content:style': {
                 ...enclosedContainer,
                 ...levitatingContainer,
-                ...paddingContainer
             }
         }
     }]
@@ -181,12 +206,11 @@ export function install() {
                 ...projectingContainer,
                 ...textBox,
                 cursor: 'pointer',
-                borderRadius: sizes.radius.item(),
             },
             '$displayValue:style': {
                 display: 'flex',
                 alignItems: 'center',
-                fontSize: sizes.font.text(),
+                fontSize: sizes.fontSize.text(),
                 justifyContent: 'space-between',
             },
             '$optionsContainer:style': {
@@ -196,7 +220,7 @@ export function install() {
                 padding: sizes.space.inner(),
             },
             '$loadingContainer:style': {
-                ...paddingContainer,
+                ...itemPaddingContainer,
                 ...layout.columnCenter(),
             },
             '$loading:style': {
@@ -214,13 +238,13 @@ export function install() {
             },
             '$options:style': {
                 color: colors.text.normal(),
-                fontSize: sizes.font.text(),
+                fontSize: sizes.fontSize.text(),
                 lineHeight: '20px',
                 overflow: 'auto',
-                ...paddingContainer
+                ...itemPaddingContainer
             },
             '$option:style': {
-                ...interactableTextField,
+                ...interactableItem,
                 ...textBox,
             }
         }
@@ -240,7 +264,7 @@ export function install() {
                     // const scale = `scaleX(${1 - index()*0.1})`
                     return [{
                         ...enclosedContainer,
-                        ...paddingContainer,
+                        ...itemPaddingContainer,
                         ...levitatingContainer,
                         position: 'fixed',
                         right:10,
@@ -278,7 +302,7 @@ export function install() {
 
                     return [{
                             ...enclosedContainer,
-                            ...paddingContainer,
+                            ...itemPaddingContainer,
                             ...levitatingContainer,
                             position: 'fixed',
                             right:10,
@@ -359,35 +383,36 @@ export function install() {
                 return {
                     ...enclosedContainer,
                     ...projectingContainer,
-                    height: textBox.height,
-                    borderRadius: sizes.radius.item(),
+                    ...textBox,
+                    padding: 0,
                     overflow: 'hidden',
                     border: focused() ? `1px solid ${colors.line.border.focused()}` : enclosedContainer.border
                 }
             },
             '$main:style': {
+                ...rawControl,
                 ...mainText,
-                borderWidth: 0,
-                outline: 'none',
-                padding: [0, sizes.space.padding()],
+                padding: textBox.padding,
                 placeholderColor: colors.text.normal(false, 'supportive'),
                 color: colors.text.normal(),
             },
             '$prefix:style': {
                 ...textBox,
                 ...supportiveTextField,
+                borderRadius: 0,
                 borderRight: enclosedContainer.border
             },
             '$affix:style': {
                 ...textBox,
                 ...supportiveTextField,
+                borderRadius: 0,
                 borderLeft: enclosedContainer.border
             },
             '$main:ref': focused.ref
         }
     }];
 
-    Select.boundProps = [...Select.boundProps!, function ({}, {createElement}: RenderContext) {
+    Select.boundProps = [...Select.boundProps!, function ({value}, {createElement}: RenderContext) {
         return {
             '$root:style': {
                 ...enclosedContainer,
@@ -396,22 +421,23 @@ export function install() {
                 cursor: 'pointer',
                 borderRadius: sizes.radius.item(),
             },
-            '$displayValue:style': {
+            '$displayValue:style': () => ({
                 display: 'flex',
                 alignItems: 'center',
-                fontSize: sizes.font.text(),
+                fontSize: sizes.fontSize.text(),
+                color: value() ? colors.text.normal() : colors.text.normal(false, 'supportive'),
                 justifyContent: 'space-between',
-            },
+            }),
             '$options:style': {
                 ...modalContainer,
-                ...paddingContainer,
+                ...itemPaddingContainer,
                 color: colors.text.normal(),
-                fontSize: sizes.font.text(),
+                fontSize: sizes.fontSize.text(),
                 lineHeight: '20px',
             },
             '$option': {
                 '$displayOption:style': {
-                    ...interactableTextField,
+                    ...interactableItem,
                     ...textBox,
                 }
             }
@@ -447,6 +473,11 @@ export function install() {
             '$root:style': () => ({
                 gap: sizes.space.gap(),
             }),
+            '$option': {
+                '$root:style': ({
+                    gap: sizes.space.gap(),
+                })
+            }
         }
     }]
 
@@ -538,9 +569,9 @@ export function install() {
             return {option, ref}
         }).indexBy('option')
 
-        const rootRef = createRef()
-        const currentRect = atomComputed(() => {
-            const rect = optionsToPosRef.get(current())?.ref.current.getBoundingClientRect()
+        const rootRef = createRxRef()
+        const currentRect = computed<DOMRect>(() => {
+            const rect = optionsToPosRef.get(current())?.ref.current?.getBoundingClientRect()
             return rect
         })
 
@@ -548,6 +579,8 @@ export function install() {
             '$root:ref': rootRef,
             '$root:style': {
                 position: 'relative',
+                // 补充一个和 bg 一样的 border，主要是为了填充高度
+                border: `1px solid ${colors.background.item.normal()}`,
                 boxSizing: 'border-box',
                 display: 'inline-flex',
                 alignItems: 'stretch',
@@ -580,8 +613,8 @@ export function install() {
             },
             '$tab:style_': () => {
                 return {
+                    ...textPaddingContainer,
                     cursor: 'pointer',
-                    padding: sizes.space.padding(),
                     borderRadius: sizes.radius.item(),
                     zIndex: 2,
                     '&:hover': {
@@ -596,7 +629,7 @@ export function install() {
         return {
             '$root:style': {
                 ...enclosedContainer,
-                ...paddingContainer,
+                ...itemPaddingContainer,
                 ...projectingContainer,
                 display: 'inline-flex',
                 flexDirection: 'column',
@@ -625,7 +658,7 @@ export function install() {
                 gap: sizes.space.gap().div(2),
             },
             '$lastMonth:style': {
-                ...interactableTextField,
+                ...interactableItem,
                 ...enclosedContainer,
                 ...transitions.button('left'),
                 useSelect: 'none',
@@ -637,7 +670,7 @@ export function install() {
                 height: sizes.thing.item(),
             },
             '$nextMonth:style': {
-                ...interactableTextField,
+                ...interactableItem,
                 ...enclosedContainer,
                 ...transitions.button('right'),
                 useSelect: 'none',
@@ -650,7 +683,7 @@ export function install() {
                 height: sizes.thing.item(),
             },
             '$lastYear:style': {
-                ...interactableTextField,
+                ...interactableItem,
                 ...enclosedContainer,
                 ...transitions.button('left'),
                 useSelect: 'none',
@@ -663,7 +696,7 @@ export function install() {
                 height: sizes.thing.item(),
             },
             '$nextYear:style': {
-                ...interactableTextField,
+                ...interactableItem,
                 ...enclosedContainer,
                 ...transitions.button('right'),
                 useSelect: 'none',
@@ -715,7 +748,6 @@ export function install() {
                 ...textBox,
                 cursor: 'pointer',
                 useSelect: 'none',
-                borderRadius: sizes.radius.item(),
                 background: colors.background.box.normal(),
                 color: colors.text.normal(),
                 '&:hover': {
@@ -767,3 +799,15 @@ export function install() {
     }]
 }
 
+export const variants = {
+    Button: {
+        primary: {
+            '$root:style': {
+                border: 0,
+                background: colors.background.box.active(),
+                color: colors.text.active(true),
+            }
+        },
+        // size 信息？？
+    }
+}

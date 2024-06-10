@@ -1,4 +1,13 @@
-import {atom, Component, FixedCompatiblePropsType, PropsType, PropTypes, RenderContext, createOnDragMove} from "axii";
+import {
+    atom,
+    Component,
+    FixedCompatiblePropsType,
+    PropsType,
+    PropTypes,
+    RenderContext,
+    createOnDragMove,
+    onLeftMouseDown
+} from "axii";
 
 const SliderProptypes= {
     value: PropTypes.atom<number>().default(() => atom(0)),
@@ -38,16 +47,24 @@ export const Slider: Component = function Slider(props: FixedCompatiblePropsType
 
     const dragMoveRef = createOnDragMove()
 
+    let lastStartValue = value()
     const onDragMove = (e: CustomEvent) => {
         console.log(e.detail)
         const { deltaX } = e.detail
         const totalWidth = containerRef.current.clientWidth
-        value(deltaX / totalWidth * 100)
+        const newValue = lastStartValue + deltaX / totalWidth * 100
+        value(newValue > 100 ? 100 : newValue < 0 ? 0 : newValue)
     }
 
     return <div as={'root'} style={rootStyle}>
         <div as={'container'} style={containerStyle} ref={containerRef}>
-            <span as={'main'} style={mainStyle} ref={dragMoveRef} onDragMove={onDragMove}></span>
+            <span
+                as={'main'}
+                style={mainStyle}
+                ref={dragMoveRef}
+                onMouseDown={onLeftMouseDown(() => lastStartValue = value())}
+                onDragMove={onDragMove}
+            ></span>
         </div>
         <div as={'bar'} style={barStyle}>
             <div as={'barInner'} style={barInnerStyle}></div>

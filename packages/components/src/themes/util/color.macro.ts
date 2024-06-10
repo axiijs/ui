@@ -5,13 +5,15 @@ export function genColors(primaryColor:string = 'black'): InputColors {
     const blackScale = chroma.scale()
     return {
         black: [[
+            blackScale(.6).hex(),
+            blackScale(.65).hex(),
             blackScale(.7).hex(),
             blackScale(.75).hex(),
             blackScale(.8).hex(),
             blackScale(.85).hex(),
             blackScale(.9).hex(),
             blackScale(1).hex(),
-        ], 4],
+        ], 6],
         gray: [[
             blackScale(0).hex(),
             blackScale(.05).hex(),
