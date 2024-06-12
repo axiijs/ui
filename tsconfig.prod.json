@@ -19,14 +19,12 @@
     "types": [ "node"],
     "rootDir": ".",
     "paths": {
-      "@framework": ["./src"]
     },
     "jsx": "react",
     "jsxFactory": "createElement",
     "jsxFragmentFactory": "Fragment"
   },
   "include": [
-    "global.d.ts",
-    "packages/primitives/src"
+    "src"
   ]
 }

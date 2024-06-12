@@ -28,6 +28,4 @@ typings
 coverage
 .next
 packages/primitives/package-lock.json
-playground
-packages/app/build
 

@@ -7,7 +7,7 @@
     "newLine": "LF",
     "useDefineForClassFields": false,
     "module": "esnext",
-    "moduleResolution": "node",
+    "moduleResolution": "NodeNext",
     "allowJs": false,
     "strict": true,
     "noUnusedLocals": true,
@@ -19,11 +19,8 @@
     "types": ["node"],
     "rootDir": ".",
     "paths": {
-      "@primitive": ["./packages/primitives/src"],
-      "@theme": ["./packages/theme/src"],
-      "axii-ui": ["./packages/components/src"],
-      "axii-ui/themes/*": ["./packages/components/src/themes/*"],
-      "axii-icon/*": ["./packages/icons/src/icons/*"]
+      "axii-ui": ["./src/index.ts"],
+      "axii-ui/themes/*": ["./src/themes/*"]
     },
     "jsx": "react",
     "jsxFactory": "createElement",
@@ -31,7 +28,6 @@
   },
   "include": [
     "global.d.ts",
-    "packages/primitives/src",
     "__tests__",
     "playground"
   ]
