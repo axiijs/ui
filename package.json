@@ -10,7 +10,8 @@
     ],
   "type": "module",
   "scripts": {
-    "build": "vite build --config vite.prod.config.ts"
+    "build": "vite build --config vite.prod.config.ts",
+    "release": "node scripts/release.js"
   },
   "author": "",
   "license": "ISC",
