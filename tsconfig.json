@@ -7,7 +7,7 @@
     "newLine": "LF",
     "useDefineForClassFields": false,
     "module": "esnext",
-    "moduleResolution": "NodeNext",
+    "moduleResolution": "node16",
     "allowJs": false,
     "strict": true,
     "noUnusedLocals": true,

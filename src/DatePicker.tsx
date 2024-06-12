@@ -12,7 +12,7 @@ import {
     withStopPropagation
 } from "axii";
 import {Calendar} from "./Calendar.js";
-import CalendarIcon from 'axii-icon-park/Calendar'
+import CalendarIcon from 'axii-icon-park/Calendar.js'
 
 const DatePickerPropTypes = {
     value: PropTypes.atom<boolean>().default(() => atom(false)).isRequired,

@@ -11,10 +11,10 @@ import {
 } from "axii";
 import dayjs from 'dayjs'
 import weekdayPlugin from 'dayjs/plugin/isoWeek.js'
-import Left from 'axii-icon-park/Left'
-import Right from 'axii-icon-park/Right'
-import DoubleLeft from 'axii-icon-park/DoubleLeft'
-import DoubleRight from 'axii-icon-park/DoubleRight'
+import Left from 'axii-icon-park/Left.js'
+import Right from 'axii-icon-park/Right.js'
+import DoubleLeft from 'axii-icon-park/DoubleLeft.js'
+import DoubleRight from 'axii-icon-park/DoubleRight.js'
 
 dayjs.extend(weekdayPlugin)
 

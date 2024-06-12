@@ -14,6 +14,9 @@ export default {
       formats: ['es'],
     },
     rollupOptions: {
+      output: {
+        entryFileNames: 'index.js',
+      },
       external: ['axii']
     },
   },

@@ -1,5 +1,5 @@
 import {atom, Component, FixedCompatiblePropsType, PropsType, PropTypes, RenderContext} from "axii";
-import Left from 'axii-icon-park/Left'
+import Left from 'axii-icon-park/Left.js'
 
 const AccordionItemProptypes = {
     title: PropTypes.atom<any>().isRequired,

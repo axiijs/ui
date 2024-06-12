@@ -4,7 +4,7 @@ const CheckboxPropTypes = {
     value: PropTypes.atom<boolean>().default(() => atom(false)).isRequired,
 }
 
-export function Checkbox(props: FixedCompatiblePropsType<typeof CheckboxPropTypes> , {createElement}: RenderContext) {
+export function Carousel(props: FixedCompatiblePropsType<typeof CheckboxPropTypes> , {createElement}: RenderContext) {
     const { value } = props as PropsType<typeof CheckboxPropTypes>
 
     const containerStyle = () => ({
@@ -31,5 +31,5 @@ export function Checkbox(props: FixedCompatiblePropsType<typeof CheckboxPropType
     </div>
 }
 
-Checkbox.propTypes = CheckboxPropTypes
+Carousel.propTypes = CheckboxPropTypes
 

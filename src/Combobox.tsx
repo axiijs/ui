@@ -14,7 +14,7 @@ import {
     RxList,
 } from "axii";
 import {Input} from "./Input.js";
-import LoadingFour from "axii-icon-park/LoadingFour";
+import LoadingFour from "axii-icon-park/LoadingFour.js";
 
 
 const ComboboxPropTypes = {

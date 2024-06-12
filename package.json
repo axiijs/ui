@@ -2,7 +2,12 @@
   "name": "axii-ui",
   "version": "1.0.0",
   "description": "",
-  "main": "index.js",
+  "main": "dist/index.js",
+  "module": "dist/index.js",
+    "types": "dist/index.d.ts",
+    "files": [
+    "dist"
+    ],
   "type": "module",
   "scripts": {
     "build": "vite build --config vite.prod.config.ts"
@@ -11,7 +16,7 @@
   "license": "ISC",
   "peerDependencies": {
     "axii": "^2.6.11",
-    "axii-icon-park": "^2.0.3"
+    "axii-icon-park": "^2.1.0"
   },
   "dependencies": {
     "@ant-design/colors": "^7.0.2",

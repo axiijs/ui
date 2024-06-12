@@ -20,6 +20,6 @@
   "dependencies": {
     "@ant-design/colors": "^7.0.2",
     "axii": "^2.6.11",
-    "axii-icon-park": "^2.0.3"
+    "axii-icon-park": "^2.1.0"
   }
 }
