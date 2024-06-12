@@ -1,11 +1,11 @@
 import {JSXElement, RenderContext, RxList} from "axii";
 
-import {common} from 'axii-ui/themes/inc'
-import UserIcon from 'axii-icon-park/AddUser'
-import TipsIcon from 'axii-icon-park/TipsOne'
-import CommentIcon from 'axii-icon-park/CommentOne'
-import ShoppingIcon from 'axii-icon-park/Shopping'
-import Ticket from 'axii-icon-park/TicketOne'
+import {common} from 'axii-ui/themes/inc.js'
+import UserIcon from 'axii-icon-park/AddUser.js'
+import TipsIcon from 'axii-icon-park/TipsOne.js'
+import CommentIcon from 'axii-icon-park/CommentOne.js'
+import ShoppingIcon from 'axii-icon-park/Shopping.js'
+import Ticket from 'axii-icon-park/TicketOne.js'
 
 
 type BoxItem = {

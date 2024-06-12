@@ -1,6 +1,6 @@
 import {atom, RenderContext, withPreventDefault} from "axii";
 import {Contextmenu} from "axii-ui";
-import {common} from "axii-ui/themes/inc";
+import {common} from "axii-ui/themes/inc.js";
 
 const contextmenuPosition = atom<any>(null)
 

@@ -2,7 +2,7 @@
   "compilerOptions": {
     "declaration": true,
     "baseUrl": ".",
-    "outDir": "dist",
+    "outDir": "dist/themes",
     "sourceMap": true,
     "target": "esnext",
     "newLine": "LF",
@@ -26,6 +26,6 @@
     "jsxFragmentFactory": "Fragment"
   },
   "include": [
-    "src"
+    "src/themes"
   ]
 }

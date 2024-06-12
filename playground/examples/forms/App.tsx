@@ -1,5 +1,5 @@
 import {atom, Atom, RenderContext, RxList} from "axii";
-import {common} from 'axii-ui/themes/inc'
+import {common} from 'axii-ui/themes/inc.js'
 import {ProfileForm} from "./ProfileForm.js";
 import {AccountForm} from "./AccountForm.js";
 import {NotificationsForm} from "./NotificationsForm.js";

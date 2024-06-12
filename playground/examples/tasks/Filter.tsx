@@ -8,8 +8,8 @@ import {
     RenderContext, RxList
 } from "axii";
 import {Dropdown} from 'axii-ui'
-import { common } from 'axii-ui/themes/inc'
-import Search from 'axii-icon-park/Search'
+import { common } from 'axii-ui/themes/inc.js'
+import Search from 'axii-icon-park/Search.js'
 
 const FilterPropTypes = {
     label: PropTypes.any.isRequired,

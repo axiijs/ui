@@ -1,29 +1,28 @@
-import {Input} from "../Input.js";
-import {Select} from "../Select.js";
 import {computed, mergeProp, reactiveFocused, RenderContext, StyleSize} from "axii";
 import {createCommon, percent, ThemeColors,} from "./common.js";
-import {Checkbox} from "../Checkbox.js";
-import {BlockOption, RadioGroup, RadioOption} from "../RadioGroup.js";
-import {Switch} from "../Switch.js";
-import {Tabs} from "../Tabs.js";
-import {Calendar} from "../Calendar.js";
+import {Input, Select} from "axii-ui";
+import {Checkbox} from "axii-ui";
+import {BlockOption, RadioGroup, RadioOption} from "axii-ui";
+import {Switch} from "axii-ui";
+import {Tabs} from "axii-ui";
+import {Calendar} from "axii-ui";
 import {genColors} from './util/color.macro.js' with {type: 'macro'}
-import {Button} from "../Button.js";
-import {AccordionItem} from "../Accordion.js";
-import {Dialog} from "../Dialog.js";
-import {Drawer} from "../Drawer.js";
-import {Contextmenu} from "../Contextmenu.js";
-import {Toast} from "../Toast.js";
-import {Sonner} from "../Sonner.js";
-import {Combobox} from "../Combobox.js";
-import {DatePicker} from "../DatePicker.js";
+import {Button} from "axii-ui";
+import {AccordionItem} from "axii-ui";
+import {Dialog} from "axii-ui";
+import {Drawer} from "axii-ui";
+import {Contextmenu} from "axii-ui";
+import {Toast} from "axii-ui";
+import {Sonner} from "axii-ui";
+import {Combobox} from "axii-ui";
+import {DatePicker} from "axii-ui";
 import dayjs from "dayjs";
-import {Textarea} from "../Textarea.js";
-import {Slider} from "../Slider.js";
-import {Dropdown} from "../Dropdown.js";
-import {Popover} from "../Popover.js";
-import {originMenuContainerStyle} from "../Menu.js";
-import {Avatar} from "../Avatar.js";
+import {Textarea} from "axii-ui";
+import {Slider} from "axii-ui";
+import {Dropdown} from "axii-ui";
+import {Popover} from "axii-ui";
+import {originMenuContainerStyle} from "axii-ui";
+import {Avatar} from "axii-ui";
 
 const zincThemeColors = genColors('#0F172A')
 const themeColors = new ThemeColors(zincThemeColors)

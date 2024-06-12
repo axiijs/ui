@@ -1,4 +1,4 @@
-import {common} from 'axii-ui/themes/inc'
+import {common} from 'axii-ui/themes/inc.js'
 import {RenderContext} from "axii";
 import {Button} from 'axii-ui'
 

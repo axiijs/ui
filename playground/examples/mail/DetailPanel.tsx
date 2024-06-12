@@ -1,12 +1,12 @@
 import {Atom, atom, createReactivePosition, RenderContext} from "axii";
-import {common} from 'axii-ui/themes/inc'
+import {common} from 'axii-ui/themes/inc.js'
 import {Popover} from 'axii-ui'
-import JunkOne from 'axii-icon-park/DeleteOne'
-import TrashOne from 'axii-icon-park/Delete'
-import Folder from 'axii-icon-park/FolderOne'
-import CornerUpLeft from 'axii-icon-park/CornerUpLeft'
-import CornerUpRight from 'axii-icon-park/CornerUpRight'
-import MoreIcon from 'axii-icon-park/MoreOne'
+import JunkOne from 'axii-icon-park/DeleteOne.js'
+import TrashOne from 'axii-icon-park/Delete.js'
+import Folder from 'axii-icon-park/FolderOne.js'
+import CornerUpLeft from 'axii-icon-park/CornerUpLeft.js'
+import CornerUpRight from 'axii-icon-park/CornerUpRight.js'
+import MoreIcon from 'axii-icon-park/MoreOne.js'
 import {ContentPanel} from "./ContentPanel.js";
 import {MailData} from "./Mail.js";
 

@@ -1,5 +1,5 @@
 import {Atom, atom, RenderContext} from "axii";
-import {common} from 'axii-ui/themes/inc'
+import {common} from 'axii-ui/themes/inc.js'
 import {Tabs} from 'axii-ui'
 import {MailListPanel} from "./MailListPanel.js";
 import {MailData} from "./Mail.js";

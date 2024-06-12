@@ -19,8 +19,8 @@
     "types": ["node"],
     "rootDir": ".",
     "paths": {
-      "axii-ui": ["./src/index.ts"],
-      "axii-ui/themes/*": ["./src/themes/*"]
+//      "axii-ui": ["./src/index.ts"],
+//      "axii-ui/themes/*": ["./src/themes/*"]
     },
     "jsx": "react",
     "jsxFactory": "createElement",

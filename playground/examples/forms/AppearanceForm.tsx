@@ -1,5 +1,5 @@
 import {atom, RenderContext, RxList} from "axii";
-import {common, variants} from 'axii-ui/themes/inc'
+import {common, variants} from 'axii-ui/themes/inc.js'
 import {Button, Select} from 'axii-ui'
 import {faker} from "@faker-js/faker";
 

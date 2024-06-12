@@ -1,5 +1,5 @@
 import {atom, createReactivePosition, RenderContext} from "axii";
-import ArrowRight from "axii-icon-park/Right";
+import ArrowRight from "axii-icon-park/Right.js";
 import {Button, Popover, originMenuContainerStyle} from 'axii-ui'
 import {common} from 'axii-ui/themes/inc.js'
 

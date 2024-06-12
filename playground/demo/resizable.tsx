@@ -1,5 +1,5 @@
 import {atom, autorun, createReactiveDragPosition, createReactiveDragTarget, RenderContext} from "axii";
-import {common} from "axii-ui/themes/inc"
+import {common} from "axii-ui/themes/inc.js"
 
 export function Demo({}, {createElement, createStateFromRef}: RenderContext) {
 

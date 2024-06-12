@@ -1,12 +1,12 @@
 import {atom, JSXElement, RenderContext, RxList} from "axii";
 
-import {common} from 'axii-ui/themes/inc'
-import InboxIcon from 'axii-icon-park/Inbox'
-import FileEditingOne from 'axii-icon-park/FileEditingOne'
-import SendOne from 'axii-icon-park/SendOne'
-import JunkOne from 'axii-icon-park/DeleteOne'
-import TrashOne from 'axii-icon-park/Delete'
-import Folder from 'axii-icon-park/FolderOne'
+import {common} from 'axii-ui/themes/inc.js'
+import InboxIcon from 'axii-icon-park/Inbox.js'
+import FileEditingOne from 'axii-icon-park/FileEditingOne.js'
+import SendOne from 'axii-icon-park/SendOne.js'
+import JunkOne from 'axii-icon-park/DeleteOne.js'
+import TrashOne from 'axii-icon-park/Delete.js'
+import Folder from 'axii-icon-park/FolderOne.js'
 
 
 

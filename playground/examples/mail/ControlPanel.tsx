@@ -1,5 +1,5 @@
 import {Atom, N_ATTR, RenderContext} from "axii";
-import {common} from 'axii-ui/themes/inc'
+import {common} from 'axii-ui/themes/inc.js'
 import {Select} from 'axii-ui'
 import {BoxesPanel} from "./BoxesPanel.js";
 import {OtherLinksPanel} from "./OtherLinksPanel.js";

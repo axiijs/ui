@@ -1,4 +1,4 @@
-import ArrowRight from "axii-icon-park/Right";
+import ArrowRight from "axii-icon-park/Right.js";
 import { RenderContext} from "axii";
 import {originMenuContainerStyle} from "axii-ui";
 import {common} from 'axii-ui/themes/inc.js'

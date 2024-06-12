@@ -1,5 +1,5 @@
 import {createRoot, createElement} from 'axii'
-import AcceptEmail from 'axii-icon-park/AcceptEmail'
+import AcceptEmail from 'axii-icon-park/AcceptEmail.js'
 // import AcceptEmail from './AcceptEmail.js'
 
 const root = createRoot(document.getElementById('root')!)

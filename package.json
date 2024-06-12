@@ -8,13 +8,24 @@
   "files": [
     "dist"
   ],
+  "exports": {
+    ".": {
+      "import": "./dist/index.js",
+      "types": "./dist/index.d.ts"
+    },
+    "./themes/inc.js": {
+      "import": "./dist/themes/inc.js",
+      "types": "./dist/themes/inc.d.ts"
+    }
+  },
   "type": "module",
   "scripts": {
     "build": "vite build --config vite.prod.config.ts",
+    "build-themes": "vite build --config vite.themes.prod.config.ts",
     "release": "node scripts/release.js"
   },
   "author": "",
-  "license": "ISC",
+  "license": "MIT",
   "peerDependencies": {
     "axii": "^2.6.11",
     "axii-icon-park": "^2.1.0"

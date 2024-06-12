@@ -1,5 +1,5 @@
 import {atom, FixedCompatiblePropsType, PropsType, PropTypes, RenderContext} from "axii";
-import {common} from 'axii-ui/themes/inc'
+import {common} from 'axii-ui/themes/inc.js'
 import {Avatar, Button, Switch, Textarea} from 'axii-ui'
 import { MailData} from "./Mail.js";
 

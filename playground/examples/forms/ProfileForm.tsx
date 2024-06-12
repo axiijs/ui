@@ -1,5 +1,5 @@
 import {RenderContext} from "axii";
-import {common, variants} from 'axii-ui/themes/inc'
+import {common, variants} from 'axii-ui/themes/inc.js'
 import {Button, Input, Select, Textarea} from 'axii-ui'
 import {faker} from "@faker-js/faker";
 

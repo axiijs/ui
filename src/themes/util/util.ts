@@ -34,27 +34,27 @@ export function invariant(condition: any, format?: string, a?:any, b?:any, c?:an
  */
 
 // type FlattenKeys<T> = keyof NestedObject<T>;
-type FlattenKeys<T> = {
+export type FlattenKeys<T> = {
     [K in keyof T]: K | (T[K] extends object ? keyof T[K] : never);
 }[keyof T];
 
-type ValueRules = {
+export type ValueRules = {
     [key: string]: (arg:{[key:string]:any}, offset:number) => any
 }
 
-type Index = {
+export type Index = {
     [key: string]: number | {[key:string]: number}
 }
 
-type ScenI<I extends Index, V extends ValueRules> = {
+export type ScenI<I extends Index, V extends ValueRules> = {
     [i in FlattenKeys<I>]: (arg?: any) => Scen<I, V>;
 }
 
-type ScenV<V extends ValueRules> = {
+export type ScenV<V extends ValueRules> = {
     [i in keyof V]: (offset?: number) => any;
 }
 
-type Scen<I extends Index, V extends ValueRules> = ScenI<I, V> & ScenV<V>
+export type Scen<I extends Index, V extends ValueRules> = ScenI<I, V> & ScenV<V>
 
 export function createPattern<I extends Index, V extends ValueRules>(index: I, values: V): Scen<I,V> {
     const scen: {[k:string] : (arg:any) => any} = {}

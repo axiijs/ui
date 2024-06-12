@@ -2,17 +2,17 @@ import {Atom, atom, autorun, computed, RenderContext, RxList, RxSet} from "axii"
 import {Avatar, Checkbox, Dropdown, Input} from 'axii-ui'
 import {common} from 'axii-ui/themes/inc.js'
 import {Filter} from "./Filter.js";
-import AddOne from "axii-icon-park/AddOne";
+import AddOne from "axii-icon-park/AddOne.js";
 import {data, Task} from "./data.js";
-import Left from "axii-icon-park/Left";
-import DoubleLeft from "axii-icon-park/DoubleLeft";
-import Right from "axii-icon-park/Right";
-import DoubleRight from "axii-icon-park/DoubleRight";
-import Loading from "axii-icon-park/Loading";
-import ArrowUp from "axii-icon-park/ArrowUp";
-import ArrowDown from "axii-icon-park/ArrowDown";
-import PreviewCloseOne from "axii-icon-park/PreviewCloseOne";
-import Sort from 'axii-icon-park/SortFour'
+import Left from "axii-icon-park/Left.js";
+import DoubleLeft from "axii-icon-park/DoubleLeft.js";
+import Right from "axii-icon-park/Right.js";
+import DoubleRight from "axii-icon-park/DoubleRight.js";
+import Loading from "axii-icon-park/Loading.js";
+import ArrowUp from "axii-icon-park/ArrowUp.js";
+import ArrowDown from "axii-icon-park/ArrowDown.js";
+import PreviewCloseOne from "axii-icon-park/PreviewCloseOne.js";
+import Sort from 'axii-icon-park/SortFour.js'
 
 type StatusFilterOptionProps = {
     option: [string, Atom<boolean>]
