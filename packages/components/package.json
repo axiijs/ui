@@ -9,16 +9,17 @@
   "author": "",
   "license": "ISC",
   "peerDependencies": {
-    "axii": "^2.6.8"
+    "axii": "^2.6.9"
   },
   "dependencies": {
     "@ant-design/colors": "^7.0.2",
-    "@types/chroma-js": "^2.4.4",
     "chroma-js": "^2.4.2",
     "dayjs": "^1.11.11"
   },
   "devDependencies": {
+    "@types/chroma-js": "^2.4.4",
     "@types/node": "^20.12.12",
+    "typescript": "^5.4.5",
     "unplugin-macros": "^0.13.0"
   }
 }
