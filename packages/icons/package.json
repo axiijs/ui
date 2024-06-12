@@ -2,9 +2,14 @@
   "name": "axii-icon-park",
   "version": "2.0.0",
   "description": "",
-  "main": "index.js",
+  "main": "dis/index.js",
+  "files": [
+    "dist"
+  ],
+  "type": "module",
   "scripts": {
-    "build": "vite build -c ./vite.prod.config.ts"
+    "build": "vite build -c ./vite.prod.config.ts",
+    "release": "node scripts/release.js"
   },
   "author": "",
   "license": "MIT",
