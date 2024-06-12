@@ -18,11 +18,11 @@ try {
   execSync('npm install')
   execSync('npm run build')
   // 读取 package.json 内容
-  const packageJson = require('../package.json')
+  const packageJson = import('../package.json')
   const exports = packageJson.exports
   // 从 icons.json 中为每一个 icon 重新生成 exports 字段。
   const newExports = {}
-  const icons = require('../icons.json')
+  const icons = import('../icons.json')
   icons.forEach(icon => {
     // 连字符转成驼峰
     const iconName = icon.name.replace(/-([a-z])/g, g => g[1].toUpperCase())
