@@ -14,7 +14,7 @@
   "author": "",
   "license": "MIT",
   "peerDependencies": {
-    "axii": "^2.6.11"
+    "axii": "^2.6.12"
   },
   "devDependencies": {
     "@types/node": "^20.12.11",
