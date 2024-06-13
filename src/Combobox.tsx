@@ -1,7 +1,7 @@
 import {
     atom,
-    Atom, Component,
-    createReactivePosition,
+    Atom,
+    Component,
     createSelection,
     FixedCompatiblePropsType,
     ModalContext,
@@ -12,6 +12,7 @@ import {
     reactiveSize,
     RenderContext,
     RxList,
+    withStopPropagation,
 } from "axii";
 import {Input} from "./Input.js";
 import LoadingFour from "axii-icon-park/LoadingFour.js";
@@ -24,7 +25,7 @@ const ComboboxPropTypes = {
     options: PropTypes.rxList<any>().default(() => new RxList([])).isRequired
 }
 
-export const Combobox:Component = function Combobox(props: FixedCompatiblePropsType<typeof ComboboxPropTypes> , {createElement, createPortal, context, createStateFromRef}: RenderContext) {
+export const Combobox:Component = function Combobox(props: FixedCompatiblePropsType<typeof ComboboxPropTypes> , {createElement, createPortal, createRef, context, createStateFromRef}: RenderContext) {
     const {value, options, placeholder, search} = props as PropsType<typeof ComboboxPropTypes>
 
     const optionsWithSelected = createSelection(options, value)
@@ -39,12 +40,13 @@ export const Combobox:Component = function Combobox(props: FixedCompatiblePropsT
         position: 'fixed',
         top: 0,
         left: 0,
-        width: viewportSize()?.width,
-        height: viewportSize()?.height,
+        right:0,
+        bottom:0,
     })
 
     // TODO position 改成 manual
-    const rootPosition = createStateFromRef<PositionObject>(createReactivePosition({type:'interval', duration:100}) )
+    const rootRef = createRef()
+    const rootPosition = atom.lazy(() => rootRef.current.getBoundingClientRect() as PositionObject)
     const optionsStyle = (() => {
         // rootRectRef.sync!()
         return {
@@ -87,7 +89,7 @@ export const Combobox:Component = function Combobox(props: FixedCompatiblePropsT
     })
 
     return (
-        <div as="root" ref={[rootPosition.ref]} onClick={() => optionVisible(true)}>
+        <div as="root" ref={[rootRef]} onClick={() => optionVisible(true)}>
             <div as="displayValueContainer" >
                 <div
                     as="displayValue"
@@ -99,9 +101,9 @@ export const Combobox:Component = function Combobox(props: FixedCompatiblePropsT
                 </div>
             </div>
             {
-                () => optionVisible() ? createPortal((
-                    <div as="dropdownBackground" style={dropdownBackgroundStyle()}>
-                        <div as="optionsContainer" style={optionsStyle} prop:value={options}>
+                createPortal(() => optionVisible() ? (
+                    <div as="dropdownBackground" style={dropdownBackgroundStyle} onClick={() => optionVisible(false)} onScrollCapture={withStopPropagation(() => {})}>
+                        <div as="optionsContainer" style={optionsStyle} prop:value={options} onClick={withStopPropagation(() => {})}>
                             <div as={'searchContainer'}>
                                 <Input as={"search"} value={search}/>
                             </div>
@@ -116,7 +118,7 @@ export const Combobox:Component = function Combobox(props: FixedCompatiblePropsT
                             }
                         </div>
                     </div>
-                ), dropdowmContainer) : null
+                ) : null, dropdowmContainer)
             }
         </div>
     )

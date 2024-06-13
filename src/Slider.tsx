@@ -37,7 +37,6 @@ export const Slider: Component = function Slider(props: FixedCompatiblePropsType
     })
 
     const mainStyle = () => {
-        console.log(value(), containerRef.current?.clientWidth)
         return ({
             position: 'absolute',
             left: value()/100*(containerRef.current?.clientWidth||0),
@@ -49,7 +48,6 @@ export const Slider: Component = function Slider(props: FixedCompatiblePropsType
 
     let lastStartValue = value()
     const onDragMove = (e: CustomEvent) => {
-        console.log(e.detail)
         const { deltaX } = e.detail
         const totalWidth = containerRef.current.clientWidth
         const newValue = lastStartValue + deltaX / totalWidth * 100

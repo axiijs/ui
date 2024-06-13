@@ -1,13 +1,11 @@
 import {
     atom,
     Component,
-    createReactivePosition,
     FixedCompatiblePropsType,
     ModalContext,
     PositionObject,
     PropsType,
     PropTypes,
-    reactiveSize,
     RenderContext,
     withStopPropagation
 } from "axii";
@@ -20,26 +18,24 @@ const DatePickerPropTypes = {
 
 }
 
-export const DatePicker:Component = function Combobox(props: FixedCompatiblePropsType<typeof DatePickerPropTypes> , {createElement, createPortal, context, createStateFromRef}: RenderContext) {
+export const DatePicker:Component = function Combobox(props: FixedCompatiblePropsType<typeof DatePickerPropTypes> , {createElement, createRef, createPortal, context, createStateFromRef}: RenderContext) {
     const {value, placeholder} = props as PropsType<typeof DatePickerPropTypes>
 
 
     const dropdownVisible = atom(false)
 
-    const dropdowmViewport = context.get(ModalContext)?.viewport || window
     const dropdowmContainer = context.get(ModalContext)?.container || document.body
-    const viewportSize = createStateFromRef(reactiveSize, dropdowmViewport)
 
     const dropdownBackgroundStyle = () => ({
         position: 'fixed',
         top: 0,
         left: 0,
-        width: viewportSize()?.width,
-        height: viewportSize()?.height,
+        right: 0,
+        bottom: 0,
     })
 
-    // TODO position 改成 manual
-    const rootPosition = createStateFromRef<PositionObject>(createReactivePosition({type:'interval', duration:100}) )
+    const rootRef = createRef()
+    const rootPosition = atom.lazy(() => rootRef.current.getBoundingClientRect() as PositionObject)
     const optionsStyle = (() => {
         // rootRectRef.sync!()
         return {
@@ -55,7 +51,7 @@ export const DatePicker:Component = function Combobox(props: FixedCompatibleProp
     return (
         <div
             as="root"
-            ref={[rootPosition.ref]}
+            ref={[rootRef]}
             onClick={() => dropdownVisible(true)}
         >
             <div as="displayValueContainer" >
@@ -69,13 +65,13 @@ export const DatePicker:Component = function Combobox(props: FixedCompatibleProp
                 </span>
             </div>
             {
-                () => dropdownVisible() ? createPortal((
-                    <div as="dropdownBackground" style={dropdownBackgroundStyle()} onClick={() => dropdownVisible(false)}>
+                createPortal(() => dropdownVisible() ? (
+                    <div as="dropdownBackground" style={dropdownBackgroundStyle} onClick={() => dropdownVisible(false)} onscrollCapature={withStopPropagation(()=>{})}>
                         <div as="calendarContainer" style={optionsStyle} onClick={withStopPropagation(() => {})}>
                             <Calendar as={'main'} value={value}/>
                         </div>
                     </div>
-                ), dropdowmContainer) : null
+                ): null, dropdowmContainer)
             }
         </div>
     )

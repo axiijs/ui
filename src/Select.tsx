@@ -1,21 +1,17 @@
 import {
-    RenderContext,
     atom,
     Atom,
     Component,
-    createReactivePosition,
     createSelection,
     FixedCompatiblePropsType,
     ModalContext,
     onEnterKey,
-    PositionObject,
     PropsType,
     PropTypes,
     reactiveSize,
-    RxList,
+    RenderContext,
+    RxList, withStopPropagation,
 } from "axii";
-
-
 
 
 const SelectPropTypes = {
@@ -24,7 +20,7 @@ const SelectPropTypes = {
     options: PropTypes.rxList<any>().default(() => new RxList([])).isRequired
 }
 
-export const Select:Component = function Select(props: FixedCompatiblePropsType<typeof SelectPropTypes> , {createElement, createPortal, context, createStateFromRef}: RenderContext) {
+export const Select:Component = function Select(props: FixedCompatiblePropsType<typeof SelectPropTypes> , {createElement, createPortal, createRef, context, createStateFromRef}: RenderContext) {
     const {value, options, placeholder} = props as PropsType<typeof SelectPropTypes>
 
     const optionsWithSelected = createSelection(options, value)
@@ -39,12 +35,12 @@ export const Select:Component = function Select(props: FixedCompatiblePropsType<
         position: 'fixed',
         top: 0,
         left: 0,
-        width: viewportSize()?.width,
-        height: viewportSize()?.height,
+        right: 0,
+        bottom: 0,
     })
 
-    // TODO position 改成 manual
-    const rootPosition = createStateFromRef<PositionObject|null>(createReactivePosition({type:'interval', duration:100}))
+    const rootRef = createRef()
+    const rootPosition = atom.lazy(() => rootRef.current.getBoundingClientRect())
     const optionsStyle = (() => {
         // rootRectRef.sync!()
         return {
@@ -60,7 +56,6 @@ export const Select:Component = function Select(props: FixedCompatiblePropsType<
     const onSelect = (e: any) => {
         value(e)
         optionVisible(false)
-        console.log(optionVisible())
     }
 
     const focusedOption = atom(null)
@@ -92,7 +87,7 @@ export const Select:Component = function Select(props: FixedCompatiblePropsType<
     })
 
     return (
-        <div as="root" ref={[rootPosition.ref]} onClick={() => optionVisible(true)}>
+        <div as="root" ref={[rootRef]} onClick={() => optionVisible(true)}>
             <div as="displayValueContainer" >
                 <div
                     as="displayValue"
@@ -105,7 +100,7 @@ export const Select:Component = function Select(props: FixedCompatiblePropsType<
             </div>
             {
                 createPortal(() => optionVisible() ? (
-                    <div as="dropdownBackground" style={dropdownBackgroundStyle()}>
+                    <div as="dropdownBackground" style={dropdownBackgroundStyle} onClick={()=>optionVisible(false)} onScrollCapture={withStopPropagation(() => {})} >
                         <div as="options" style={optionsStyle} prop:value={options}>
                             {optionNodes}
                         </div>

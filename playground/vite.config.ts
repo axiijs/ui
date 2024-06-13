@@ -12,9 +12,8 @@ export default {
   },
   resolve: {
     alias: {
-      // 'axii-ui': fileURLToPath(new URL('../primitives/src/index.ts', import.meta.url)),
-      // 'axii-ui/themes': fileURLToPath(new URL('../src/themes', import.meta.url)),
-      // 'axii-ui': fileURLToPath(new URL('../src/index.ts', import.meta.url)),
+      'axii-ui/themes': fileURLToPath(new URL('../src/themes', import.meta.url)),
+      'axii-ui': fileURLToPath(new URL('../src/index.ts', import.meta.url)),
       'axii': fileURLToPath(new URL('../../axii/src/index.ts', import.meta.url)),
       'data0': fileURLToPath(new URL('../../data0/src/index.ts', import.meta.url))
     }
