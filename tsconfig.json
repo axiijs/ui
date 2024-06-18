@@ -19,10 +19,10 @@
     "types": ["node"],
     "rootDir": ".",
     "paths": {
-//      "axii-ui": ["./src/index.ts"],
-      "axii-ui/themes/*": ["./src/themes/*"],
-      "axii-ui/themes/inc": ["./src/themes/inc/index.tsx"],
-      "axii-ui/themes/fallout": ["./src/themes/fallout/index.tsx"]
+      "axii-ui": ["./packages/components/src/index.ts"],
+      "axii-ui-theme-common": ["./packages/theme-common/src/index.ts"],
+      "axii-ui-theme-inc": ["./packages/theme-inc/src/index.tsx"],
+      "axii-ui-theme-fallout": ["./packages/theme-fallout/src/index.tsx"]
     },
     "jsx": "react",
     "jsxFactory": "createElement",
