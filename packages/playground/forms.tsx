@@ -1,7 +1,7 @@
 import {createRoot, createElement} from "axii";
 import {App} from "./examples/forms/App.js";
-import {install as installInc} from 'axii-ui/themes/inc'
-import {install as installFallout} from "axii-ui/themes/fallout";
+import {install as installInc} from 'axii-ui-theme-inc'
+import {install as installFallout} from "axii-ui-theme-fallout";
 
 
 const themeToInstall: {[k:string]:any} = {

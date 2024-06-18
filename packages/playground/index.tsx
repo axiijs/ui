@@ -1,7 +1,7 @@
 //@jsx createElement
 import {createElement, createRoot} from 'axii'
-import {install as installInc} from 'axii-ui/themes/inc'
-import {install as installFallout} from "axii-ui/themes/fallout";
+import {install as installInc} from 'axii-ui-theme-inc'
+import {install as installFallout} from "axii-ui-theme-fallout";
 import {getDemos} from "./files.macro.js" with {type: "macro"};
 
 
