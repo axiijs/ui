@@ -1,13 +1,14 @@
 {
   "compilerOptions": {
+    "declaration": true,
     "baseUrl": ".",
     "outDir": "dist",
     "sourceMap": true,
-    "target": "es2019",
+    "target": "esnext",
     "newLine": "LF",
     "useDefineForClassFields": false,
     "module": "esnext",
-    "moduleResolution": "node16",
+    "moduleResolution": "bundler",
     "allowJs": false,
     "strict": true,
     "noUnusedLocals": true,
@@ -16,21 +17,15 @@
     "esModuleInterop": true,
     "removeComments": false,
     "lib": ["esnext", "dom"],
-    "types": ["node"],
+    "types": [ "node"],
     "rootDir": ".",
     "paths": {
-//      "axii-ui": ["./src/index.ts"],
-      "axii-ui/themes/*": ["./src/themes/*"],
-      "axii-ui/themes/inc": ["./src/themes/inc/index.tsx"],
-      "axii-ui/themes/fallout": ["./src/themes/fallout/index.tsx"]
     },
     "jsx": "react",
     "jsxFactory": "createElement",
     "jsxFragmentFactory": "Fragment"
   },
   "include": [
-    "global.d.ts",
-    "__tests__",
-    "playground"
+    "src"
   ]
 }
