@@ -22,7 +22,8 @@
   "author": "",
   "license": "MIT",
   "peerDependencies": {
-    "axii": "^2.6.11"
+    "axii": "^2.6.11",
+    "axii-icon-park": "^2.1.0"
   },
   "dependencies": {
     "dayjs": "^1.11.11"
