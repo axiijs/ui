@@ -16,7 +16,6 @@ try {
   // 去除 link
   execSync('npm install')
   execSync('npm run build')
-  execSync('npm run build-themes')
   const newVersion = execSync(`npm version ${version}`)
   execSync('git push')
   execSync(`npm publish ./`)
