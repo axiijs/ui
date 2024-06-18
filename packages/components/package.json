@@ -12,35 +12,19 @@
     ".": {
       "import": "./dist/index.js",
       "types": "./dist/index.d.ts"
-    },
-    "./themes/inc": {
-      "import": "./dist/themes/inc/index.js",
-      "types": "./dist/themes/inc/index.d.ts"
-    },
-    "./themes/inc/common": {
-      "import": "./dist/themes/inc/common.js",
-      "types": "./dist/themes/inc/common.d.ts"
-    },
-    "./themes/inc/common.js": {
-      "import": "./dist/themes/inc/common.js",
-      "types": "./dist/themes/inc/common.d.ts"
     }
   },
   "type": "module",
   "scripts": {
     "build": "vite build --config vite.prod.config.ts",
-    "build-themes": "tsx scripts/buildThemes.ts",
     "release": "node scripts/release.js"
   },
   "author": "",
   "license": "MIT",
   "peerDependencies": {
-    "axii": "^2.6.11",
-    "axii-icon-park": "^2.1.0"
+    "axii": "^2.6.11"
   },
   "dependencies": {
-    "@ant-design/colors": "^7.0.2",
-    "chroma-js": "^2.4.2",
     "dayjs": "^1.11.11"
   },
   "devDependencies": {
