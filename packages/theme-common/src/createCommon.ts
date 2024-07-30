@@ -50,6 +50,8 @@ export type ColorSchema = {
     success: string,
     info: string,
     process: string,
+    // for extended
+    [k:string]: any
 }
 
 export function createCommon(
@@ -207,7 +209,7 @@ export function createCommon(
         line: {
             border: {
                 normal(inverted = false) {
-                    return inverted ? 'none' : themeColorSchema.line
+                    return inverted ? 'none' : brighten(themeColorSchema.line, 4)
                 },
                 focused(inverted = false) {
                     return inverted ? themeColorSchema.lineInverted: themeColorSchema.line
@@ -226,7 +228,7 @@ export function createCommon(
                 },
             },
             separator() {
-                return themeColorSchema.line
+                return brighten(themeColorSchema.line, 4)
             }
         }
     })
@@ -310,7 +312,32 @@ export function createCommon(
                 }
             }
         },
-
+        evenlyGrid: (rowGap: string | number | StyleSize, columnGap: string | number | StyleSize, minWidth: string | number | StyleSize) => ({
+            display: 'grid',
+            rowGap,
+            columnGap,
+            gridTemplateColumns: `repeat(auto-fill, minmax(${minWidth}, 1fr))`,
+        }),
+        circle(radius: number | StyleSize = 40) {
+            return {
+                borderRadius: '50%',
+                width: radius,
+                height: radius,
+                boxSizing: 'border-box',
+                overflow: 'hidden',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+            }
+        },
+        oneLine(overflow = 'hidden') {
+            return {
+                whiteSpace: 'nowrap',
+                overflow,
+                maxWidth: '100%',
+                textOverflow: 'ellipsis',
+            }
+        }
     }
 
     const itemPaddingContainer = {
