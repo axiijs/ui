@@ -1,6 +1,6 @@
 {
   "name": "axii-ui-theme-common",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "description": "common utils for axii-ui themes",
   "main": "dist/index.js",
   "module": "dist/index.js",

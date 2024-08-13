@@ -23,7 +23,7 @@ export function em(value: number = 0) {
 type flexRowProps = {
     gap?: number|StyleSize,
     align?: 'start' | 'center' | 'end' | 'stretch' | 'baseline',
-    justify?: 'start' | 'center' | 'end' | 'between' | 'around' | 'evenly' | 'stretch'
+    justify?: 'start' | 'center' | 'end' | 'space-between' | 'around' | 'evenly' | 'stretch'
 }
 
 type TextType = 'text' | 'description' | 'supportive' | 'heading'
