@@ -66,25 +66,27 @@ export const Popover: Component = function(props: FixedCompatiblePropsType<typeo
                     verticalMiddle
                 } = align()
 
+                const transforms:string[] = []
+
                 if (alignLeft === 'left') {
                     positionObj.left = left
                 } else if(alignLeft === 'right') {
                     positionObj.left = right
                 } else if(alignRight === 'left') {
                     positionObj.left = left
-                    positionObj.transform = 'translateX(-100%)'
+                    transforms.push('translateX(-100%)')
                 } else if(alignRight === 'right') {
                     positionObj.left = right
-                    positionObj.transform = 'translateX(-100%)'
+                    transforms.push('translateX(-100%)')
                 } else if(horizontalMiddle === 'left') {
                     positionObj.left = left
-                    positionObj.transform = 'translateX(-50%)'
+                    transforms.push('translateX(-50%)')
                 } else if(horizontalMiddle === 'right') {
                     positionObj.left = right
-                    positionObj.transform = 'translateX(-50%)'
+                    transforms.push('translateX(-50%)')
                 } else if(horizontalMiddle === 'middle') {
                     positionObj.left = (left + right) / 2
-                    positionObj.transform = 'translateX(-50%)'
+                    transforms.push('translateX(-50%)')
                 }
 
                 if (alignTop === 'top') {
@@ -93,18 +95,22 @@ export const Popover: Component = function(props: FixedCompatiblePropsType<typeo
                     positionObj.top = bottom
                 } else if(alignBottom === 'top') {
                     positionObj.top = top
-                    positionObj.transform = 'translateY(-100%)'
+                    transforms.push('translateY(-100%)')
                 } else if(alignBottom === 'bottom') {
                     positionObj.top = bottom
                 } else if (verticalMiddle === 'top') {
                     positionObj.top = top
-                    positionObj.transform = 'translateY(-50%)'
+                    transforms.push('translateY(-50%)')
                 } else if(verticalMiddle === 'bottom') {
                     positionObj.top = bottom
-                    positionObj.transform = 'translateY(-50%)'
+                    transforms.push('translateY(-50%)')
                 } else if(verticalMiddle === 'middle') {
                     positionObj.top = (top + bottom) / 2
-                    positionObj.transform = 'translateY(-50%)'
+                    transforms.push('translateY(-50%)')
+                }
+
+                if (transforms.length > 0) {
+                    positionObj.transform = transforms.join(' ')
                 }
             }
 
