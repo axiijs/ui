@@ -26,8 +26,9 @@ export const PopoverPropTypes = {
 }
 
 
-export const Popover: Component = function(props: FixedCompatiblePropsType<typeof PopoverPropTypes>, { createElement, createPortal, context, createStateFromRef}: RenderContext) {
+export const Popover: Component = function(props: FixedCompatiblePropsType<typeof PopoverPropTypes>, { createElement, createPortal, context, createRef, createStateFromRef}: RenderContext) {
     const contentSize = createStateFromRef<SizeObject>(reactiveSize)
+    const bgRef = createRef()
 
     const {
         visible,
@@ -72,42 +73,69 @@ export const Popover: Component = function(props: FixedCompatiblePropsType<typeo
                     positionObj.left = left
                 } else if(alignLeft === 'right') {
                     positionObj.left = right
-                } else if(alignRight === 'left') {
-                    positionObj.left = left
-                    transforms.push('translateX(-100%)')
-                } else if(alignRight === 'right') {
-                    positionObj.left = right
-                    transforms.push('translateX(-100%)')
-                } else if(horizontalMiddle === 'left') {
-                    positionObj.left = left
-                    transforms.push('translateX(-50%)')
-                } else if(horizontalMiddle === 'right') {
-                    positionObj.left = right
-                    transforms.push('translateX(-50%)')
-                } else if(horizontalMiddle === 'middle') {
+                } else if(alignLeft === 'middle') {
                     positionObj.left = (left + right) / 2
-                    transforms.push('translateX(-50%)')
+                }else if(alignRight === 'left') {
+                    positionObj.left = left - contentSize()!.width
+                    // transforms.push('translateX(-100%)')
+                } else if(alignRight === 'right') {
+                    positionObj.left = right - contentSize()!.width
+                    // transforms.push('translateX(-100%)')
+                } else if(alignRight === 'middle') {
+                    positionObj.left = (left + right) / 2 - contentSize()!.width
+                    // transforms.push('translateX(-100%)')
+                } else if(horizontalMiddle === 'left') {
+                    positionObj.left = left - contentSize()!.width/2
+                    // transforms.push('translateX(-50%)')
+                } else if(horizontalMiddle === 'right') {
+                    positionObj.left = right - contentSize()!.width/2
+                    // transforms.push('translateX(-50%)')
+                } else if(horizontalMiddle === 'middle') {
+                    positionObj.left = (left + right) / 2 - contentSize()!.width/2
+                    // transforms.push('translateX(-50%)')
                 }
 
                 if (alignTop === 'top') {
                     positionObj.top = top
                 } else if(alignTop === 'bottom') {
                     positionObj.top = bottom
+                } else if(alignTop === 'middle') {
+                    positionObj.top = (top + bottom) / 2
                 } else if(alignBottom === 'top') {
-                    positionObj.top = top
-                    transforms.push('translateY(-100%)')
+                    positionObj.top = top - contentSize()!.height
+                    // transforms.push('translateY(-100%)')
                 } else if(alignBottom === 'bottom') {
                     positionObj.top = bottom
+                } else if(alignBottom === 'middle') {
+                    positionObj.top = (top + bottom) / 2 - contentSize()!.height
+                    // transforms.push('translateY(-100%)')
                 } else if (verticalMiddle === 'top') {
-                    positionObj.top = top
-                    transforms.push('translateY(-50%)')
+                    positionObj.top = top - contentSize()!.height/2
+                    // transforms.push('translateY(-50%)')
                 } else if(verticalMiddle === 'bottom') {
-                    positionObj.top = bottom
-                    transforms.push('translateY(-50%)')
+                    positionObj.top = bottom - contentSize()!.height/2
+                    // transforms.push('translateY(-50%)')
                 } else if(verticalMiddle === 'middle') {
-                    positionObj.top = (top + bottom) / 2
-                    transforms.push('translateY(-50%)')
+                    positionObj.top = (top + bottom) / 2 - contentSize()!.height/2
+                    // transforms.push('translateY(-50%)')
                 }
+
+                const bgRect = bgRef.current.getBoundingClientRect()
+                // 智能调整超出屏幕的部分
+                // 1. 如果是左右两侧，上下超出屏幕，那么应该滑动到边缘
+                if(alignLeft === 'right' || alignRight === 'left') {
+                    if (positionObj.top < 0) positionObj.top = 0
+                    if (positionObj.top + contentSize()!.height > bgRect.height) positionObj.top = bgRect.height - contentSize()!.height
+                }
+
+                // 2. 如果是上下两侧，左右超出屏幕，那么应该滑动到边缘
+                if (alignTop === 'bottom' || alignBottom === 'top') {
+                    if (positionObj.left < 0) positionObj.left = 0
+                    if (positionObj.left + contentSize()!.width > bgRect.width) positionObj.left = bgRect.width - contentSize()!.width
+                }
+
+                // 3. TODO 如果是在左右两侧，左右超出屏幕，那么应该尝试翻转
+                // 4. TODO 如果是上下两侧，上下超出屏幕，那么应该尝试翻转
 
                 if (transforms.length > 0) {
                     positionObj.transform = transforms.join(' ')
@@ -129,6 +157,7 @@ export const Popover: Component = function(props: FixedCompatiblePropsType<typeo
                 onscroll={(e:Event)=>e.stopPropagation()}
                 style={ backgroundStyle}
                 onClick={() => visible(false)}
+                ref={bgRef}
             >
                 <div
                     ref={contentSize.ref}

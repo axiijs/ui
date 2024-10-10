@@ -21,3 +21,5 @@ export * from './Dropdown.js'
 export * from './Popover.js'
 export * from './Menu.js'
 export * from './Avatar.js'
+export * from './Column.js'
+
