@@ -26,9 +26,9 @@ export const PopoverPropTypes = {
 }
 
 
-export const Popover: Component = function(props: FixedCompatiblePropsType<typeof PopoverPropTypes>, { createElement, createPortal, context, createRef, createStateFromRef}: RenderContext) {
+export const Popover: Component = function(props: FixedCompatiblePropsType<typeof PopoverPropTypes>, { createElement, createPortal, context, createRxRef, createStateFromRef}: RenderContext) {
     const contentSize = createStateFromRef<SizeObject>(reactiveSize)
-    const bgRef = createRef()
+    const bgRef = createRxRef()
 
     const {
         visible,
@@ -56,7 +56,7 @@ export const Popover: Component = function(props: FixedCompatiblePropsType<typeo
             //  如果下方空间不够，并且 position 是在屏幕下半部分，就显示在上方
             //  如果右方空间不够，并且 position 是在屏幕右半部分，就显示在左方
             const positionObj: any = {}
-            if (targetPosition() && contentSize()){
+            if (targetPosition() && bgRef.current && contentSize()){
                 const { left, top, bottom, right } = targetPosition()!
                 const {
                     left: alignLeft,
