@@ -811,7 +811,7 @@ body {
 }
 
 * {
-    font-size: clamp(18px, 3vw, 30px);
+    font-size: clamp(16px, 2vw, 20px);
 }
             `}
         </style> as HTMLElement
