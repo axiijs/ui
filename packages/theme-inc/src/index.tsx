@@ -186,8 +186,8 @@ export function install() {
                 }
             },
             '$displayValueContainer:style': {
-                ...projectingContainer,
                 ...textBox(),
+                ...projectingContainer,
                 ...layout.rowCenter(),
                 cursor: 'pointer',
                 gap: sizes.space.inner(),
@@ -201,8 +201,8 @@ export function install() {
     Combobox.boundProps = [...Combobox.boundProps||[], function ({}, {createElement}: RenderContext) {
         return {
             '$root:style': {
-                ...projectingContainer,
                 ...textBox(),
+                ...projectingContainer,
                 cursor: 'pointer',
             },
             '$displayValue:style': {
@@ -416,8 +416,8 @@ export function install() {
     Select.boundProps = [...(Select.boundProps||[]), function ({value}, {createElement}: RenderContext) {
         return {
             '$root:style': {
-                ...projectingContainer,
                 ...textBox(),
+                ...projectingContainer,
                 cursor: 'pointer',
                 borderRadius: sizes.radius.item(),
             },
@@ -444,25 +444,24 @@ export function install() {
 
     Checkbox.boundProps = [...(Checkbox.boundProps || []), function ({value}, {createElement}: RenderContext) {
         return {
-            '$root:style': () => ({
+            '$root:style': [{
                 cursor: 'pointer',
                 width: sizes.thing.item(),
                 height: sizes.thing.item(),
                 borderRadius: '50%',
+            },() => ({
                 outline: value() ? `1px solid ${colors.line.border.focused()}` : `1px solid ${colors.line.border.normal()}`,
-            }),
-            '$main:style': () => {
-                return [{
-                    width: 0,
-                    height: 0,
-                    borderRadius: '50%',
-                    transition: 'height 0.3s, width 0.3s',
-                    background: value() ? colors.background.item.active() : 'transparent',
-                }, {
+            })],
+            '$main:style': [{
+                borderRadius: '50%',
+                transition: 'height 0.3s, width 0.3s',
+                background: colors.background.item.active()
+            },() => {
+                return {
                     width: value() ? sizes.thing.item().div(2) : 0,
                     height: value() ? sizes.thing.item().div(2) : 0,
-                }]
-            },
+                }
+            }],
         }
     }];
 
@@ -496,19 +495,18 @@ export function install() {
                 background: 'transparent',
                 border: `1px solid ${selected() ? colors.line.border.focused() : colors.line.border.normal()}`,
             }),
-            '$dot:style': () => {
-                return [{
-                    width: 0,
-                    height: 0,
-                    borderRadius: '50%',
-                    background: selected() ? colors.background.item.active() : 'transparent',
-                    transition: 'height 0.3s, width 0.3s',
-                }, {
+            '$dot:style': [{
+                width:0,
+                height:0,
+                borderRadius: '50%',
+                transition: 'height 0.3s, width 0.3s',
+                background: colors.background.item.active(),
+            },() => {
+                return {
                     width: selected() ? sizes.thing.item().div(2) : 0,
                     height: selected() ? sizes.thing.item().div(2) : 0,
-                }]
-            }
-
+                }
+            }]
         }
     }];
 
@@ -603,7 +601,7 @@ export function install() {
                     height: percent(100).sub(sizes.space.inner().mul(2)),
                     width: rect ? (new StyleSize(rect.width!, 'px').sub(sizes.space.inner().mul(2))) : 0,
                     borderRadius: sizes.radius.item(),
-                    transition: 'all 0.3s',
+                    transition: 'left 0.3s',
                 })
             },
             '$tab:ref_': (_: any, {tab}: any) => {
@@ -626,7 +624,6 @@ export function install() {
     Calendar.boundProps = [...(Calendar.boundProps || []), function ({value}, {createElement}: RenderContext) {
         return {
             '$root:style': {
-                ...enclosedContainer,
                 ...itemPaddingContainer,
                 ...projectingContainer,
                 display: 'inline-flex',
