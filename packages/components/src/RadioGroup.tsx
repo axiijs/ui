@@ -41,7 +41,7 @@ export const RadioOption: Component = function ({selected, option}:RadioOptionPr
 
     return (<div as='root' style={containerStyle}>
         <div as='dotContainer'>
-            {() => selected() ? <div as="dot"/> : null}
+            <div as="dot"/>
         </div>
         <div>{option.label || option}</div>
     </div>)
