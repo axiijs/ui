@@ -28,14 +28,16 @@ const demoFiles = getDemos()
 //     // 'dialog.tsx',
 //     // 'drawer.tsx',
 //     // 'dropdown.tsx',
-//     'input.tsx',
+//     // 'input.tsx',
 //     // 'menu.tsx',
 //     // 'menubar.tsx',
 //     // 'popover.tsx',
-//     // 'radioGroup.tsx',
+//     'radioGroup.tsx',
 //     // 'resizable.tsx',
 //     // 'select.tsx',
-//     'slider.tsx',
+//     // 'slider.tsx',
+//     // 'switch.tsx',
+//     // 'tabs.tsx',
 // ]
 const demos = await Promise.all(demoFiles.map( async(d) => {
     const componentName = d.replace('.tsx', '')
