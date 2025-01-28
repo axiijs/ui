@@ -1,7 +1,5 @@
 import {Atom, atom, N_ATTR, RenderContext, RxList} from "axii";
 import {Select} from "axii-ui";
-const value = atom(null)
-const options = new RxList([{label: 'a11', value: 'a'}, {label: 'b', value: 'b'}])
 type SelectItemProps = {
     value: any,
     onSelect: (value: any) => void,
@@ -11,9 +9,11 @@ type SelectItemProps = {
 }
 
 function DisplayOption(props: SelectItemProps, {createElement}: RenderContext) {
-    const {value} = props
+    const {value, selected} = props
     const nativeAttrs = props[N_ATTR]
+    console.log(value.raw, selected.raw)
     return <div {...nativeAttrs}>
+        <span style={{marginRight:10}}>{() => selected() ? '√' : '*'}</span>
         {value.label}
     </div>
 }
@@ -29,6 +29,9 @@ function DisplayValue({value, optionVisible}: DisplayValueProps, {createElement}
 }
 
 export function Demo({}, {createElement}: RenderContext) {
+    const options = new RxList([{label: 'a11', value: 'a'}, {label: 'b', value: 'b'}])
+    const value = atom(options.raw[0])
+
     return (
         <div>
             <div>
