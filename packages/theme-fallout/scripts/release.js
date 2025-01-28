@@ -17,6 +17,8 @@ try {
   execSync('npm install')
   execSync('npm run build')
   const newVersion = execSync(`npm version ${version}`)
+  execSync('git add .')
+  execSync(`git commit -m "version: axii-ui-theme-fallout@${version}"`)
   execSync('git push')
   execSync(`npm publish ./`)
 } catch (e) {
