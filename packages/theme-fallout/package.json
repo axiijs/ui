@@ -1,6 +1,6 @@
 {
   "name": "axii-ui-theme-fallout",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "description": "fallout style theme for axii-ui",
   "main": "dist/index.js",
   "module": "dist/index.js",
@@ -26,7 +26,7 @@
   "author": "",
   "license": "MIT",
   "peerDependencies": {
-    "axii": "^2.7.0",
+    "axii": "^2.7.1",
     "axii-ui": "^1.0.0",
     "axii-ui-theme-common": "^1.0.0"
   },
