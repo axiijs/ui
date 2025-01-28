@@ -20,7 +20,7 @@ const SelectPropTypes = {
     options: PropTypes.rxList<any>().default(() => new RxList([])).isRequired
 }
 
-export const Select:Component = function Select(props: FixedCompatiblePropsType<typeof SelectPropTypes> , {createElement, createPortal, createRef, context, createStateFromRef}: RenderContext) {
+export const Select:Component = function Select(props: FixedCompatiblePropsType<typeof SelectPropTypes> , {createElement, reusable, createPortal, createRef, context, createStateFromRef}: RenderContext) {
     const {value, options, placeholder} = props as PropsType<typeof SelectPropTypes>
 
     const optionsWithSelected = createSelection(options, value)
@@ -60,7 +60,7 @@ export const Select:Component = function Select(props: FixedCompatiblePropsType<
 
     const focusedOption = atom(null)
 
-    const optionNodes = optionsWithSelected.map(([option, selected ]:[any,Atom<boolean> ]) => {
+    const optionNodes = reusable(optionsWithSelected.map(([option, selected ]:[any,Atom<boolean> ]) => {
         const focused = atom(false)
 
         return (
@@ -84,7 +84,7 @@ export const Select:Component = function Select(props: FixedCompatiblePropsType<
                 </div>
             </div>
         )
-    })
+    }))
 
     return (
         <div as="root" ref={[rootRef]} onClick={() => optionVisible(true)}>
@@ -99,13 +99,15 @@ export const Select:Component = function Select(props: FixedCompatiblePropsType<
                 </div>
             </div>
             {
-                createPortal(() => optionVisible() ? (
-                    <div as="dropdownBackground" style={dropdownBackgroundStyle} onClick={()=>optionVisible(false)} onScrollCapture={withStopPropagation(() => {})} >
-                        <div as="options" style={optionsStyle} prop:value={options}>
-                            {optionNodes}
-                        </div>
-                    </div>)
-                : null, dropdowmContainer)
+                createPortal(() => {
+                    return optionVisible() ? (
+                            <div as="dropdownBackground" style={dropdownBackgroundStyle} onClick={()=>optionVisible(false)} onScrollCapture={withStopPropagation(() => {})} >
+                                <div as="options" style={optionsStyle} prop:value={options}>
+                                    {optionNodes}
+                                </div>
+                            </div>)
+                        : null
+                }, dropdowmContainer)
             }
         </div>
     )
