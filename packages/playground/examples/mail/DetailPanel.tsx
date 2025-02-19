@@ -1,4 +1,4 @@
-import {Atom, atom, createReactivePosition, RenderContext} from "axii";
+import {Atom, atom, RectObject, RenderContext, RxDOMRect} from "axii";
 import {common} from '../../common.js'
 import {Popover} from 'axii-ui'
 import JunkOne from 'axii-icon-park/DeleteOne.js'
@@ -14,7 +14,7 @@ type DetailProps = {
     mail: Atom<null|MailData>
 }
 
-export function DetailPanel({ mail }: DetailProps, {createElement, createStateFromRef}: RenderContext) {
+export function DetailPanel({ mail }: DetailProps, {createElement}: RenderContext) {
     const containerStyle = {
         height: '100%',
         width: '100%',
@@ -42,7 +42,7 @@ export function DetailPanel({ mail }: DetailProps, {createElement, createStateFr
         }
     }
 
-    const moreIconPosition = createStateFromRef(createReactivePosition({type: 'interval', duration: 100}))
+    const rxMoreIconPosition = new RxDOMRect(atom<RectObject>(null), {type: 'interval', duration: 100})
     const popoverVisible = atom(false)
     const popoverAlign = atom({
         right: 'right',
@@ -78,10 +78,10 @@ export function DetailPanel({ mail }: DetailProps, {createElement, createStateFr
                         <span style={{...common.separator(true)}}/>
                     </div>
                     <div style={operationContainerStyle}>
-                        <span onClick={() => popoverVisible(true)} ref={moreIconPosition.ref}>
+                        <span onClick={() => popoverVisible(true)} ref={rxMoreIconPosition.ref}>
                             <MoreIcon size={14}/>
                         </span>
-                        <Popover targetPosition={moreIconPosition} visible={popoverVisible} align={popoverAlign}>
+                        <Popover targetPosition={rxMoreIconPosition.value} visible={popoverVisible} align={popoverAlign}>
                             {() => (<div style={popoverContainerStyle}>
                                 <div>Mark as unread</div>
                                 <div>Star thread</div>

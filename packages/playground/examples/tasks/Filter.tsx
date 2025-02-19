@@ -1,14 +1,16 @@
 import {
     atom,
     Component,
-    createReactivePosition,
     FixedCompatiblePropsType,
     PropsType,
     PropTypes,
-    RenderContext, RxList
+    RectObject,
+    RenderContext,
+    RxDOMRect,
+    RxList
 } from "axii";
 import {Dropdown} from 'axii-ui'
-import { common } from '../../common.js'
+import {common} from '../../common.js'
 import Search from 'axii-icon-park/Search.js'
 
 const FilterPropTypes = {
@@ -18,16 +20,16 @@ const FilterPropTypes = {
 }
 
 
-export const Filter: Component = function (props: FixedCompatiblePropsType<typeof FilterPropTypes>, {createElement, createStateFromRef}:RenderContext) {
+export const Filter: Component = function (props: FixedCompatiblePropsType<typeof FilterPropTypes>, {createElement}:RenderContext) {
     const {label, search, options} = props as PropsType<typeof FilterPropTypes>
 
     const dropdownVisible = atom(false)
-    const labelPosition = createStateFromRef(createReactivePosition({type:'interval', duration:100}))
+    const rxLabelPosition = new RxDOMRect(atom<RectObject>(null), {type:'interval', duration:100})
 
 
     return <div style={{...common.enclosedContainer, ...common.boxPaddingContainer, cursor: 'pointer'}}>
         <div
-            ref={labelPosition.ref}
+            ref={rxLabelPosition.ref}
             style={common.layout.rowCenter({ gap: common.sizes.space.gap()})}
             onClick={() => dropdownVisible(true)}
         >
@@ -35,7 +37,7 @@ export const Filter: Component = function (props: FixedCompatiblePropsType<typeo
                 {label}
             </div>
         </div>
-        <Dropdown visible={dropdownVisible} targetPosition={labelPosition}>
+        <Dropdown visible={dropdownVisible} targetPosition={rxLabelPosition.value}>
             <div style={common.layout.flexColumn({})}>
                 <div style={{...common.boxPaddingContainer, ...common.layout.rowCenter({gap: common.sizes.space.gap()})}}>
                     <Search />

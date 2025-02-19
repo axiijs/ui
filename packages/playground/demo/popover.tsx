@@ -1,8 +1,8 @@
-import {atom, createReactivePosition, RenderContext} from "axii";
+import {atom, createReactivePosition, RectObject, RenderContext, RxDOMRect} from "axii";
 import {Button, Popover} from 'axii-ui'
 
-export function Demo({}, {createElement, createStateFromRef}: RenderContext) {
-    const position = createStateFromRef(createReactivePosition({type: 'interval', duration: 100}))
+export function Demo({}, {createElement}: RenderContext) {
+    const rxPosition = new RxDOMRect(atom<RectObject>(null),{type: 'interval', duration: 100})
     const popoverVisible = atom(false)
 
     const align = atom({
@@ -77,7 +77,7 @@ export function Demo({}, {createElement, createStateFromRef}: RenderContext) {
 
 
     return <div>
-        <div ref={position.ref} style={{marginLeft: 200, width: 100, height: 100, border: '1px dashed #000'}}>target</div>
+        <div ref={rxPosition.ref} style={{marginLeft: 200, width: 100, height: 100, border: '1px dashed #000'}}>target</div>
         <Button $root:onClick={LLTB}>LLTB</Button>
         <Button $root:onClick={LLBT}>LLBT</Button>
         <Button $root:onClick={RRTB}>RRTB</Button>
@@ -94,7 +94,7 @@ export function Demo({}, {createElement, createStateFromRef}: RenderContext) {
         <Button $root:onClick={VMMRR}>VMMRR</Button>
         <Button $root:onClick={VMMLL}>VMMLL</Button>
         <Button $root:onClick={VMMLR}>VMMLR</Button>
-        <Popover targetPosition={position} visible={popoverVisible} align={align}>
+        <Popover targetPosition={rxPosition.value} visible={popoverVisible} align={align}>
             {() => (<div>
                 <div>popover content very very looooooooooooooooooooong</div>
                 <div>popover content very very looooooooooooooooooooong</div>

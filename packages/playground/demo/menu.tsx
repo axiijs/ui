@@ -3,7 +3,7 @@ import { RenderContext} from "axii";
 import {originMenuContainerStyle} from "axii-ui";
 import {common} from '../common.js'
 
-export function Demo({}, {createElement, createStateFromRef}: RenderContext) {
+export function Demo({}, {createElement}: RenderContext) {
     return (
         <div style={{...originMenuContainerStyle}}>
             <div>

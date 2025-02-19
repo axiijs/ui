@@ -1,10 +1,10 @@
-import {atom, createReactivePosition, RenderContext} from "axii";
+import {atom, RectObject, RenderContext, RxDOMRect} from "axii";
 import ArrowRight from "axii-icon-park/Right.js";
-import {Button, Popover, originMenuContainerStyle} from 'axii-ui'
+import {Button, originMenuContainerStyle, Popover} from 'axii-ui'
 import {common} from '../common.js'
 
-export function Demo({}, {createElement, createStateFromRef}: RenderContext) {
-    const position = createStateFromRef(createReactivePosition({type: 'interval', duration: 100}))
+export function Demo({}, {createElement}: RenderContext) {
+    const rxPosition = new RxDOMRect(atom<RectObject>(null),{type: 'interval', duration: 100})
     const popoverVisible = atom(false)
 
     const align = atom({
@@ -21,11 +21,11 @@ export function Demo({}, {createElement, createStateFromRef}: RenderContext) {
         <Button
             $root:style={common.textBox()}
             $root:onClick={LLTB}
-            $root:ref={position.ref}
+            $root:ref={rxPosition.ref}
         >
             show menu
         </Button>
-        <Popover targetPosition={position} visible={popoverVisible} align={align}>
+        <Popover targetPosition={rxPosition.value} visible={popoverVisible} align={align}>
             {() => (
                 <div style={{...originMenuContainerStyle, boxShadow: 'none', border: 0}}>
                     <div>

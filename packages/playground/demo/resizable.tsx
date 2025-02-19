@@ -1,7 +1,14 @@
-import {atom, autorun, createReactiveDragPosition, createReactiveDragTarget, RenderContext} from "axii";
+import {
+    atom,
+    autorun,
+    createReactiveDragPosition,
+    createReactiveDragTarget, DragPosition,
+    RenderContext,
+    RxDOMDragPosition
+} from "axii";
 import {common} from "../common.js"
 
-export function Demo({}, {createElement, createStateFromRef}: RenderContext) {
+export function Demo({}, {createElement, createRef}: RenderContext) {
 
     const containerStyle = {
         ...common.enclosedContainer,
@@ -18,21 +25,25 @@ export function Demo({}, {createElement, createStateFromRef}: RenderContext) {
         cursor: 'row-resize',
     })
 
-    const dragTarget = createStateFromRef(createReactiveDragTarget(() => ({topHeight: topHeight()})))
-    const dragPosition = createStateFromRef(createReactiveDragPosition(dragTarget))
+
+    const containerRef = createRef()
+
+    const rxDragPosition = new RxDOMDragPosition(atom<DragPosition>(null), containerRef)
+
     autorun(() => {
-        if (dragTarget() && dragPosition()) {
-            topHeight(dragTarget()?.topHeight + dragPosition()?.offsetY)
+        const position = rxDragPosition.value()
+        if (position) {
+            topHeight(position.clientY-position.startY-position.containerRect!.top)
         }
     })
 
     return (
         <div>
-            <div ref={dragPosition.ref} style={containerStyle}>
+            <div ref={containerRef} style={containerStyle}>
                 <div style={[topStyle, common.layout.center()]}>
                     top
                 </div>
-                <div ref={dragTarget.ref} style={handleStyle}>
+                <div ref={rxDragPosition.ref} style={handleStyle}>
                     <div style={common.separator()}></div>
                 </div>
                 <div style={{flexGrow: 1, ...common.layout.center()}}>

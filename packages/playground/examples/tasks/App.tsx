@@ -26,7 +26,7 @@ function StatusFilterOption({option}: StatusFilterOptionProps, {createElement}: 
 }
 
 
-export function App({}, {createElement, Fragment, createStateFromRef, createRef}: RenderContext) {
+export function App({}, {createElement, Fragment, createRef}: RenderContext) {
     const status = new RxList(['backlog', 'todo','in progress', 'done', 'cancelled'])
     const selectedStatus = new RxSet<string>([])
     const statusWithSelected = status.createSelection(selectedStatus)

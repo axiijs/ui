@@ -8,7 +8,7 @@ const addSonner = () => {
     sonnerStack.unshift((sonnerStackTimes++).toString().repeat(10))
 }
 
-export function Demo({}, {createElement, createStateFromRef}: RenderContext) {
+export function Demo({}, {createElement}: RenderContext) {
     return (
         <div>
             {/*<Button $root:onClick={() => toastStack.unshift((toastStackTimes++).toString().repeat(10))}>add toast</Button>*/}
