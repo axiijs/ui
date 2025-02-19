@@ -1,19 +1,20 @@
 import {
     atom,
+    autorun,
     Component,
+    DragPosition,
     FixedCompatiblePropsType,
     PropsType,
     PropTypes,
     RenderContext,
-    createOnDragMove,
-    onLeftMouseDown
+    RxDOMDragPosition
 } from "axii";
 
 const SliderProptypes= {
     value: PropTypes.atom<number>().default(() => atom(0)),
 }
 
-export const Slider: Component = function Slider(props: FixedCompatiblePropsType<typeof SliderProptypes>, {createElement, createRxRef}: RenderContext) {
+export const Slider: Component = function Slider(props: FixedCompatiblePropsType<typeof SliderProptypes>, {createElement, createRxRef, useLayoutEffect}: RenderContext) {
     const { value } = props as PropsType<typeof SliderProptypes>
     const containerRef = createRxRef()
 
@@ -44,24 +45,23 @@ export const Slider: Component = function Slider(props: FixedCompatiblePropsType
         })
     }
 
-    const dragMoveRef = createOnDragMove()
 
-    let lastStartValue = value()
-    const onDragMove = (e: CustomEvent) => {
-        const { deltaX } = e.detail
-        const totalWidth = containerRef.current.clientWidth
-        const newValue = lastStartValue + deltaX / totalWidth * 100
-        value(newValue > 100 ? 100 : newValue < 0 ? 0 : newValue)
-    }
+    const rxDragPosition = new RxDOMDragPosition(atom<DragPosition>(null), containerRef)
+
+    autorun(() => {
+        const position = rxDragPosition.value()
+        if(position) {
+            const newValue = position.clientX-position.startX-position.containerRect!.left
+            value(newValue > 100 ? 100 : newValue < 0 ? 0 : newValue)
+        }
+    })
 
     return <div as={'root'} style={rootStyle}>
         <div as={'container'} style={containerStyle} ref={containerRef}>
             <span
                 as={'main'}
                 style={mainStyle}
-                ref={dragMoveRef}
-                onMouseDown={onLeftMouseDown(() => lastStartValue = value())}
-                onDragMove={onDragMove}
+                ref={rxDragPosition.ref}
             ></span>
         </div>
         <div as={'bar'} style={barStyle}>

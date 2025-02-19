@@ -2,11 +2,12 @@ import {
     atom,
     Component,
     FixedCompatiblePropsType,
+    ModalContext,
+    RectObject,
     PropsType,
-    PositionObject,
     PropTypes,
     RenderContext,
-    ModalContext, SizeObject, reactiveSize
+    RxDOMSize
 } from "axii";
 
 export type alignType = {
@@ -21,13 +22,14 @@ export type alignType = {
 export const PopoverPropTypes = {
     visible: PropTypes.atom<boolean>().default(() => atom(false)),
     children: PropTypes.any,
-    targetPosition: PropTypes.atom<PositionObject|null>().default(() => atom(null)),
+    targetPosition: PropTypes.atom<RectObject|null>().default(() => atom(null)),
     align: PropTypes.atom<alignType>().default(() => atom({left: 'left', top: 'bottom'}))
 }
 
 
-export const Popover: Component = function(props: FixedCompatiblePropsType<typeof PopoverPropTypes>, { createElement, createPortal, context, createRxRef, createStateFromRef}: RenderContext) {
-    const contentSize = createStateFromRef<SizeObject>(reactiveSize)
+export const Popover: Component = function(props: FixedCompatiblePropsType<typeof PopoverPropTypes>, { createElement, createPortal, context, createRxRef}: RenderContext) {
+    const rxContentSize = new RxDOMSize()
+
     const bgRef = createRxRef()
 
     const {
@@ -56,7 +58,7 @@ export const Popover: Component = function(props: FixedCompatiblePropsType<typeo
             //  如果下方空间不够，并且 position 是在屏幕下半部分，就显示在上方
             //  如果右方空间不够，并且 position 是在屏幕右半部分，就显示在左方
             const positionObj: any = {}
-            if (targetPosition() && bgRef.current && contentSize()){
+            if (targetPosition() && bgRef.current && rxContentSize.value()){
                 const { left, top, bottom, right } = targetPosition()!
                 const {
                     left: alignLeft,
@@ -76,22 +78,22 @@ export const Popover: Component = function(props: FixedCompatiblePropsType<typeo
                 } else if(alignLeft === 'middle') {
                     positionObj.left = (left + right) / 2
                 }else if(alignRight === 'left') {
-                    positionObj.left = left - contentSize()!.width
+                    positionObj.left = left - rxContentSize.value()!.width
                     // transforms.push('translateX(-100%)')
                 } else if(alignRight === 'right') {
-                    positionObj.left = right - contentSize()!.width
+                    positionObj.left = right - rxContentSize.value()!.width
                     // transforms.push('translateX(-100%)')
                 } else if(alignRight === 'middle') {
-                    positionObj.left = (left + right) / 2 - contentSize()!.width
+                    positionObj.left = (left + right) / 2 - rxContentSize.value()!.width
                     // transforms.push('translateX(-100%)')
                 } else if(horizontalMiddle === 'left') {
-                    positionObj.left = left - contentSize()!.width/2
+                    positionObj.left = left - rxContentSize.value()!.width/2
                     // transforms.push('translateX(-50%)')
                 } else if(horizontalMiddle === 'right') {
-                    positionObj.left = right - contentSize()!.width/2
+                    positionObj.left = right - rxContentSize.value()!.width/2
                     // transforms.push('translateX(-50%)')
                 } else if(horizontalMiddle === 'middle') {
-                    positionObj.left = (left + right) / 2 - contentSize()!.width/2
+                    positionObj.left = (left + right) / 2 - rxContentSize.value()!.width/2
                     // transforms.push('translateX(-50%)')
                 }
 
@@ -102,21 +104,21 @@ export const Popover: Component = function(props: FixedCompatiblePropsType<typeo
                 } else if(alignTop === 'middle') {
                     positionObj.top = (top + bottom) / 2
                 } else if(alignBottom === 'top') {
-                    positionObj.top = top - contentSize()!.height
+                    positionObj.top = top - rxContentSize.value()!.height
                     // transforms.push('translateY(-100%)')
                 } else if(alignBottom === 'bottom') {
                     positionObj.top = bottom
                 } else if(alignBottom === 'middle') {
-                    positionObj.top = (top + bottom) / 2 - contentSize()!.height
+                    positionObj.top = (top + bottom) / 2 - rxContentSize.value()!.height
                     // transforms.push('translateY(-100%)')
                 } else if (verticalMiddle === 'top') {
-                    positionObj.top = top - contentSize()!.height/2
+                    positionObj.top = top - rxContentSize.value()!.height/2
                     // transforms.push('translateY(-50%)')
                 } else if(verticalMiddle === 'bottom') {
-                    positionObj.top = bottom - contentSize()!.height/2
+                    positionObj.top = bottom - rxContentSize.value()!.height/2
                     // transforms.push('translateY(-50%)')
                 } else if(verticalMiddle === 'middle') {
-                    positionObj.top = (top + bottom) / 2 - contentSize()!.height/2
+                    positionObj.top = (top + bottom) / 2 - rxContentSize.value()!.height/2
                     // transforms.push('translateY(-50%)')
                 }
 
@@ -125,13 +127,13 @@ export const Popover: Component = function(props: FixedCompatiblePropsType<typeo
                 // 1. 如果是左右两侧，上下超出屏幕，那么应该滑动到边缘
                 if(alignLeft === 'right' || alignRight === 'left') {
                     if (positionObj.top < 0) positionObj.top = 0
-                    if (positionObj.top + contentSize()!.height > bgRect.height) positionObj.top = bgRect.height - contentSize()!.height
+                    if (positionObj.top + rxContentSize.value()!.height > bgRect.height) positionObj.top = bgRect.height - rxContentSize.value()!.height
                 }
 
                 // 2. 如果是上下两侧，左右超出屏幕，那么应该滑动到边缘
                 if (alignTop === 'bottom' || alignBottom === 'top') {
                     if (positionObj.left < 0) positionObj.left = 0
-                    if (positionObj.left + contentSize()!.width > bgRect.width) positionObj.left = bgRect.width - contentSize()!.width
+                    if (positionObj.left + rxContentSize.value()!.width > bgRect.width) positionObj.left = bgRect.width - rxContentSize.value()!.width
                 }
 
                 // 3. TODO 如果是在左右两侧，左右超出屏幕，那么应该尝试翻转
@@ -160,7 +162,7 @@ export const Popover: Component = function(props: FixedCompatiblePropsType<typeo
                 ref={bgRef}
             >
                 <div
-                    ref={contentSize.ref}
+                    ref={rxContentSize.ref}
                     as={'content'}
                     style={contentContainerStyle}
                     onClick={(e:Event) => e.stopPropagation()}

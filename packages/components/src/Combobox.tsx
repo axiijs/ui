@@ -6,12 +6,13 @@ import {
     FixedCompatiblePropsType,
     ModalContext,
     onEnterKey,
-    PositionObject,
+    RectObject,
     PropsType,
     PropTypes,
-    reactiveSize,
     RenderContext,
+    RxDOMSize,
     RxList,
+    SizeObject,
     withStopPropagation,
 } from "axii";
 import {Input} from "./Input.js";
@@ -25,7 +26,7 @@ const ComboboxPropTypes = {
     options: PropTypes.rxList<any>().default(() => new RxList([])).isRequired
 }
 
-export const Combobox:Component = function Combobox(props: FixedCompatiblePropsType<typeof ComboboxPropTypes> , {createElement, createPortal, createRef, context, createStateFromRef}: RenderContext) {
+export const Combobox:Component = function Combobox(props: FixedCompatiblePropsType<typeof ComboboxPropTypes> , {createElement, createPortal, createRef, context}: RenderContext) {
     const {value, options, placeholder, search} = props as PropsType<typeof ComboboxPropTypes>
 
     const optionsWithSelected = createSelection(options, value)
@@ -34,7 +35,8 @@ export const Combobox:Component = function Combobox(props: FixedCompatiblePropsT
 
     const dropdowmViewport = context.get(ModalContext)?.viewport || window
     const dropdowmContainer = context.get(ModalContext)?.container || document.body
-    const viewportSize = createStateFromRef(reactiveSize, dropdowmViewport)
+    const viewportSize = atom<SizeObject|null>(null);
+    (new RxDOMSize(viewportSize)).ref(dropdowmViewport())
 
     const dropdownBackgroundStyle = () => ({
         position: 'fixed',
@@ -46,7 +48,7 @@ export const Combobox:Component = function Combobox(props: FixedCompatiblePropsT
 
     // TODO position 改成 manual
     const rootRef = createRef()
-    const rootPosition = atom.lazy(() => rootRef.current.getBoundingClientRect() as PositionObject)
+    const rootPosition = atom.lazy(() => rootRef.current.getBoundingClientRect() as RectObject)
     const optionsStyle = (() => {
         // rootRectRef.sync!()
         return {

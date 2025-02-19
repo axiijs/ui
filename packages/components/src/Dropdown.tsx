@@ -2,21 +2,22 @@ import {
     atom,
     Component,
     FixedCompatiblePropsType,
+    ModalContext,
     PropsType,
-    PositionObject,
     PropTypes,
     RenderContext,
-    ModalContext, SizeObject, reactiveSize
+    RxDOMSize,
+    RectObject
 } from "axii";
 
 export const DropdownPropTypes = {
     visible: PropTypes.atom<boolean>().default(() => atom(false)),
     children: PropTypes.any,
-    targetPosition: PropTypes.atom<PositionObject|null>().default(() => atom(null)),
+    targetPosition: PropTypes.atom<RectObject|null>().default(() => atom(null)),
 }
 
-export const Dropdown: Component = function(props: FixedCompatiblePropsType<typeof DropdownPropTypes>, { createElement, createPortal, context, createStateFromRef}: RenderContext) {
-    const contentSize = createStateFromRef<SizeObject>(reactiveSize)
+export const Dropdown: Component = function(props: FixedCompatiblePropsType<typeof DropdownPropTypes>, { createElement, createPortal, context}: RenderContext) {
+    const rxContentSize = new RxDOMSize()
 
     const { visible, children, targetPosition } = props as PropsType<typeof DropdownPropTypes>
     const container = context.get(ModalContext)?.container || document.body
@@ -38,9 +39,9 @@ export const Dropdown: Component = function(props: FixedCompatiblePropsType<type
             //  如果下方空间不够，并且 position 是在屏幕下半部分，就显示在上方
             //  如果右方空间不够，并且 position 是在屏幕右半部分，就显示在左方
             const positionObj: any = {}
-            if (visible() && targetPosition() && contentSize()){
+            if (visible() && targetPosition() && rxContentSize.value()){
                 const { left, top: y, bottom } = targetPosition()!
-                const { height } = contentSize()!
+                const { height } = rxContentSize.value()!
                 const { innerHeight } = window
                 if (y + height > innerHeight && y > height/2) {
                     // 显式在上面
@@ -68,7 +69,7 @@ export const Dropdown: Component = function(props: FixedCompatiblePropsType<type
             onClick={() => visible(false)}
         >
             <div
-                ref={contentSize.ref}
+                ref={rxContentSize.ref}
                 as={'content'}
                 style={contentContainerStyle}
                 onClick={(e:Event) => e.stopPropagation()}

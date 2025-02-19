@@ -8,9 +8,8 @@ import {
     onEnterKey,
     PropsType,
     PropTypes,
-    reactiveSize,
-    RenderContext,
-    RxList, withStopPropagation,
+    RenderContext, RxDOMSize,
+    RxList, SizeObject, withStopPropagation,
 } from "axii";
 
 
@@ -20,7 +19,7 @@ const SelectPropTypes = {
     options: PropTypes.rxList<any>().default(() => new RxList([])).isRequired
 }
 
-export const Select:Component = function Select(props: FixedCompatiblePropsType<typeof SelectPropTypes> , {createElement, reusable, createPortal, createRef, context, createStateFromRef}: RenderContext) {
+export const Select:Component = function Select(props: FixedCompatiblePropsType<typeof SelectPropTypes> , {createElement, reusable, createPortal, createRef, context}: RenderContext) {
     const {value, options, placeholder} = props as PropsType<typeof SelectPropTypes>
 
     const optionsWithSelected = createSelection(options, value)
@@ -29,7 +28,8 @@ export const Select:Component = function Select(props: FixedCompatiblePropsType<
 
     const dropdowmViewport = context.get(ModalContext)?.viewport || window
     const dropdowmContainer = context.get(ModalContext)?.container || document.body
-    const viewportSize = createStateFromRef(reactiveSize, dropdowmViewport)
+    const viewportSize = atom<SizeObject|null>(null);
+    (new RxDOMSize(viewportSize)).ref(dropdowmViewport)
 
     const dropdownBackgroundStyle = () => ({
         position: 'fixed',

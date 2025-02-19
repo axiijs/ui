@@ -3,7 +3,7 @@ import {
     Component,
     FixedCompatiblePropsType,
     ModalContext,
-    PositionObject,
+    RectObject,
     PropsType,
     PropTypes,
     RenderContext,
@@ -18,7 +18,7 @@ const DatePickerPropTypes = {
 
 }
 
-export const DatePicker:Component = function Combobox(props: FixedCompatiblePropsType<typeof DatePickerPropTypes> , {createElement, createRef, createPortal, context, createStateFromRef}: RenderContext) {
+export const DatePicker:Component = function Combobox(props: FixedCompatiblePropsType<typeof DatePickerPropTypes> , {createElement, createRef, createPortal, context}: RenderContext) {
     const {value, placeholder} = props as PropsType<typeof DatePickerPropTypes>
 
 
@@ -35,7 +35,7 @@ export const DatePicker:Component = function Combobox(props: FixedCompatibleProp
     })
 
     const rootRef = createRef()
-    const rootPosition = atom.lazy(() => rootRef.current.getBoundingClientRect() as PositionObject)
+    const rootPosition = atom.lazy(() => rootRef.current.getBoundingClientRect() as RectObject)
     const optionsStyle = (() => {
         // rootRectRef.sync!()
         return {

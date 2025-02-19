@@ -1,12 +1,13 @@
 import {
     atom,
     Component,
-    FixedCompatiblePropsType, ModalContext,
+    FixedCompatiblePropsType,
+    ModalContext,
     PropsType,
     PropTypes,
-    reactiveSize,
     RenderContext,
-    SizeObject, withPreventDefault
+    RxDOMSize,
+    withPreventDefault
 } from "axii";
 
 export const ContextmenuPropTypes = {
@@ -14,8 +15,8 @@ export const ContextmenuPropTypes = {
     children: PropTypes.any,
 }
 
-export const Contextmenu: Component = function(props: FixedCompatiblePropsType<typeof ContextmenuPropTypes>, { createElement, context, createPortal, createStateFromRef}: RenderContext) {
-    const contentSize = createStateFromRef<SizeObject>(reactiveSize)
+export const Contextmenu: Component = function(props: FixedCompatiblePropsType<typeof ContextmenuPropTypes>, { createElement, context, createPortal}: RenderContext) {
+    const rxContentSize = new RxDOMSize()
     const { position, children } = props as PropsType<typeof ContextmenuPropTypes>
     const container = context.get(ModalContext)?.container || document.body
 
@@ -36,9 +37,9 @@ export const Contextmenu: Component = function(props: FixedCompatiblePropsType<t
             //  如果下方空间不够，并且 position 是在屏幕下半部分，就显示在上方
             //  如果右方空间不够，并且 position 是在屏幕右半部分，就显示在左方
             const positionObj: any = {}
-            if (position() && contentSize()){
+            if (position() && rxContentSize.value()){
                 const { x, y } = position()!
-                const { width, height } = contentSize()!
+                const { width, height } = rxContentSize.value()!
                 const { innerWidth, innerHeight } = window
                 if (y + height > innerHeight && y > height/2) {
                     positionObj.bottom = innerHeight - y
@@ -68,7 +69,7 @@ export const Contextmenu: Component = function(props: FixedCompatiblePropsType<t
             oncontextmenu={withPreventDefault(() => position(null))}
         >
             <div
-                ref={contentSize.ref}
+                ref={rxContentSize.ref}
                 as={'content'}
                 style={contentContainerStyle}
                 onClick={(e:Event) => e.stopPropagation()}
