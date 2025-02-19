@@ -26,9 +26,9 @@
   "author": "",
   "license": "MIT",
   "peerDependencies": {
-    "axii": "^2.7.3",
-    "axii-ui": "^1.0.0",
-    "axii-ui-theme-common": "^1.0.0"
+    "axii": "^3.0.0",
+    "axii-ui": "^2.0.0",
+    "axii-ui-theme-common": "^2.0.0"
   },
   "dependencies": {
     "dayjs": "^1.11.11"
