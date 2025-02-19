@@ -1,4 +1,4 @@
-import {computed, mergeProp, reactiveFocused, RenderContext, StyleSize, createElement} from "axii";
+import {computed, mergeProp, RenderContext, RxDOMFocused, StyleSize, createElement} from "axii";
 import {percent,} from "axii-ui-theme-common";
 import {
     AccordionItem,
@@ -374,8 +374,8 @@ export function install() {
         }
     }]
 
-    Input.boundProps = [function ({}, {createStateFromRef}: RenderContext) {
-        const focused = createStateFromRef(reactiveFocused)
+    Input.boundProps = [function ({}, {}: RenderContext) {
+        const rxFocused = new RxDOMFocused()
         // TODO 继承 form status? 还是放在 createForm 里面？
         return {
             '$root:style': () => {
@@ -384,7 +384,7 @@ export function install() {
                     ...textBox(),
                     padding: 0,
                     overflow: 'hidden',
-                    border: focused() ? `1px solid ${colors.line.border.focused()}` : enclosedContainer.border
+                    border: rxFocused.value() ? `1px solid ${colors.line.border.focused()}` : enclosedContainer.border
                 }
             },
             '$main:style': {
@@ -406,7 +406,7 @@ export function install() {
                 borderRadius: 0,
                 borderLeft: enclosedContainer.border
             },
-            '$main:ref': focused.ref
+            '$main:ref': rxFocused.ref
         }
     }];
 
