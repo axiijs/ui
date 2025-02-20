@@ -1,20 +1,15 @@
-import {
-    atom,
-    autorun,
-    createReactiveDragPosition,
-    createReactiveDragTarget, DragPosition,
-    RenderContext,
-    RxDOMDragPosition
-} from "axii";
+import {atom, autorun, DragPosition, RenderContext, RxDOMDragPosition} from "axii";
 import {common} from "../common.js"
 
 export function Demo({}, {createElement, createRef}: RenderContext) {
 
-    const containerStyle = {
+    const containerStyle = () => ({
         ...common.enclosedContainer,
         ...common.layout.flexColumnStretched({gap:0}),
         height: '200px',
-    }
+        userSelect:'none',
+        cursor: rxDragPosition.value() ? 'ns-resize' : 'default'
+    })
 
     const topHeight = atom(50)
     const topStyle = () => ({
@@ -22,7 +17,9 @@ export function Demo({}, {createElement, createRef}: RenderContext) {
     })
 
     const handleStyle = () => ({
-        cursor: 'row-resize',
+        height: 10,
+        cursor: 'ns-resize',
+        ...common.layout.center()
     })
 
 

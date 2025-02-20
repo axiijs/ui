@@ -1,4 +1,4 @@
-import {atom, createReactivePosition, RectObject, RenderContext, RxDOMRect} from "axii";
+import {atom, RectObject, RenderContext, RxDOMRect} from "axii";
 import {Button, Popover} from 'axii-ui'
 
 export function Demo({}, {createElement}: RenderContext) {
