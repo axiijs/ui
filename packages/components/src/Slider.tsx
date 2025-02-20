@@ -26,7 +26,8 @@ export const Slider: Component = function Slider(props: FixedCompatiblePropsType
         position: 'absolute',
         top: 0,
         left:0,
-        right: 0
+        right: 0,
+        userSelect: 'none',
     }
 
     const barStyle = {
@@ -51,7 +52,8 @@ export const Slider: Component = function Slider(props: FixedCompatiblePropsType
     autorun(() => {
         const position = rxDragPosition.value()
         if(position) {
-            const newValue = position.clientX-position.startX-position.containerRect!.left
+            console.log(position.clientX, position.startX, position.containerRect!.left)
+            const newValue = (position.clientX-position.startX-position.containerRect!.left)/position.containerRect!.width*100
             value(newValue > 100 ? 100 : newValue < 0 ? 0 : newValue)
         }
     })

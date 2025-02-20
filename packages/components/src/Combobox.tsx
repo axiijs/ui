@@ -36,7 +36,7 @@ export const Combobox:Component = function Combobox(props: FixedCompatiblePropsT
     const dropdowmViewport = context.get(ModalContext)?.viewport || window
     const dropdowmContainer = context.get(ModalContext)?.container || document.body
     const viewportSize = atom<SizeObject|null>(null);
-    (new RxDOMSize(viewportSize)).ref(dropdowmViewport())
+    (new RxDOMSize(viewportSize)).ref(dropdowmViewport)
 
     const dropdownBackgroundStyle = () => ({
         position: 'fixed',

@@ -11,6 +11,7 @@ export const Checkbox: Component = function(props: FixedCompatiblePropsType<type
         alignItems: 'center',
         justifyContent: 'center',
         cursor: 'pointer',
+        userSelect: 'none',
     })
 
     return <div as='root' style={containerStyle}>
