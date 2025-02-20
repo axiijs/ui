@@ -257,10 +257,8 @@ export function install() {
                 overflow: 'visible',
             },
             '$content:style_': (_:any, {index}:any) => {
-                return () => {
-                    const translateY = `calc(-100% - ${index()*10}px)`
-                    // const scale = `scaleX(${1 - index()*0.1})`
-                    return [{
+                return [() => {
+                    return {
                         ...enclosedContainer,
                         ...itemPaddingContainer,
                         ...levitatingContainer,
@@ -270,10 +268,14 @@ export function install() {
                         zIndex: 2000 - index(),
                         transition: 'transform .3s, opacity .3s',
                         transform: `translateY(150%)`,
-                    }, {
+                    }
+                }, () => {
+                    const translateY = `calc(-100% - ${index()*10}px)`
+                    // const scale = `scaleX(${1 - index()*0.1})`
+                    return {
                         transform: `translateY(${translateY}) scale(${1 - index()*0.1})`
-                    }]
-                }
+                    }
+                }]
             },
             '$content:detachStyle_': (_:any, {index, expired}:any) => {
                 return () => {
@@ -295,23 +297,24 @@ export function install() {
                 overflow: 'visible',
             },
             '$content:style_': (_:any, {index}:any) => {
-                return () => {
+                return [() => {
+                    return {
+                        ...enclosedContainer,
+                        ...itemPaddingContainer,
+                        ...levitatingContainer,
+                        position: 'fixed',
+                        right:10,
+                        bottom:10,
+                        zIndex: 1000 - index(),
+                        transition: 'transform .3s',
+                        transform: `translateY(150%)`,
+                    }
+                }, () => {
                     const translateY = `calc(-${index()* 100}% - ${index()*10}px)`
-
-                    return [{
-                            ...enclosedContainer,
-                            ...itemPaddingContainer,
-                            ...levitatingContainer,
-                            position: 'fixed',
-                            right:10,
-                            bottom:10,
-                            zIndex: 1000 - index(),
-                            transition: 'transform .3s',
-                            transform: `translateY(150%)`,
-                    }, {
-                            transform: `translateY(${translateY})`
-                    }]
-                }
+                    return {
+                        transform: `translateY(${translateY})`
+                    }
+                }]
             },
             '$content:detachStyle_': (_:any, {index, expired}:any) => {
                 return () => {
@@ -749,7 +752,7 @@ export function install() {
     }]
 
     AccordionItem.boundProps = [function ({visible}: any, {createRxRef}: RenderContext) {
-
+        console.log(1111, sizes.space.padding())
         return {
             '$root:style': {
                 borderBottom: `1px solid ${colors.line.border.normal()}`,
@@ -788,7 +791,6 @@ export function install() {
     const search = new URLSearchParams(window.location.search)
     const dark = search.get('mode') === 'dark'
 
-    console.log('dark', dark)
     document.head.appendChild(<style>
 {`
 body {
