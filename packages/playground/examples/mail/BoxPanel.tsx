@@ -26,8 +26,8 @@ export function BoxPanel({data, selected}: BoxPanelProps, {createElement}: Rende
 
     const headerStyle = {
         ...common.boxPaddingContainer,
-        ...common.layout.twoSide(),
         ...common.layout.rowCenter(),
+        ...common.layout.twoSide(),
         flexGrow: 0,
     }
 
@@ -35,7 +35,7 @@ export function BoxPanel({data, selected}: BoxPanelProps, {createElement}: Rende
     return (
         <div style={containerStyle}>
             <div style={headerStyle}>
-                <div>
+                <div style={common.heading()}>
                     Inbox
                 </div>
                 <div>

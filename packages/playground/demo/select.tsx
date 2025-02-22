@@ -11,7 +11,6 @@ type SelectItemProps = {
 function DisplayOption(props: SelectItemProps, {createElement}: RenderContext) {
     const {value, selected} = props
     const nativeAttrs = props[N_ATTR]
-    console.log(value.raw, selected.raw)
     return <div {...nativeAttrs}>
         <span style={{marginRight:10}}>{() => selected() ? '√' : '*'}</span>
         {value.label}

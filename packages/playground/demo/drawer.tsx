@@ -13,7 +13,7 @@ export function Demo({}, {createElement}: RenderContext) {
             >
                 Open Drawer
             </Button>
-            <Drawer visible={showDrawer} $content:style={{minHeight: '30vh'}}>
+            <Drawer visible={showDrawer} $content:style={{minHeight: '30vh', padding:10}}>
                 <div>Drawer Content</div>
                 <div>
                     <Button

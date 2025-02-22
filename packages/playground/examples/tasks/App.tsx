@@ -1,5 +1,5 @@
 import {Atom, atom, autorun, computed, RenderContext, RxList, RxSet} from "axii";
-import {Avatar, Checkbox, Dropdown, Input} from 'axii-ui'
+import {Avatar, Button, Checkbox, Dropdown, Input} from 'axii-ui'
 import {common} from '../../common.js'
 import {Filter} from "./Filter.js";
 import AddOne from "axii-icon-park/AddOne.js";
@@ -39,7 +39,7 @@ export function App({}, {createElement, Fragment, createRef}: RenderContext) {
         <div style={common.layout.rowCenter({gap: common.sizes.space.itemGap()})}>
             <span style={common.layout.rowCenter({gap: common.sizes.space.itemGap()})}>
                 <AddOne/>
-                <span>status</span>
+                <span>Status</span>
             </span>
             {() => selectedStatus.size() ?
                 <span>{selectedStatus.size()} selected</span>
@@ -185,26 +185,25 @@ export function App({}, {createElement, Fragment, createRef}: RenderContext) {
 
 
 
-    return <div style={{...common.layout.flexColumn({gap: common.sizes.space.gap()})}}>
-        <div style={{...common.layout.rowCenter(), ...common.layout.twoSide(), }}>
-            <div>
+    return <div style={{...common.layout.flexColumn({gap: common.sizes.space.gap(2)})}}>
+        <div style={{...common.layout.rowCenter(), ...common.layout.twoSide(), marginBottom:common.sizes.space.gap()}}>
+            <div style={{...common.layout.flexColumn({gap: common.sizes.space.gap()})}}>
                 <div style={common.heading()}>
-                    left title
+                    Left Title
                 </div>
-                <div style={common.supportiveText}>
+                <div style={common.descriptionText}>
                     Here's a list of your tasks for this month!
                 </div>
             </div>
 
             <Avatar alt={"avatar"} src={"https://i.pravatar.cc/100"} />
         </div>
-        <div style={{...common.layout.twoSide(), ...common.layout.rowCenter()}}>
+        <div style={{...common.layout.rowCenter(), ...common.layout.twoSide(), }}>
             <div>
                 <div style={{...common.layout.rowCenter({gap: common.sizes.space.gap()})}}>
                     <Input placeholder={"Filter tasks"} value={titleSearch}/>
                     <Filter $option:_use={StatusFilterOption} $option={{'$toggle': {'$root:onClick': onStatusToggle}}} search={statusSearch} options={displayStatus} label={statusLabelNode}/>
-                    <Filter />
-                    <div>reset</div>
+                    <Button $root:style={common.textBox({colorBox:true})}>Reset</Button>
                 </div>
             </div>
             <div>
@@ -327,7 +326,7 @@ export function App({}, {createElement, Fragment, createRef}: RenderContext) {
         </div>
 
         <div style={{...common.layout.rowCenter(), ...common.layout.twoSide(),}}>
-            <div style={common.layout.rowCenter({gap: common.sizes.space.itemGap()})}>
+            <div style={{...common.layout.rowCenter({gap: common.sizes.space.itemGap()}), color: common.colors.text.normal(false,'supportive')}}>
                 <span>
                     {selectedIds.size}
                 </span>

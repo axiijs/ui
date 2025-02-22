@@ -18,7 +18,7 @@ export function Demo({}, {createElement}: RenderContext) {
             >
                 add sonner
             </Button>
-            <Sonner stack={sonnerStack}/>
+            <Sonner $content:style={{padding:10}} stack={sonnerStack}/>
         </div>
     )
 }

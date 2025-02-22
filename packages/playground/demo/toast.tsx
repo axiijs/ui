@@ -17,7 +17,7 @@ export function Demo({}, {createElement}: RenderContext) {
             >
                 add toast
             </Button>
-            <Toast stack={toastStack}/>
+            <Toast $content:style={{padding:10}} stack={toastStack}/>
         </div>
     )
 }

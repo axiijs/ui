@@ -26,6 +26,9 @@ export function MailListPanel({data, selected}: MailListPanelProps, {createEleme
         ...common.layout.flexColumnStretched({gap: common.sizes.space.gap()}),
         paddingTop: 0,
         overflowY: 'auto',
+        '&>*': {
+            flexShrink: 0
+        }
     }
 
     return (

@@ -14,7 +14,7 @@ export function Demo({}, {createElement}: RenderContext) {
             show dropdown
         </Button>
         <Dropdown targetPosition={rxPosition.value} visible={dropdownVisible}>
-            {() => (<div>
+            {() => (<div style={{padding:10}}>
                 dropdown content
             </div>)}
         </Dropdown>

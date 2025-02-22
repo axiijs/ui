@@ -77,7 +77,7 @@ export function Demo({}, {createElement}: RenderContext) {
 
 
     return <div>
-        <div ref={rxPosition.ref} style={{marginLeft: 200, width: 100, height: 100, border: '1px dashed #000'}}>target</div>
+        <div ref={rxPosition.ref} style={{marginLeft: 100, width: 100, height: 100, border: '1px dashed #000'}}>target</div>
         <Button $root:onClick={LLTB}>LLTB</Button>
         <Button $root:onClick={LLBT}>LLBT</Button>
         <Button $root:onClick={RRTB}>RRTB</Button>
@@ -94,7 +94,7 @@ export function Demo({}, {createElement}: RenderContext) {
         <Button $root:onClick={VMMRR}>VMMRR</Button>
         <Button $root:onClick={VMMLL}>VMMLL</Button>
         <Button $root:onClick={VMMLR}>VMMLR</Button>
-        <Popover targetPosition={rxPosition.value} visible={popoverVisible} align={align}>
+        <Popover targetPosition={rxPosition.value} visible={popoverVisible} align={align} $content:style={{padding:10}}>
             {() => (<div>
                 <div>popover content very very looooooooooooooooooooong</div>
                 <div>popover content very very looooooooooooooooooooong</div>

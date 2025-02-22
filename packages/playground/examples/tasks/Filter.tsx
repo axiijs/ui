@@ -9,7 +9,7 @@ import {
     RxDOMRect,
     RxList
 } from "axii";
-import {Dropdown} from 'axii-ui'
+import {Button, Dropdown} from 'axii-ui'
 import {common} from '../../common.js'
 import Search from 'axii-icon-park/Search.js'
 
@@ -27,7 +27,7 @@ export const Filter: Component = function (props: FixedCompatiblePropsType<typeo
     const rxLabelPosition = new RxDOMRect(atom<RectObject>(null), {type:'interval', duration:100})
 
 
-    return <div style={{...common.enclosedContainer, ...common.boxPaddingContainer, cursor: 'pointer'}}>
+    return <Button>
         <div
             ref={rxLabelPosition.ref}
             style={common.layout.rowCenter({ gap: common.sizes.space.gap()})}
@@ -54,7 +54,7 @@ export const Filter: Component = function (props: FixedCompatiblePropsType<typeo
             </div>
 
         </Dropdown>
-    </div>
+    </Button>
 }
 
 Filter.propTypes = FilterPropTypes

@@ -51,8 +51,21 @@ const demos = await Promise.all(demoFiles.map( async(d) => {
 
 const root = createRoot(document.getElementById('root')!)
 
-root.render(<div style={{display: 'flex', gap: 32, flexDirection: 'column'}}>
-    {demos.map(({name, Demo}) => (<div>
+const gridStyle = {
+    display: 'grid',
+    gridTemplateColumns: 'repeat(auto-fill, minmax(300px, 1fr))',
+    gap: 32,
+    padding: 32,
+}
+
+const itemStyle = {
+    padding: 32,
+    border: '1px solid rgb(228,228,228)',
+    borderRadius: 4,
+}
+
+root.render(<div style={gridStyle}>
+    {demos.map(({name, Demo}) => (<div style={itemStyle}>
         <h1>{name}</h1>
         <Demo/>
     </div>))}

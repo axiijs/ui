@@ -19,7 +19,7 @@
   },
   "dependencies": {
     "@ant-design/colors": "^7.0.2",
-    "axii": "^3.0.2",
+    "axii": "^3.0.3",
     "axii-icon-park": "^3.0.0",
     "axii-ui": "^2.0.0",
     "axii-ui-theme-fallout": "^2.0.1",
