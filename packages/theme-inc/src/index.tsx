@@ -1,4 +1,5 @@
-import {computed, mergeProp, RenderContext, RxDOMFocused, StyleSize, createElement} from "axii";
+/* @jsx createElement */
+import {computed, createElement, mergeProp, RenderContext, RxDOMFocused, StyleSize} from "axii";
 import {percent} from "axii-ui-theme-common";
 import {
     AccordionItem,
@@ -36,7 +37,6 @@ const {
     interactableItem,
     modalContainer,
     itemPaddingContainer,
-    textPaddingContainer,
     projectingContainer,
     levitatingContainer,
     sizes,
@@ -258,24 +258,22 @@ export function install() {
             },
             '$content:style_': (_:any, {index}:any) => {
                 return [() => {
+                    const translateY = `calc(-100% - ${index() * 10}px)`
                     return {
                         ...enclosedContainer,
                         ...itemPaddingContainer,
                         ...levitatingContainer,
                         position: 'fixed',
-                        right:10,
-                        bottom:10,
+                        right: 10,
+                        bottom: 10,
                         zIndex: 2000 - index(),
                         transition: 'transform .3s, opacity .3s',
-                        transform: `translateY(150%)`,
+                        '@starting-style': {
+                            transform: `translateY(150%)`,
+                        },
+                        transform: `translateY(${translateY}) scale(${1 - index() * 0.1})`
                     }
-                }, () => {
-                    const translateY = `calc(-100% - ${index()*10}px)`
-                    // const scale = `scaleX(${1 - index()*0.1})`
-                    return {
-                        transform: `translateY(${translateY}) scale(${1 - index()*0.1})`
-                    }
-                }]
+                }, _]
             },
             '$content:detachStyle_': (_:any, {index, expired}:any) => {
                 return () => {
@@ -297,24 +295,24 @@ export function install() {
                 overflow: 'visible',
             },
             '$content:style_': (_:any, {index}:any) => {
-                return [() => {
-                    return {
-                        ...enclosedContainer,
-                        ...itemPaddingContainer,
-                        ...levitatingContainer,
-                        position: 'fixed',
-                        right:10,
-                        bottom:10,
-                        zIndex: 1000 - index(),
-                        transition: 'transform .3s',
-                        transform: `translateY(150%)`,
+                return [
+                    () => {
+                        const translateY = `calc(-${index()* 100}% - ${index()*10}px)`
+                        return {
+                            ...enclosedContainer,
+                            ...itemPaddingContainer,
+                            ...levitatingContainer,
+                            position: 'fixed',
+                            right:10,
+                            bottom:10,
+                            zIndex: 1000 - index(),
+                            transition: 'transform .3s',
+                            '@starting-style': {
+                                transform: `translateY(150%)`,
+                            },
+                            transform: `translateY(${translateY})`
                     }
-                }, () => {
-                    const translateY = `calc(-${index()* 100}% - ${index()*10}px)`
-                    return {
-                        transform: `translateY(${translateY})`
-                    }
-                }]
+                }, _]
             },
             '$content:detachStyle_': (_:any, {index, expired}:any) => {
                 return () => {
@@ -381,33 +379,41 @@ export function install() {
         // TODO 继承 form status? 还是放在 createForm 里面？
         return {
             '$root:style': () => {
-                const result = {
+                return {
                     ...textBox(),
-                    padding: 0,
+                    padding:0,
                     ...projectingContainer,
-                }
-                if (rxFocused.value()) {
-                    result.borderColor = colors.line.border.focused()
+                    borderColor: rxFocused.value() ? colors.line.border.focused() : undefined
                 }
 
-                return result
             },
-            '$main:style': {
-                ...rawControl,
-                ...mainText,
-                padding: textBox().padding,
-                placeholderColor: colors.text.normal(false, 'supportive'),
-                color: colors.text.normal(),
+            '$main:style': () => {
+                const box = textBox()
+                const fontSize = box.fontSize.clone()
+                const padding = box.padding[0].clone()
+                return {
+                    ...rawControl,
+                    fontSize: box.fontSize,
+                    height: fontSize.mul(box.lineHeight).add(padding.mul(2)),
+                    padding: box.padding,
+                    boxSizing:'border-box',
+                    flexShrink:1,
+                    '&::placeholder': {
+                        color: colors.text.normal(false, 'supportive'),
+                    }
+                }
             },
             '$prefix:style': {
                 ...textBox({borderWidth:0}),
                 ...supportiveTextField,
+                flexShrink:0,
                 borderRadius: 0,
                 borderRight: enclosedContainer.border
             },
             '$affix:style': {
                 ...textBox({borderWidth:0}),
                 ...supportiveTextField,
+                flexShrink:0,
                 borderRadius: 0,
                 borderLeft: enclosedContainer.border
             },
@@ -577,8 +583,6 @@ export function install() {
             '$root:ref': rootRef,
             '$root:style': {
                 position: 'relative',
-                // 补充一个和 bg 一样的 border，主要是为了填充高度
-                border: `1px solid ${colors.background.item.normal()}`,
                 boxSizing: 'border-box',
                 display: 'inline-flex',
                 alignItems: 'stretch',
@@ -611,7 +615,8 @@ export function install() {
             },
             '$tab:style_': () => {
                 return {
-                    ...textPaddingContainer,
+                    ...textBox({borderWidth:0}),
+                    backgroundColor: 'transparent',
                     cursor: 'pointer',
                     borderRadius: sizes.radius.item(),
                     zIndex: 2,
@@ -741,18 +746,19 @@ export function install() {
     Button.boundProps = [function ({}, {createElement}: RenderContext) {
         return {
             '$root:style': {
+                ...rawControl,
                 ...projectingContainer,
+                ...common.textBox(),
                 cursor: 'pointer',
                 useSelect: 'none',
                 ...common.transitions.button(),
                 whiteSpace: 'nowrap',
-
+                appearance: 'none',
             }
         }
     }]
 
     AccordionItem.boundProps = [function ({visible}: any, {createRxRef}: RenderContext) {
-        console.log(1111, sizes.space.padding())
         return {
             '$root:style': {
                 borderBottom: `1px solid ${colors.line.border.normal()}`,
@@ -794,12 +800,16 @@ export function install() {
     document.head.appendChild(<style>
 {`
 body {
-    background: ${dark ? '#111' : '#fff'};
-    color: ${dark ? '#fff' : '#000'
-}
+    backgroundColor: ${dark ? '#111' : '#fff'};
+    color: ${dark ? '#fff' : '#000'};
+    font-family: Inter,ui-sans-serif,system-ui,sans-serif,"Apple Color Emoji","Segoe UI Emoji","Segoe UI Symbol","Noto Color Emoji";
+    color: rgb(9,9,11);
 `}
     </style> as HTMLElement)
 
+    document.head.appendChild(<link rel="preconnect" href="https://fonts.googleapis.com"/> as HTMLElement)
+    document.head.appendChild(<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/> as HTMLElement)
+    document.head.appendChild(<link href="https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&display=swap" rel="stylesheet"/> as HTMLElement)
 }
 
 export const variants = {
