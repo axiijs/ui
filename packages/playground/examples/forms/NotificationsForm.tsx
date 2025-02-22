@@ -57,10 +57,10 @@ export function NotificationsForm({}, {createElement}: RenderContext) {
     }
 
     const notificationPanelStyle = {
+        ...common.layout.row(),
+        ...common.layout.twoSide(),
         ...common.enclosedContainer,
         padding: common.sizes.space.panel(),
-        ...common.layout.twoSide(),
-        ...common.layout.rowCenter(),
         '&>*:first-child': notificationPanelTitleStyle
     }
 

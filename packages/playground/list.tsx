@@ -1,5 +1,5 @@
 //@jsx createElement
-import {createElement, createRoot} from 'axii'
+import {Component, createElement, createRoot} from 'axii'
 import {install as installInc} from 'axii-ui-theme-inc'
 import {install as installFallout} from "axii-ui-theme-fallout";
 import {getDemos} from "./files.macro.js" with {type: "macro"};
@@ -15,7 +15,7 @@ const search = new URLSearchParams(location.search)
 const theme: keyof typeof themeToInstall = search.get('theme') || 'inc'
 themeToInstall[theme]()
 
-const demoFiles = getDemos()
+// const demoFiles = getDemos()
 // const demoFiles = [
 //     // 'accordion.tsx',
 //     // 'alert.tsx',
@@ -39,15 +39,31 @@ const demoFiles = getDemos()
 //     // 'switch.tsx',
 //     // 'tabs.tsx',
 // ]
-const demos = await Promise.all(demoFiles.map( async(d) => {
-    const componentName = d.replace('.tsx', '')
+// const demos = await Promise.all(demoFiles.map( async(d) => {
+//     const componentName = d.replace('.tsx', '')
+//
+//     return {
+//         name: componentName[0].toUpperCase() + componentName.slice(1),
+//         Demo: (await import(`./demo/${componentName}`)).Demo
+//     }
+// }))
 
+// @ts-ignore
+const demoComponents = import.meta.glob('./demo/*.tsx', {eager:true, import: 'Demo'}) as {[k:string]: Component}
+// @ts-ignore
+const demoStrings = import.meta.glob('./demo/*.tsx', {eager:true, import:'default',query:'?raw'}) as {[k:string]: string}
+function getComponentName(fileName:string) {
+    const name = fileName.split('/').pop()!.replace('.tsx', '')
+    return name[0].toUpperCase() + name.slice(1)
+}
+
+const demos = Object.entries(demoComponents).map(([fileName, Demo]) => {
     return {
-        name: componentName[0].toUpperCase() + componentName.slice(1),
-        Demo: (await import(`./demo/${componentName}`)).Demo
+        name: getComponentName(fileName),
+        Demo,
+        code: demoStrings[fileName]
     }
-}))
-
+})
 
 const root = createRoot(document.getElementById('root')!)
 
@@ -65,9 +81,12 @@ const itemStyle = {
 }
 
 root.render(<div style={gridStyle}>
-    {demos.map(({name, Demo}) => (<div style={itemStyle}>
-        <h1>{name}</h1>
+    {demos.map(({name, Demo, code}) => (<div style={itemStyle}>
+        <h1>{getComponentName(name)}</h1>
         <Demo/>
+        {/*<pre style={{maxHeight:'300px', overflow:'auto'}}>*/}
+        {/*    <code>{code}</code>*/}
+        {/*</pre>*/}
     </div>))}
 
 </div>)

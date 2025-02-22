@@ -76,7 +76,7 @@ export function ContentPanel(props: FixedCompatiblePropsType<typeof ContentPropT
             <div style={operationContainerStyle}>
                 <Textarea placeholder="Type your message here" />
                 <div style={{...common.layout.twoSide()}}>
-                    <div style={{...common.layout.rowCenter(), gap: common.sizes.space.itemGap()}}>
+                    <div style={{...common.layout.row(), gap: common.sizes.space.itemGap()}}>
                         <Switch />
                         <span>Mute this thread</span>
                     </div>

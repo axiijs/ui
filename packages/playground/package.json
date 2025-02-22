@@ -5,7 +5,8 @@
   "main": "index.js",
   "type": "module",
   "scripts": {
-    "start": "vite"
+    "start": "vite",
+    "build": "vite build -c vite.build.config.ts"
   },
   "author": "",
   "license": "ISC",
@@ -13,8 +14,7 @@
     "@faker-js/faker": "^8.4.1",
     "@types/node": "^20.12.12",
     "chroma-js": "^2.4.2",
-    "unplugin-macros": "^0.13.0",
-    "vite": "^5.2.8",
+    "vite": "^6.1.1",
     "vite-tsconfig-paths": "^4.3.2"
   },
   "dependencies": {

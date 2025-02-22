@@ -26,7 +26,7 @@ export function BoxPanel({data, selected}: BoxPanelProps, {createElement}: Rende
 
     const headerStyle = {
         ...common.boxPaddingContainer,
-        ...common.layout.rowCenter(),
+        ...common.layout.row(),
         ...common.layout.twoSide(),
         flexGrow: 0,
     }

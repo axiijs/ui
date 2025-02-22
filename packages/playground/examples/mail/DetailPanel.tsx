@@ -30,12 +30,12 @@ export function DetailPanel({ mail }: DetailProps, {createElement}: RenderContex
     const headerStyle = {
         ...common.boxPaddingContainer,
         ...common.layout.twoSide(),
-        ...common.layout.rowCenter(),
+        ...common.layout.row(),
         flexGrow: 0,
     }
 
     const operationContainerStyle = {
-        ...common.layout.rowCenter(),
+        ...common.layout.row(),
         '& > *' : {
             ...common.iconBox,
             ...common.interactableItem
@@ -69,7 +69,7 @@ export function DetailPanel({ mail }: DetailProps, {createElement}: RenderContex
                     <JunkOne size={14}/>
                     <TrashOne size={14}/>
                 </div>
-                <div style={{...common.layout.rowCenter()}}>
+                <div style={{...common.layout.row()}}>
                     <div style={operationContainerStyle}>
                         <CornerUpLeft size={14}/>
                         <CornerUpRight size={14}/>

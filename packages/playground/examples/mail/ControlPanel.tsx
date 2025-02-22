@@ -30,11 +30,11 @@ export function ControlPanel({}, {createElement}: RenderContext) {
     }
 
     const options = [{
-        value: '1',
-        label: '1'
+        value: 'James@axii.org',
+        label: 'James@axii.org'
     }, {
-        value: '2',
-        label: '2'
+        value: 'Tom@axii.org',
+        label: 'Tom@axii.org'
     }]
 
     type SelectItemProps = {
@@ -59,18 +59,16 @@ export function ControlPanel({}, {createElement}: RenderContext) {
         placeholder: () => string
     }
     function DisplayValue({value, optionVisible}: DisplayValueProps, {createElement}: RenderContext) {
-        return <div onClick={() => optionVisible(true)}>{() => value()?.label ?? 'choose account'}</div>
+        return <div onClick={() => optionVisible(true)}>{() => value()?.label ?? 'Switch Account'}</div>
     }
 
     return (
         <div style={containerStyle}>
             <div style={headerStyle}>
                 <Select
-                    placeholder='choose account'
+                    placeholder='Switch Account'
                     options={options}
-                    $option={{
-                        '$displayOption:_use': DisplayOption,
-                    }}
+                    $displayOption:_use={DisplayOption}
                     $displayValue:_use={DisplayValue}
                 />
             </div>

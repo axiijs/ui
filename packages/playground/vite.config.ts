@@ -1,6 +1,5 @@
 import {fileURLToPath, URL } from 'url'
 import tsconfigPaths from 'vite-tsconfig-paths'
-import Macros from 'unplugin-macros/vite'
 
 export default {
   esbuild: {
@@ -26,6 +25,6 @@ export default {
       allow: ['..'],
     },
   },
-  plugins: [tsconfigPaths(), Macros()],
+  plugins: [tsconfigPaths(), ],
 
 }

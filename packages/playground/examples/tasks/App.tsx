@@ -19,7 +19,7 @@ type StatusFilterOptionProps = {
 }
 
 function StatusFilterOption({option}: StatusFilterOptionProps, {createElement}: RenderContext) {
-    return <div style={common.layout.rowCenter({gap: common.sizes.space.gap()})}>
+    return <div style={common.layout.row({gap: common.sizes.space.gap()})}>
         <Checkbox value={option[1]} as='toggle' />
         <span>{option[0]}</span>
     </div>
@@ -36,8 +36,8 @@ export function App({}, {createElement, Fragment, createRef}: RenderContext) {
     })
 
     const statusLabelNode = (
-        <div style={common.layout.rowCenter({gap: common.sizes.space.itemGap()})}>
-            <span style={common.layout.rowCenter({gap: common.sizes.space.itemGap()})}>
+        <div style={common.layout.row({gap: common.sizes.space.itemGap()})}>
+            <span style={common.layout.row({gap: common.sizes.space.itemGap()})}>
                 <AddOne/>
                 <span>Status</span>
             </span>
@@ -94,7 +94,7 @@ export function App({}, {createElement, Fragment, createRef}: RenderContext) {
     })
 
     const paginationButtonsStyle ={
-        ...common.layout.rowCenter({gap: common.sizes.space.gap()}),
+        ...common.layout.row({gap: common.sizes.space.gap()}),
         '&>*': {
             ...common.enclosedContainer,
             ...common.layout.center(),
@@ -163,7 +163,7 @@ export function App({}, {createElement, Fragment, createRef}: RenderContext) {
 
 
     const columnHeadStyle = {
-        ...common.layout.rowCenter({gap: common.sizes.space.itemGap()}),
+        ...common.layout.row({gap: common.sizes.space.itemGap()}),
         cursor: 'pointer'
     }
 
@@ -186,10 +186,10 @@ export function App({}, {createElement, Fragment, createRef}: RenderContext) {
 
 
     return <div style={{...common.layout.flexColumn({gap: common.sizes.space.gap(2)})}}>
-        <div style={{...common.layout.rowCenter(), ...common.layout.twoSide(), marginBottom:common.sizes.space.gap()}}>
+        <div style={{...common.layout.row(), ...common.layout.twoSide(), marginBottom:common.sizes.space.gap()}}>
             <div style={{...common.layout.flexColumn({gap: common.sizes.space.gap()})}}>
                 <div style={common.heading()}>
-                    Left Title
+                    Tasks
                 </div>
                 <div style={common.descriptionText}>
                     Here's a list of your tasks for this month!
@@ -198,9 +198,9 @@ export function App({}, {createElement, Fragment, createRef}: RenderContext) {
 
             <Avatar alt={"avatar"} src={"https://i.pravatar.cc/100"} />
         </div>
-        <div style={{...common.layout.rowCenter(), ...common.layout.twoSide(), }}>
+        <div style={{...common.layout.row(), ...common.layout.twoSide(), }}>
             <div>
-                <div style={{...common.layout.rowCenter({gap: common.sizes.space.gap()})}}>
+                <div style={{...common.layout.row({gap: common.sizes.space.gap()})}}>
                     <Input placeholder={"Filter tasks"} value={titleSearch}/>
                     <Filter $option:_use={StatusFilterOption} $option={{'$toggle': {'$root:onClick': onStatusToggle}}} search={statusSearch} options={displayStatus} label={statusLabelNode}/>
                     <Button $root:style={common.textBox({colorBox:true})}>Reset</Button>
@@ -325,8 +325,8 @@ export function App({}, {createElement, Fragment, createRef}: RenderContext) {
             {/*<div style={loadingMaskStyle}><span style={common.spin(1)}><Loading/></span></div>*/}
         </div>
 
-        <div style={{...common.layout.rowCenter(), ...common.layout.twoSide(),}}>
-            <div style={{...common.layout.rowCenter({gap: common.sizes.space.itemGap()}), color: common.colors.text.normal(false,'supportive')}}>
+        <div style={{...common.layout.row(), ...common.layout.twoSide(),}}>
+            <div style={{...common.layout.row({gap: common.sizes.space.itemGap()}), color: common.colors.text.normal(false,'supportive')}}>
                 <span>
                     {selectedIds.size}
                 </span>
@@ -334,14 +334,14 @@ export function App({}, {createElement, Fragment, createRef}: RenderContext) {
                     selected
                 </span>
             </div>
-            <div style={{...common.layout.rowCenter({gap: common.sizes.space.gap()})}}>
-                <div style={common.layout.rowCenter({gap: common.sizes.space.itemGap()})}>
+            <div style={{...common.layout.row({gap: common.sizes.space.gap()})}}>
+                <div style={common.layout.row({gap: common.sizes.space.itemGap()})}>
                     <span>{rowsPerPage}</span>
                     <span>rows</span>
                     <span>per</span>
                     <span>page</span>
                 </div>
-                <div style={common.layout.rowCenter({gap: common.sizes.space.itemGap()})}>
+                <div style={common.layout.row({gap: common.sizes.space.itemGap()})}>
                     <span>page</span>
                     <span>{currentPage}</span>
                     <span>of</span>

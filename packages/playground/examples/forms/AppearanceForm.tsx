@@ -39,6 +39,8 @@ export function AppearanceForm({}, {createElement}: RenderContext) {
     const themesWithSelected = themes.createSelection(selectedTheme)
 
 
+    const fontSizes = ['small', 'medium', 'large', 'extra large']
+
     return (
         <div>
             <div>
@@ -51,7 +53,7 @@ export function AppearanceForm({}, {createElement}: RenderContext) {
                     <div>
                         <div>Font</div>
                         <div>
-                            <Select options={[1, 2, 3, 4]} placeholder={'click to choose'}/>
+                            <Select options={fontSizes} placeholder={'Choose'}/>
                         </div>
                         <div style={common.supportiveText}>{faker.lorem.paragraph()}</div>
                     </div>
@@ -75,7 +77,7 @@ export function AppearanceForm({}, {createElement}: RenderContext) {
                                 })
 
                                 const containerStyle= {
-                                    ...common.layout.columnCenter({gap: common.sizes.space.gap()}),
+                                    ...common.layout.column({gap: common.sizes.space.gap()}),
                                 }
                                 return (
                                     <div style={containerStyle}>

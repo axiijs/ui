@@ -3,52 +3,92 @@
 <head>
     <meta charset="UTF-8">
     <title>Title</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com"/>
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&display=swap" rel="stylesheet"/>
     <style>
+
         html, body, #root{
             height: 100%;
             margin: 0;
-            padding: 0px;
+            padding: 0;
             overflow-x: hidden;
             box-sizing: border-box;
         }
 
-        :root {
-            font-size:14px;
+        #root {
+            font-family: "Inter", sans-serif;
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            grid-template-rows: repeat(2, 1fr);
+            gap: 0;
+            font-size: 36px;
         }
-        body {
-            background-image: radial-gradient(circle at 2px 2px, #e1e1e1 1px, transparent 1px);
-            background-size: 20px 20px;
+
+        #root>* {
+              display: flex;
+                flex-direction: column;
+              justify-content: center;
+              align-items: center;
+              font-size: 2em;
+            gap:20px
+          }
+
+        #root>*{
+            text-decoration: none;
+            cursor: pointer;
+            background-color: #fff;
+        }
+
+        #root>*>*{
+            font-size: 24px;
+            color: #999;
+        }
+
+        #root>*>*:first-child{
+            color: #000;
+            font-size: 36px;
+        }
+
+        #root>*:hover{
+            background-color: #fcfcfc;
+        }
+
+        .link{
+            color: #999;
+            text-decoration: underline;
+        }
+        .link:hover{
+            color: #000;
+            text-decoration: underline;
         }
 
     </style>
-
-
-<!--    <link rel="preconnect" href="https://fonts.googleapis.com">-->
-<!--    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>-->
-<!--    <link href="https://fonts.googleapis.com/css2?family=VT323&display=swap" rel="stylesheet">-->
-<!--    <style>-->
-<!--        :root {-->
-<!--            font-family: "VT323", monospace;-->
-<!--            font-weight: 400;-->
-<!--            &#45;&#45;primary-color: #ffd52c;-->
-<!--            &#45;&#45;secondary-color: #ff5c00;-->
-<!--            &#45;&#45;tertiary-color: #c72d04;-->
-<!--            &#45;&#45;background-color: #111;-->
-<!--            scrollbar-color: var(&#45;&#45;primary-color) var(&#45;&#45;secondary-color);-->
-<!--            font-size: clamp(18px, 3vw, 30px);-->
-<!--        }-->
-
-<!--        body {-->
-<!--            mask-image: linear-gradient(to bottom, #0005 50%, #000 50%);-->
-<!--            mask-size: 100% 2px;-->
-<!--        }-->
-<!--    </style>-->
-
-
-
 </head>
 <body>
-<div id="root"></div>
-<script type="module" src="index.tsx"></script>
+<div id="root">
+    <div style="background:#000;color:white">
+        <img src="https://axii.dev/logos/axii-logo-white.svg" alt="Axii Logo" style="height: 30%"/>
+        <div style="color:#fff;font-size:50px">Axii UI</div>
+    </div>
+    <div onclick="window.open('/list.html')">
+        <div>Components</div>
+        <div>Headless components</div>
+    </div>
+    <div>
+        <div>Pages</div>
+        <div>ShadCN style examples</div>
+        <div>
+            <a class="link" href="/forms.html">Form</a>
+            <a class="link" href="/mail.html">Mail</a>
+            <a class="link" href="/tasks.html">Tasks</a>
+        </div>
+    </div>
+    <a>
+        <div>Styling System</div>
+        <div>Computable Style System</div>
+        <div>(WIP)</div>
+    </a>
+</div>
 </body>
 </html>

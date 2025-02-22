@@ -19,6 +19,8 @@ export function AccountForm({}, {createElement}: RenderContext) {
         fontSize: common.sizes.fontSize.title()
     }
 
+    const languages = ['English', 'Spanish', 'French', 'German']
+
 
     return (
         <div>
@@ -46,7 +48,7 @@ export function AccountForm({}, {createElement}: RenderContext) {
                     <div>
                         <div>Language</div>
                         <div>
-                            <Select options={[1, 2, 3, 4]} placeholder={'click to choose'}/>
+                            <Select options={languages} placeholder={'Choose'}/>
                         </div>
                         <div style={common.supportiveText}>{faker.lorem.paragraph()}</div>
                     </div>

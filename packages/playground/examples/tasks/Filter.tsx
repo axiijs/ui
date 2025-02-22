@@ -30,7 +30,7 @@ export const Filter: Component = function (props: FixedCompatiblePropsType<typeo
     return <Button>
         <div
             ref={rxLabelPosition.ref}
-            style={common.layout.rowCenter({ gap: common.sizes.space.gap()})}
+            style={common.layout.row({ gap: common.sizes.space.gap()})}
             onClick={() => dropdownVisible(true)}
         >
             <div>
@@ -39,7 +39,7 @@ export const Filter: Component = function (props: FixedCompatiblePropsType<typeo
         </div>
         <Dropdown visible={dropdownVisible} targetPosition={rxLabelPosition.value}>
             <div style={common.layout.flexColumn({})}>
-                <div style={{...common.boxPaddingContainer, ...common.layout.rowCenter({gap: common.sizes.space.gap()})}}>
+                <div style={{...common.boxPaddingContainer, ...common.layout.row({gap: common.sizes.space.gap()})}}>
                     <Search />
                     <input placeholder={'Search'} style={common.rawControl} type="text" value={search} onChange={(e:any) => search(e.target.value)}/>
                 </div>

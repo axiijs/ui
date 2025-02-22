@@ -25,7 +25,7 @@ export function Mail({item}: MailProps, {createElement}: RenderContext) {
         ...common.layout.flexColumnStretched({gap: common.sizes.space.gap()}),
     }
     const headerStyle = {
-        ...common.layout.rowCenter(),
+        ...common.layout.row(),
         ...common.layout.twoSide(),
         flexGrow: 0,
     }

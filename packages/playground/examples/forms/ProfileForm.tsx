@@ -1,3 +1,4 @@
+/* @jsx createElement */
 import {RenderContext} from "axii";
 import {common} from '../../common.js'
 import {Button, Input, Select, Textarea} from 'axii-ui'
@@ -18,6 +19,7 @@ export function ProfileForm({}, {createElement}: RenderContext) {
         fontSize: common.sizes.fontSize.title()
     }
 
+    const names = ['light', 'dark']
 
     return (
         <div>
@@ -38,7 +40,7 @@ export function ProfileForm({}, {createElement}: RenderContext) {
                     <div>
                         <div>Username</div>
                         <div>
-                            <Select options={[1, 2, 3, 4]} placeholder={'click to choose'}/>
+                            <Select options={names} placeholder={'Choose'}/>
                         </div>
                         <div style={common.supportiveText}>{faker.lorem.paragraph()}</div>
                     </div>

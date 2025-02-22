@@ -58,7 +58,7 @@ export function OtherLinksPanel({}, {createElement}: RenderContext) {
             })
 
             const labelContainerStyle = {
-                ...common.layout.rowCenter(),
+                ...common.layout.row(),
                 gap: common.sizes.space.gap(),
             }
             return <div as='root' style={style}>
