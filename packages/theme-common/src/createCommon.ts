@@ -94,6 +94,7 @@ export function createCommon(
             },
         },
         thing: {
+            // FIXME 算出来应该和 textBox/iconBox 一样高
             box(times: number = 1) {
                 return rem(2*times)
             },
@@ -449,9 +450,10 @@ export function createCommon(
 
 
     const iconBox = {
-        ...layout.row(),
+        ...layout.center(),
         borderRadius: sizes.radius.text(),
-        padding: sizes.space.innerText()
+        fontSize: sizes.fontSize.text(),
+        padding: textBox({borderWidth:0}).padding[0].add(sizes.space.innerText(textBox().lineHeight-1).div(2))
     }
 
     const supportiveText = {
