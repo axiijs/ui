@@ -1,6 +1,5 @@
 import {
     atom,
-    Atom,
     autorun,
     Component,
     FixedCompatiblePropsType, ModalContext,
@@ -23,10 +22,10 @@ export const Toast: Component = function(props: FixedCompatiblePropsType<typeof 
     const container = context.get(ModalContext)?.container || document.body
 
     // 手动 remove 就是用户点击 toast 上的关闭按钮。
-    // FIXME 因为我们同时支持手动 remove 和超时 remove。
-    //  index 在已经被 remove 之后会失去响应，会不会对这里的逻辑造成什么影响？？？
-    const scheduleToRemove = (index: Atom<number>) => {
-        stack.splice(index.raw,1)
+    // CAUTION 因为我们同时支持手动 remove 和超时 remove。
+    //  index 在已经被 remove 之后会失去响应，可能造成 bug，所以这里再次查找一次。
+    const scheduleToRemove = (item: any) => {
+        stack.splice(stack.raw.indexOf(item),1)
     }
 
     const itemsWithExpired = stack.map((item, index, {onCleanup}) => {
@@ -37,7 +36,7 @@ export const Toast: Component = function(props: FixedCompatiblePropsType<typeof 
 
         autorun(() => {
             if (expired()) {
-                scheduleToRemove(index)
+                scheduleToRemove(item)
             }
         })
 
@@ -57,7 +56,7 @@ export const Toast: Component = function(props: FixedCompatiblePropsType<typeof 
         return (<div
             as='root'
         >
-            {itemsWithExpired.map(({item, expired, index}:any) => {
+            {itemsWithExpired.map(({item, index, expired}:any) => {
                 return (
                     <div as='content' prop:item={item} prop:index={index} prop:expired={expired} >
                         {item}
