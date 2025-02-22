@@ -1,6 +1,7 @@
 import {StyleSize} from 'axii'
 import {matrixMatch, RangeValueGetter} from "./util/util.js";
 import {InputColors,} from "./pattern.js";
+// @ts-ignore
 import chroma from 'chroma-js'
 
 
@@ -65,6 +66,10 @@ export function createCommon(
     const brighten = (color: string, amount: number) => themeDark ? chroma(color).darken(amount): chroma(color).brighten(amount)
     const darken = (color: string, amount: number) => themeDark ? chroma(color).brighten(amount): chroma(color).darken(amount)
 
+    const textVerticalPaddingCoefficient = .8
+    const textHorizontalPaddingCoefficient = 1.2
+    const textLineHeight = 1.3
+    
     const sizes = {
         fontWeight(offset: number = 0) {
             return weights(offset)
@@ -109,7 +114,7 @@ export function createCommon(
             },
             padding(times: number = 1) {
                 // 和外部的 border 之间的距离
-                return rem(.65*times)
+                return rem(.75*times)
             },
             // text 和 border 之间的距离
             innerText(times: number = 1) {
@@ -146,7 +151,15 @@ export function createCommon(
     const colors = ({
         text: {
             normal(inverted = false, type: TextType = 'text') {
-                return inverted ? themeColorSchema.lineInverted : themeColorSchema.line
+                const color = inverted ? themeColorSchema.lineInverted : themeColorSchema.line
+                if (inverted) return color
+                if (type === 'supportive') {
+                    return brighten(color, 4)
+                }else if (type === 'description') {
+                    return brighten(color, 2)
+                } else {
+                    return color
+                }
             },
             disabled(inverted = false) {
                 return darken(inverted ? themeColorSchema.lineInverted : themeColorSchema.line, 1)
@@ -209,7 +222,7 @@ export function createCommon(
         line: {
             border: {
                 normal(inverted = false) {
-                    return inverted ? 'none' : brighten(themeColorSchema.line, 4)
+                    return inverted ? 'none' : brighten(themeColorSchema.line, 4.75)
                 },
                 focused(inverted = false) {
                     return inverted ? themeColorSchema.lineInverted: themeColorSchema.line
@@ -228,7 +241,7 @@ export function createCommon(
                 },
             },
             separator() {
-                return brighten(themeColorSchema.line, 4)
+                return brighten(themeColorSchema.line, 4.8)
             }
         }
     })
@@ -269,7 +282,7 @@ export function createCommon(
                 alignItems: 'center',
             }
         },
-        rowCenter({gap, justify}: flexRowProps = {}) {
+        row({gap, justify}: flexRowProps = {}) {
             return {
                 display: 'flex',
                 flexDirection: 'row',
@@ -278,7 +291,7 @@ export function createCommon(
                 justifyContent: justify
             }
         },
-        columnCenter({gap}: flexRowProps = {}) {
+        column({gap}: flexRowProps = {}) {
             return {
                 display: 'flex',
                 flexDirection: 'column',
@@ -286,14 +299,15 @@ export function createCommon(
                 alignItems: 'center',
             }
         },
-        twoSide(column = false) {
+        twoSide(column = false, align = 'center') {
             return {
                 display: 'flex',
+                alignItems: align,
                 flexDirection: column ? 'column' : 'row',
                 justifyContent: 'space-between',
             }
         },
-        middleGrow(column = false, middleOffset = 2) {
+        middleGrow(column = false, middleOffset = 2, {gap, align, justify}: flexRowProps = {}) {
             return {
                 display: 'flex',
                 minHeight: 0,
@@ -309,7 +323,10 @@ export function createCommon(
                 [`&>*:nth-child(n+${middleOffset+1})`]: {
                     flexGrow:0,
                     flexShrink:0,
-                }
+                },
+                gap,
+                alignItems: align,
+                justifyContent: justify,
             }
         },
         evenlyGrid: (rowGap: string | number | StyleSize, columnGap: string | number | StyleSize, minWidth: string | number | StyleSize) => ({
@@ -345,7 +362,7 @@ export function createCommon(
     }
 
     const textPaddingContainer = {
-        padding: [sizes.space.innerText(.8), sizes.space.innerText(1.2),],
+        padding: [sizes.space.innerText(textVerticalPaddingCoefficient), sizes.space.innerText(textHorizontalPaddingCoefficient)],
     }
 
     const boxPaddingContainer = {
@@ -360,6 +377,7 @@ export function createCommon(
     const mainText = {
         fontSize: sizes.fontSize.text(),
         color: colors.text.normal(),
+        lineHeight: textLineHeight,
     }
     const textField = {}
 
@@ -398,7 +416,10 @@ export function createCommon(
         const attrs: any = {
             color: matrixMatch([colorBox, highlight, themeDark], colorPattern),
             backgroundColor: matrixMatch([colorBox, highlight], backgroundColoPattern),
-            borderColor: infoColor||color,
+            borderColor: infoColor|| (colorBox ? matrixMatch([colorBox, highlight], backgroundColoPattern) : brighten(color, 4.5)),
+            lineHeight: textLineHeight,
+            fontSize: sizes.fontSize.text(),
+            borderWidth,
         }
 
         if (interactable === true) {
@@ -417,19 +438,18 @@ export function createCommon(
             }
         }
 
-        if (borderWidth) {
-            attrs.borderWidth = borderWidth
-        }
 
         attrs.boxSizing = 'border-box'
-        attrs.padding = [sizes.space.innerText().div(textAsContent ? 2 : 1), sizes.space.innerText()]
+        const verticalPadding = sizes.space.innerText(textAsContent ? textVerticalPaddingCoefficient : 1)
+        attrs.padding = [verticalPadding.sub(borderWidth), sizes.space.innerText(textHorizontalPaddingCoefficient)]
 
         return attrs
 
     }
 
+
     const iconBox = {
-        ...layout.rowCenter(),
+        ...layout.row(),
         borderRadius: sizes.radius.text(),
         padding: sizes.space.innerText()
     }
@@ -534,7 +554,7 @@ export function createCommon(
     const listItem = {
         ...textPaddingContainer,
         ...interactableItem,
-        ...layout.rowCenter()
+        ...layout.row()
     }
 
     const groupedListItems = {
@@ -557,12 +577,14 @@ export function createCommon(
     }
 
     const rawControl = {
+        appearance:'none',
+        '-webkit-appearance': 'none',
         border: 'none',
         background: 'none',
         outline: 'none',
         padding: 0,
         margin: 0,
-        lineHeight: 1,
+        minWidth:0,
     }
 
     const heading = (level: number = 0) => ({
@@ -588,8 +610,7 @@ export function createCommon(
             '& > th': {
                 textAlign: 'left',
                 borderWidth: 0,
-                background: colors.background.item.normal(),
-                padding: sizes.space.padding(),
+                padding: sizes.space.padding(1.2),
             }
         },
         '& > table > tbody > tr': {
@@ -600,7 +621,7 @@ export function createCommon(
             },
             '& > td' : {
                 border: 0,
-                padding: sizes.space.padding(),
+                padding: sizes.space.padding(1.2),
                 // 不换行
                 whiteSpace: 'nowrap',
             }
