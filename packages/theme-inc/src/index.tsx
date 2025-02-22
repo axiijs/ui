@@ -55,7 +55,7 @@ export const menuItemStyle = {
     ...itemPaddingContainer,
     width:'100%',
     boxSizing: 'border-box',
-    // ...layout.rowCenter(),
+    // ...layout.row(),
     borderBottom: `1px solid ${colors.line.border.normal()}`,
     '&:last-child': {
         borderBottom: 0
@@ -125,7 +125,7 @@ export function install() {
     Slider.boundProps = [function ({}, {createElement}: RenderContext) {
         return {
             '$root:style': {
-                ...layout.columnCenter(),
+                ...layout.column(),
                 justifyContent: 'center',
                 alignItems: 'stretch',
                 height: sizes.thing.item(),
@@ -159,7 +159,7 @@ export function install() {
             '$root:style': {
                 ...enclosedContainer,
                 ...projectingContainer,
-                ...layout.columnCenter(),
+                ...layout.column(),
                 alignItems: 'stretch',
                 borderRadius: sizes.radius.item(),
                 overflow: 'hidden',
@@ -188,7 +188,7 @@ export function install() {
             '$displayValueContainer:style': {
                 ...textBox(),
                 ...projectingContainer,
-                ...layout.rowCenter(),
+                ...layout.row(),
                 cursor: 'pointer',
                 gap: sizes.space.inner(),
             },
@@ -219,7 +219,7 @@ export function install() {
             },
             '$loadingContainer:style': {
                 ...itemPaddingContainer,
-                ...layout.columnCenter(),
+                ...layout.column(),
             },
             '$loading:style': {
                 // 修复 svg 下面有个额外高度的问题
@@ -778,7 +778,7 @@ export function install() {
                 fontWeight: 500,
             },
             '$handle:style': () => ({
-                ...layout.rowCenter(),
+                ...layout.row(),
                 color: colors.text.normal(false, 'supportive'),
                 transform: visible() ? 'rotate(-90deg)' : 'rotate(0deg)',
                 transition: 'transform .3s',
