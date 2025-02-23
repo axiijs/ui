@@ -25,7 +25,7 @@ type DisplayValueProps = {
 }
 
 function DisplayValue({value, optionVisible}: DisplayValueProps) {
-    return <div onClick={() => optionVisible(true)}>{() => value()?.label ?? '请选择'}</div>
+    return <div onClick={() => optionVisible(true)}>{() => value()?.label ?? 'Choose'}</div>
 }
 
 const comboboxOptionsData = Array(100).fill(0).map((_, i) => ({label: `option ${i}`, value: i}))
