@@ -1,5 +1,6 @@
 import {fileURLToPath, URL } from 'url'
 import tsconfigPaths from 'vite-tsconfig-paths'
+import vitePluginShiki from './plugins/vite-plugin-shiki.js'
 
 export default {
   esbuild: {
@@ -25,6 +26,10 @@ export default {
       allow: ['..'],
     },
   },
-  plugins: [tsconfigPaths(), ],
-
+  plugins: [
+    tsconfigPaths(),
+    vitePluginShiki({
+      theme: 'material-theme-ocean' // 你可以更换其他主题
+    })
+  ],
 }

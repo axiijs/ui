@@ -1,15 +1,10 @@
 //@jsx createElement
-import {Component, createElement, createRoot, atom} from 'axii'
+import {atom, Component, createElement, createRoot, RenderContext} from 'axii'
 import {install as installInc} from 'axii-ui-theme-inc'
 import {install as installFallout} from "axii-ui-theme-fallout";
 import {styleSystem} from "./styleSystem.js";
-import Prism from 'prismjs';
-import 'prismjs/components/prism-jsx';
-import 'prismjs/components/prism-typescript';
-import 'prismjs/components/prism-tsx';
-import 'prism-themes/themes/prism-vsc-dark-plus.css'
 import {Header} from "./examples/Header.js";
-import {Drawer, Button} from "axii-ui";
+import {Button, Drawer} from "axii-ui";
 
 
 const themeToInstall: {[k:string]:any} = {
@@ -58,7 +53,7 @@ themeToInstall[theme]()
 // @ts-ignore
 const demoComponents = import.meta.glob('./demo/*.tsx', {eager:true, import: 'Demo'}) as {[k:string]: Component}
 // @ts-ignore
-const demoStrings = import.meta.glob('./demo/*.tsx', {eager:true, import:'default',query:'?raw'}) as {[k:string]: string}
+const demoStrings = import.meta.glob('./demo/*.tsx', {eager:true, import:'default',query:'?shiki'}) as {[k:string]: string}
 function getComponentName(fileName:string) {
     const name = fileName.split('/').pop()!.replace('.tsx', '')
     return name[0].toUpperCase() + name.slice(1)
@@ -97,9 +92,9 @@ const itemStyle = {
 const codeToShow = atom('')
 
 const drawerStyle = {
-    minHeight: '50vh',
+    minHeight: '70vh',
+    background:'#0F111A',
     height: 0,
-    backgroundColor: '#000',
     '@starting-style': {
         minHeight: 0,
         height:0,
@@ -109,33 +104,30 @@ const drawerStyle = {
 }
 
 const codeContainerStyle = {
-    padding: 24,
-    backgroundColor: '#000',
-    color: '#fff',
     lineHeight: 1.6,
-    fontSize:14
+    fontSize:14,
+    padding:[0, 14],
+    display:'block',
+    overflow: 'auto'
 }
-function App() {
+function App({}, {createElement, createRxRef}: RenderContext) {
+
+
     return (
         <div>
             <Header />
             <div style={gridStyle}>
                 <Drawer visible={codeToShow} $content:style={drawerStyle}>
-                    {() => (
-                        <div style={styleSystem.layout.column({gap: 10})}>
-                <pre style={codeContainerStyle}>
-                    <code
-                        dangerouslySetInnerHTML={() => codeToShow() ? Prism.highlight(codeToShow(), Prism.languages.tsx, 'tsx') : ''}></code>
-                </pre>
-                        </div>
-                    )}
+                    {() => {
+                        return (
+                            <div style={codeContainerStyle} dangerouslySetInnerHTML={codeToShow}>
+                            </div>
+                        )
+                    }}
                 </Drawer>
                 {demos.map(({name, Demo, code}) => (<div style={itemStyle}>
                     <h1>{getComponentName(name)}</h1>
                     <Demo/>
-                    {/*<pre style={{maxHeight:'300px', overflow:'auto'}}>*/}
-                    {/*    <code>{code}</code>*/}
-                    {/*</pre>*/}
                     <Button $root:style={{
                         position: 'absolute',
                         bottom: 10,

@@ -26,7 +26,6 @@
     "axii-ui-theme-common": "^4.1.0",
     "axii-ui-theme-fallout": "^4.1.1",
     "axii-ui-theme-inc": "^4.1.0",
-    "prism-themes": "^1.9.0",
-    "prismjs": "^1.29.0"
+    "shiki": "^3.0.0"
   }
 }

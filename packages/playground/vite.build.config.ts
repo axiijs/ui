@@ -1,4 +1,6 @@
 import {resolve} from "path";
+import tsconfigPaths from "vite-tsconfig-paths";
+import vitePluginShiki from "./plugins/vite-plugin-shiki.js";
 
 export default {
   esbuild: {
@@ -24,5 +26,10 @@ export default {
       dedupe: ['data0', 'axii']
     }
   },
-
+  plugins: [
+    tsconfigPaths(),
+    vitePluginShiki({
+      theme: 'material-theme-ocean' // 你可以更换其他主题
+    })
+  ],
 }
