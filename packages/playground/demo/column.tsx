@@ -1,6 +1,6 @@
 import {RenderContext, RxList} from "axii";
 import {Button, Column} from "axii-ui";
-import {styleSystem} from "../styleSystem";
+import {styleSystem} from "../styleSystem.js";
 
 
 
@@ -46,7 +46,7 @@ export function Demo({}, {createElement}: RenderContext) {
         </div>
         <Column gap={10} $root:style={columnStyle}>
             {staticItemsWithOrder.map(([item, index]) => {
-                const style = {borderWidth:1,...styleSystem.textBox({color:'black',colorBox:true })}
+                const style = {borderWidth:1,...styleSystem.textBox({colorBox:true })}
                 return (
                     <div style={style} data-order={index}>
                         <span>{item.value}</span>

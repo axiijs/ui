@@ -1,6 +1,6 @@
 import {RenderContext} from "axii";
 import {Button} from "axii-ui";
-import {styleSystem} from "../styleSystem";
+import {styleSystem} from "../styleSystem.js";
 
 export function Demo({}, {createElement}: RenderContext) {
     return (<div style={{...styleSystem.layout.column({gap: styleSystem.sizes.space.gap()})}}>
