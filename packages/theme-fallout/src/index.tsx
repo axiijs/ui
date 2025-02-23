@@ -258,24 +258,23 @@ export function install() {
                 overflow: 'visible',
             },
             '$content:style_': (_:any, {index}:any) => {
-                return () => {
-                    const translateY = `calc(-100% - ${index()*10}px)`
-                    // const scale = `scaleX(${1 - index()*0.1})`
+                return [() => {
+                    const translateY = `calc(-100% - ${index() * 10}px)`
                     return {
                         ...enclosedContainer,
                         ...itemPaddingContainer,
                         ...levitatingContainer,
                         position: 'fixed',
-                        right:10,
-                        bottom:10,
+                        right: 10,
+                        bottom: 10,
                         zIndex: 2000 - index(),
                         transition: 'transform .3s, opacity .3s',
                         '@starting-style': {
                             transform: `translateY(150%)`,
                         },
-                        transform: `translateY(${translateY}) scale(${1 - index()*0.1})`
+                        transform: `translateY(${translateY}) scale(${1 - index() * 0.1})`
                     }
-                }
+                }, _]
             },
             '$content:detachStyle_': (_:any, {index, expired}:any) => {
                 return () => {

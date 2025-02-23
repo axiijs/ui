@@ -28,7 +28,7 @@
   "peerDependencies": {
     "axii": "^3.0.0",
     "axii-ui": "^2.0.0",
-    "axii-ui-theme-common": "^3.0.1"
+    "axii-ui-theme-common": "^4.0.0"
   },
   "dependencies": {
     "dayjs": "^1.11.11"
