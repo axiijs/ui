@@ -13,9 +13,9 @@ export function Demo({}, {createElement}: RenderContext) {
             >
                 Open Drawer
             </Button>
-            <Drawer visible={showDrawer} $content:style={{minHeight: '30vh', padding:10}}>
-                <div>Drawer Content</div>
-                <div>
+            <Drawer visible={showDrawer} $content:style={{minHeight: '30vh', ...common.layout.center()}}>
+                <div style={common.layout.column({gap:10})}>
+                    <div>Drawer Content</div>
                     <Button
                         $root:style={common.textBox()}
                         $root:onClick={() => showDrawer(false)}

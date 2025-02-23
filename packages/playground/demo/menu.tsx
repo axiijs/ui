@@ -4,6 +4,11 @@ import {originMenuContainerStyle} from "axii-ui";
 import {common} from '../common.js'
 
 export function Demo({}, {createElement}: RenderContext) {
+    const subItemStyle = {
+        ...common.levitatingContainer,
+        ...originMenuContainerStyle,
+    }
+
     return (
         <div style={{...originMenuContainerStyle}}>
             <div>
@@ -14,14 +19,14 @@ export function Demo({}, {createElement}: RenderContext) {
                     <span>item 2</span>
                     <ArrowRight/>
                 </div>
-                <div style={{...originMenuContainerStyle, ...common.levitatingContainer}}>
+                <div style={subItemStyle}>
                     <div><span>item 2.1</span></div>
                     <div>
                         <div>
                             <span>item 2.2</span>
                             <ArrowRight/>
                         </div>
-                        <div style={{...originMenuContainerStyle, ...common.levitatingContainer}}>
+                        <div style={subItemStyle}>
                             <div><span>item 2.2.1</span></div>
                             <div><span>item 2.2.2</span></div>
                         </div>

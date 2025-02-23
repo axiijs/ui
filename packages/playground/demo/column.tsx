@@ -36,8 +36,8 @@ export function Demo({}, {createElement}: RenderContext) {
         }
     }
 
-    return (<div>
-        <div>
+    return (<div style={common.layout.column({gap:10})}>
+        <div style={common.layout.row({gap:10, flexWrap:'wrap'})}>
             <Button $root:onClick={swap1To3}>swap 1 to 3</Button>
             <Button $root:onClick={reposition3To5}>reposition</Button>
             <Button $root:onClick={sort}>sort</Button>

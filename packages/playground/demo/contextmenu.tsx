@@ -9,7 +9,7 @@ export function Demo({}, {createElement}: RenderContext) {
         <div
             oncontextmenu={withPreventDefault((e: MouseEvent) => contextmenuPosition({x: e.clientX, y: e.clientY}))}
             style={{height: 100, border: '1px dashed gray', ...common.layout.center()}}
-        >right click on me
+        >Right click on me
         </div>
         <Contextmenu position={contextmenuPosition}>
             <div style={common.listItems}>

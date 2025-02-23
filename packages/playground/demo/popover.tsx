@@ -1,5 +1,6 @@
 import {atom, RectObject, RenderContext, RxDOMRect} from "axii";
 import {Button, Popover} from 'axii-ui'
+import {common} from "../common.js";
 
 export function Demo({}, {createElement}: RenderContext) {
     const rxPosition = new RxDOMRect(atom<RectObject>(null),{type: 'interval', duration: 100})
@@ -76,24 +77,27 @@ export function Demo({}, {createElement}: RenderContext) {
     }
 
 
-    return <div>
-        <div ref={rxPosition.ref} style={{marginLeft: 100, width: 100, height: 100, border: '1px dashed #000'}}>target</div>
-        <Button $root:onClick={LLTB}>LLTB</Button>
-        <Button $root:onClick={LLBT}>LLBT</Button>
-        <Button $root:onClick={RRTB}>RRTB</Button>
-        <Button $root:onClick={RRBT}>RRBT</Button>
-        <Button $root:onClick={LRBT}>LRBT</Button>
-        <Button $root:onClick={LRTB}>LRTB</Button>
-        <Button $root:onClick={HMMTB}>HMMTB</Button>
-        <Button $root:onClick={HMMBT}>HMMBT</Button>
-        <Button $root:onClick={HMLBT}>HMLBT</Button>
-        <Button $root:onClick={HMLTB}>HMLTB</Button>
-        <Button $root:onClick={HMRBT}>HMRBT</Button>
-        <Button $root:onClick={HMRTB}>HMRTB</Button>
-        <Button $root:onClick={VMMRL}>VMMRL</Button>
-        <Button $root:onClick={VMMRR}>VMMRR</Button>
-        <Button $root:onClick={VMMLL}>VMMLL</Button>
-        <Button $root:onClick={VMMLR}>VMMLR</Button>
+    return <div style={common.layout.column({gap: common.sizes.space.gap()})}>
+        <div ref={rxPosition.ref} style={{marginLeft: 100, width: 100, height: 100, border: '1px dashed #000', ...common.layout.center()}}>target</div>
+        <div style={common.layout.row({gap: common.sizes.space.gap(), flexWrap: 'wrap'})}>
+            <Button $root:onClick={LLTB}>LLTB</Button>
+            <Button $root:onClick={LLBT}>LLBT</Button>
+            <Button $root:onClick={RRTB}>RRTB</Button>
+            <Button $root:onClick={RRBT}>RRBT</Button>
+            <Button $root:onClick={LRBT}>LRBT</Button>
+            <Button $root:onClick={LRTB}>LRTB</Button>
+            <Button $root:onClick={HMMTB}>HMMTB</Button>
+            <Button $root:onClick={HMMBT}>HMMBT</Button>
+            <Button $root:onClick={HMLBT}>HMLBT</Button>
+            <Button $root:onClick={HMLTB}>HMLTB</Button>
+            <Button $root:onClick={HMRBT}>HMRBT</Button>
+            <Button $root:onClick={HMRTB}>HMRTB</Button>
+            <Button $root:onClick={VMMRL}>VMMRL</Button>
+            <Button $root:onClick={VMMRR}>VMMRR</Button>
+            <Button $root:onClick={VMMLL}>VMMLL</Button>
+            <Button $root:onClick={VMMLR}>VMMLR</Button>
+        </div>
+
         <Popover targetPosition={rxPosition.value} visible={popoverVisible} align={align} $content:style={{padding:10}}>
             {() => (<div>
                 <div>popover content very very looooooooooooooooooooong</div>

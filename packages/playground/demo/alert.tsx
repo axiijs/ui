@@ -7,7 +7,7 @@ export function Demo({}, {createElement}: RenderContext) {
         ...common.enclosedContainer,
         ...common.panelPaddingContainer,
     }
-    return <div style={common.layout.flexColumn({gap: common.sizes.space.gap()})}>
+    return <div style={common.layout.column({gap: common.sizes.space.gap()})}>
         <div style={{...containerStyle, ...common.textBox({infoColor: common.colorScheme.error})}}>
             This is a error message
         </div>

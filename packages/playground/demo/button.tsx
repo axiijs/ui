@@ -3,8 +3,8 @@ import {Button} from "axii-ui";
 import {common} from "../common.js";
 
 export function Demo({}, {createElement}: RenderContext) {
-    return (<div style={{...common.layout.flexColumn({gap: common.sizes.space.gap()})}}>
-        <div style={{...common.layout.flexRow({gap: common.sizes.space.gap()})}}>
+    return (<div style={{...common.layout.column({gap: common.sizes.space.gap()})}}>
+        <div style={{...common.layout.row({gap: common.sizes.space.gap(), flexWrap: 'wrap'})}}>
             <Button $root:style={common.textBox()}>
                 default button
             </Button>
@@ -21,7 +21,7 @@ export function Demo({}, {createElement}: RenderContext) {
                 non-interactable button with error color
             </Button>
         </div>
-        <div style={{...common.layout.flexRow({gap: common.sizes.space.gap()})}}>
+        <div style={{...common.layout.row({gap: common.sizes.space.gap(), flexWrap:'wrap'})}}>
             <Button $root:style={common.textBox({colorBox:true})}>
                 inverted button
             </Button>

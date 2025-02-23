@@ -17,6 +17,11 @@ export function Demo({}, {createElement}: RenderContext) {
         popoverVisible(true)
     }
 
+    const subItemStyle = {
+        ...common.levitatingContainer,
+        ...originMenuContainerStyle,
+    }
+
     return <div>
         <Button
             $root:style={common.textBox()}
@@ -25,7 +30,7 @@ export function Demo({}, {createElement}: RenderContext) {
         >
             show menu
         </Button>
-        <Popover targetPosition={rxPosition.value} visible={popoverVisible} align={align}>
+        <Popover targetPosition={rxPosition.value} visible={popoverVisible} align={align} $content:style={{overflow:'visible'}}>
             {() => (
                 <div style={{...originMenuContainerStyle, boxShadow: 'none', border: 0}}>
                     <div>
@@ -36,14 +41,14 @@ export function Demo({}, {createElement}: RenderContext) {
                             <span>item 2</span>
                             <ArrowRight/>
                         </div>
-                        <div style={{...originMenuContainerStyle, ...common.levitatingContainer}}>
+                        <div style={subItemStyle}>
                             <div><span>item 2.1</span></div>
                             <div>
                                 <div>
                                     <span>item 2.2</span>
                                     <ArrowRight/>
                                 </div>
-                                <div style={{...originMenuContainerStyle, ...common.levitatingContainer}}>
+                                <div style={subItemStyle}>
                                     <div><span>item 2.2.1</span></div>
                                     <div><span>item 2.2.2</span></div>
                                 </div>
