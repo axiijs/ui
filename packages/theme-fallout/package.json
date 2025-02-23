@@ -1,6 +1,6 @@
 {
   "name": "axii-ui-theme-fallout",
-  "version": "4.0.0",
+  "version": "4.1.0",
   "description": "fallout style theme for axii-ui",
   "main": "dist/index.js",
   "module": "dist/index.js",
