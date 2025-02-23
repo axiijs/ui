@@ -747,6 +747,7 @@ export function install() {
         return {
             '$root:style': {
                 ...projectingContainer,
+                ...common.textBox(),
                 cursor: 'pointer',
                 useSelect: 'none',
                 ...common.transitions.button(),
@@ -815,9 +816,6 @@ body {
     background: #111;
 }
 
-* {
-    font-size: clamp(16px, 2vw, 20px);
-}
             `}
         </style> as HTMLElement
     )
