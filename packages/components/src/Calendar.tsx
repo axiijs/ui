@@ -108,7 +108,7 @@ export const Calendar: Component = function(props: FixedCompatiblePropsType<type
             <table as={'table'}>
                 <thead as={'head'}>
                     <tr>
-                        {['一', '二', '三', '四', '五', '六', '日'].map(index => (
+                        {['MON', 'TUE', 'WED', 'THU', 'FRI', 'SAT', 'SUN'].map(index => (
                             <th>
                                 {index}
                             </th>
