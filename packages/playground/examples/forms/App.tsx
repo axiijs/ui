@@ -1,5 +1,5 @@
 import {atom, Atom, RenderContext, RxList} from "axii";
-import {common} from '../../common.js'
+import {styleSystem} from '../../styleSystem'
 import {ProfileForm} from "./ProfileForm.js";
 import {AccountForm} from "./AccountForm.js";
 import {NotificationsForm} from "./NotificationsForm.js";
@@ -32,22 +32,22 @@ export function App({}, {createElement}: RenderContext) {
     const menuWithSelected = (new RxList(Object.keys(routeData))).createSelection(currentForm)
 
     const containerStyle = {
-        ...common.panelPaddingContainer,
+        ...styleSystem.panelPaddingContainer,
         boxSizing: 'border-box',
-        ...common.layout.flexColumnStretched({gap: 0}),
+        ...styleSystem.layout.flexColumnStretched({gap: 0}),
         height: '100%',
     }
 
     const menuContainerStyle = {
         width: 200,
-        ...common.layout.flexColumnStretched({gap:common.sizes.space.gap()}),
+        ...styleSystem.layout.flexColumnStretched({gap:styleSystem.sizes.space.gap()}),
         '&>*': {
-            ...common.textBox,
+            ...styleSystem.textBox,
         },
     }
 
     const descriptionStyle = {
-        ...common.supportiveText
+        ...styleSystem.supportiveText
     }
 
     return <div style={containerStyle}>
@@ -55,21 +55,21 @@ export function App({}, {createElement}: RenderContext) {
             <h1>Settings</h1>
             <div style={descriptionStyle}>{() => routeData[currentForm()].description}</div>
         </div>
-        <div style={common.separator(false, 2)}></div>
-        <div style={{...common.layout.middleGrow(), gap: common.sizes.space.gap(2), alignItems:'stretch'}}>
+        <div style={styleSystem.separator(false, 2)}></div>
+        <div style={{...styleSystem.layout.middleGrow(), gap: styleSystem.sizes.space.gap(2), alignItems:'stretch'}}>
             <div style={menuContainerStyle}>
                 {menuWithSelected.map(([key, selected]) => {
                     const style = () => {
 
                         return ({
-                            ...common.textBox({borderWidth:0}),
-                            ...common.layout.twoSide(),
-                            color: selected() ? common.colors.text.active(true) : common.colors.text.normal(),
-                            backgroundColor: selected() ? common.colors.background.box.active() : common.colors.background.box.normal(),
-                            borderRadius: common.sizes.radius.box(),
+                            ...styleSystem.textBox({borderWidth:0}),
+                            ...styleSystem.layout.twoSide(),
+                            color: selected() ? styleSystem.colors.text.active(true) : styleSystem.colors.text.normal(),
+                            backgroundColor: selected() ? styleSystem.colors.background.box.active() : styleSystem.colors.background.box.normal(),
+                            borderRadius: styleSystem.sizes.radius.box(),
                             cursor: 'pointer',
                             '&:hover': {
-                                backgroundColor: selected() ? common.colors.background.box.active() : common.colors.background.box.focus(),
+                                backgroundColor: selected() ? styleSystem.colors.background.box.active() : styleSystem.colors.background.box.focus(),
                             }
                         })
                     }

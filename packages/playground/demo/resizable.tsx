@@ -1,12 +1,12 @@
 import {atom, autorun, DragPosition, RenderContext, RxDOMDragPosition} from "axii";
-import {common} from "../common.js"
+import {styleSystem} from "../styleSystem"
 
 export function Demo({}, {createElement, createRef}: RenderContext) {
 
     const containerStyle = () => ({
         position:"relative",
-        ...common.enclosedContainer,
-        ...common.layout.column({gap:0}),
+        ...styleSystem.enclosedContainer,
+        ...styleSystem.layout.column({gap:0}),
         height: '200px',
         userSelect:'none',
         cursor: rxDragPosition.value() ? 'ns-resize' : (rxVerticalDragPosition.value() ? 'ew-resize':'default')
@@ -35,7 +35,7 @@ export function Demo({}, {createElement, createRef}: RenderContext) {
         top: topHeight()-5,
         left:0,
         right:0,
-        ...common.layout.center(),
+        ...styleSystem.layout.center(),
     })
 
     const verticalHandleStyle=() =>({
@@ -45,7 +45,7 @@ export function Demo({}, {createElement, createRef}: RenderContext) {
         left: bottomLeftWidth()-5,
         top:0,
         bottom:0,
-        ...common.layout.center(),
+        ...styleSystem.layout.center(),
         '&>*': {
             flexShrink:0
         }
@@ -73,18 +73,18 @@ export function Demo({}, {createElement, createRef}: RenderContext) {
     return (
         <div>
             <div ref={containerRef} style={containerStyle}>
-                <div style={[topStyle, common.layout.center()]}>
+                <div style={[topStyle, styleSystem.layout.center()]}>
                     top
                 </div>
                 <div ref={rxDragPosition.ref} style={handleStyle}>
-                    <div style={common.separator()}></div>
+                    <div style={styleSystem.separator()}></div>
                 </div>
-                <div style={{flexGrow: 1, position:'relative', ...common.layout.row({alignItems:'stretch'})}} ref={verticalContainerRef}>
-                    <div style={[bottomLeftStyle, common.layout.center()]}>bottom left</div>
+                <div style={{flexGrow: 1, position:'relative', ...styleSystem.layout.row({alignItems:'stretch'})}} ref={verticalContainerRef}>
+                    <div style={[bottomLeftStyle, styleSystem.layout.center()]}>bottom left</div>
                     <div ref={rxVerticalDragPosition.ref} style={verticalHandleStyle}>
-                        <div style={common.separator(true)}></div>
+                        <div style={styleSystem.separator(true)}></div>
                     </div>
-                    <div style={{flexGrow:1, ...common.layout.center(), overflow:'hidden'}}>bottom right</div>
+                    <div style={{flexGrow:1, ...styleSystem.layout.center(), overflow:'hidden'}}>bottom right</div>
                 </div>
             </div>
 

@@ -1,11 +1,11 @@
 import ArrowRight from "axii-icon-park/Right.js";
 import { RenderContext} from "axii";
 import {originMenuContainerStyle} from "axii-ui";
-import {common} from '../common.js'
+import {styleSystem} from '../styleSystem'
 
 export function Demo({}, {createElement}: RenderContext) {
     const subItemStyle = {
-        ...common.levitatingContainer,
+        ...styleSystem.levitatingContainer,
         ...originMenuContainerStyle,
     }
 

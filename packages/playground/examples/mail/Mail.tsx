@@ -1,4 +1,4 @@
-import {common} from '../../common.js'
+import {styleSystem} from '../../styleSystem'
 import {RenderContext} from "axii";
 import {Button} from 'axii-ui'
 
@@ -16,39 +16,39 @@ export type MailProps = {
 
 export function Mail({item}: MailProps, {createElement}: RenderContext) {
     const containerStyle = {
-        ...common.enclosedContainer,
-        ...common.panelPaddingContainer,
+        ...styleSystem.enclosedContainer,
+        ...styleSystem.panelPaddingContainer,
         cursor: 'pointer',
         '&:hover': {
-            backgroundColor: common.colors.background.box.focus(),
+            backgroundColor: styleSystem.colors.background.box.focus(),
         },
-        ...common.layout.flexColumnStretched({gap: common.sizes.space.gap()}),
+        ...styleSystem.layout.flexColumnStretched({gap: styleSystem.sizes.space.gap()}),
     }
     const headerStyle = {
-        ...common.layout.row(),
-        ...common.layout.twoSide(),
+        ...styleSystem.layout.row(),
+        ...styleSystem.layout.twoSide(),
         flexGrow: 0,
     }
 
     const fromStyle = {
-        fontSize: common.sizes.fontSize.title(),
-        color: common.colors.text.normal(),
-        fontWeight: common.sizes.fontWeight(4),
+        fontSize: styleSystem.sizes.fontSize.title(),
+        color: styleSystem.colors.text.normal(),
+        fontWeight: styleSystem.sizes.fontWeight(4),
     }
 
 
     const dateStyle = {
-        ...common.supportiveText
+        ...styleSystem.supportiveText
     }
 
     const titleStyle = {
-        fontSize: common.sizes.fontSize.text(),
-        color: common.colors.text.normal(),
-        fontWeight: common.sizes.fontWeight(4),
+        fontSize: styleSystem.sizes.fontSize.text(),
+        color: styleSystem.colors.text.normal(),
+        fontWeight: styleSystem.sizes.fontWeight(4),
     }
 
     const contentStyle = {
-        ...common.supportiveText
+        ...styleSystem.supportiveText
     }
 
     const actionStyle = {

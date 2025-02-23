@@ -1,5 +1,5 @@
 import {Atom, N_ATTR, RenderContext} from "axii";
-import {common} from '../../common.js'
+import {styleSystem} from '../../styleSystem'
 import {Select} from 'axii-ui'
 import {BoxesPanel} from "./BoxesPanel.js";
 import {OtherLinksPanel} from "./OtherLinksPanel.js";
@@ -12,7 +12,7 @@ export function ControlPanel({}, {createElement}: RenderContext) {
         display: 'flex',
         flexDirection: 'column',
         '&>*': {
-            borderBottom: `1px solid ${common.colors.line.border.normal()}`,
+            borderBottom: `1px solid ${styleSystem.colors.line.border.normal()}`,
             '&:last-child': {
                 borderRight: 'none'
             }
@@ -20,7 +20,7 @@ export function ControlPanel({}, {createElement}: RenderContext) {
     }
 
     const headerStyle = {
-        ...common.boxPaddingContainer,
+        ...styleSystem.boxPaddingContainer,
         flexGrow: 0,
     }
 

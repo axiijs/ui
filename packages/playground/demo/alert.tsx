@@ -1,44 +1,44 @@
 import {RenderContext} from "axii";
-import {common} from "../common.js";
+import {styleSystem} from "../styleSystem";
 
 
 export function Demo({}, {createElement}: RenderContext) {
     const containerStyle = {
-        ...common.enclosedContainer,
-        ...common.panelPaddingContainer,
+        ...styleSystem.enclosedContainer,
+        ...styleSystem.panelPaddingContainer,
     }
-    return <div style={common.layout.column({gap: common.sizes.space.gap()})}>
-        <div style={{...containerStyle, ...common.textBox({infoColor: common.colorScheme.error})}}>
+    return <div style={styleSystem.layout.column({gap: styleSystem.sizes.space.gap()})}>
+        <div style={{...containerStyle, ...styleSystem.textBox({infoColor: styleSystem.colorScheme.error})}}>
             This is a error message
         </div>
         <div
-            style={{...containerStyle, ...common.textBox({highlight: true, infoColor: common.colorScheme.error})}}>
+            style={{...containerStyle, ...styleSystem.textBox({highlight: true, infoColor: styleSystem.colorScheme.error})}}>
             This is a error message
         </div>
-        <div style={{...containerStyle, ...common.textBox({ infoColor: common.colorScheme.info})}}>
+        <div style={{...containerStyle, ...styleSystem.textBox({ infoColor: styleSystem.colorScheme.info})}}>
             This is a info message
         </div>
-        <div style={{...containerStyle, ...common.textBox({highlight: true, infoColor: common.colorScheme.info})}}>
+        <div style={{...containerStyle, ...styleSystem.textBox({highlight: true, infoColor: styleSystem.colorScheme.info})}}>
             This is a info message
         </div>
-        <div style={{...containerStyle, ...common.textBox({infoColor: common.colorScheme.success})}}>
+        <div style={{...containerStyle, ...styleSystem.textBox({infoColor: styleSystem.colorScheme.success})}}>
             This is a success message
         </div>
         <div style={{
-            ...containerStyle, ...common.textBox({
+            ...containerStyle, ...styleSystem.textBox({
                 highlight: true,
-                infoColor: common.colorScheme.success
+                infoColor: styleSystem.colorScheme.success
             })
         }}>
             This is a success message
         </div>
-        <div style={{...containerStyle, ...common.textBox({infoColor: common.colorScheme.warning})}}>
+        <div style={{...containerStyle, ...styleSystem.textBox({infoColor: styleSystem.colorScheme.warning})}}>
             This is a warning message
         </div>
         <div style={{
-            ...containerStyle, ...common.textBox({
+            ...containerStyle, ...styleSystem.textBox({
                 highlight: true,
-                infoColor: common.colorScheme.warning
+                infoColor: styleSystem.colorScheme.warning
             })
         }}>
             This is a warning message

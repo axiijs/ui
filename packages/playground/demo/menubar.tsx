@@ -1,7 +1,7 @@
 import {atom, RectObject, RenderContext, RxDOMRect} from "axii";
 import ArrowRight from "axii-icon-park/Right.js";
 import {Button, originMenuContainerStyle, Popover} from 'axii-ui'
-import {common} from '../common.js'
+import {styleSystem} from '../styleSystem'
 
 export function Demo({}, {createElement}: RenderContext) {
     const rxPosition = new RxDOMRect(atom<RectObject>(null),{type: 'interval', duration: 100})
@@ -18,13 +18,13 @@ export function Demo({}, {createElement}: RenderContext) {
     }
 
     const subItemStyle = {
-        ...common.levitatingContainer,
+        ...styleSystem.levitatingContainer,
         ...originMenuContainerStyle,
     }
 
     return <div>
         <Button
-            $root:style={common.textBox()}
+            $root:style={styleSystem.textBox()}
             $root:onClick={LLTB}
             $root:ref={rxPosition.ref}
         >

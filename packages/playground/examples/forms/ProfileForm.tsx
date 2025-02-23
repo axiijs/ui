@@ -1,22 +1,22 @@
 /* @jsx createElement */
 import {RenderContext} from "axii";
-import {common} from '../../common.js'
+import {styleSystem} from '../../styleSystem'
 import {Button, Input, Select, Textarea} from 'axii-ui'
 import {faker} from "@faker-js/faker";
 
 export function ProfileForm({}, {createElement}: RenderContext) {
 
     const itemListContainerStyle = {
-        ...common.layout.flexColumnStretched(({gap: common.sizes.space.panel(3)})),
+        ...styleSystem.layout.flexColumnStretched(({gap: styleSystem.sizes.space.panel(3)})),
         '&>*': {
-            ...common.layout.flexColumnStretched({gap: common.sizes.space.panel(1)})
+            ...styleSystem.layout.flexColumnStretched({gap: styleSystem.sizes.space.panel(1)})
         },
-        marginBottom: common.sizes.space.panel(3)
+        marginBottom: styleSystem.sizes.space.panel(3)
 
     }
 
     const titleStyle = {
-        fontSize: common.sizes.fontSize.title()
+        fontSize: styleSystem.sizes.fontSize.title()
     }
 
     const names = ['light', 'dark']
@@ -25,9 +25,9 @@ export function ProfileForm({}, {createElement}: RenderContext) {
         <div>
             <div>
                 <div style={titleStyle}>Profile</div>
-                <div style={common.supportiveText}>{faker.lorem.paragraph()}</div>
+                <div style={styleSystem.supportiveText}>{faker.lorem.paragraph()}</div>
             </div>
-            <div style={{...common.separator(false, 3)}}></div>
+            <div style={{...styleSystem.separator(false, 3)}}></div>
             <div>
                 <div style={itemListContainerStyle}>
                     <div>
@@ -35,25 +35,25 @@ export function ProfileForm({}, {createElement}: RenderContext) {
                         <div>
                             <Input/>
                         </div>
-                        <div style={common.supportiveText}>{faker.lorem.paragraph()}</div>
+                        <div style={styleSystem.supportiveText}>{faker.lorem.paragraph()}</div>
                     </div>
                     <div>
                         <div>Username</div>
                         <div>
                             <Select options={names} placeholder={'Choose'}/>
                         </div>
-                        <div style={common.supportiveText}>{faker.lorem.paragraph()}</div>
+                        <div style={styleSystem.supportiveText}>{faker.lorem.paragraph()}</div>
                     </div>
                     <div>
                         <div>Username</div>
                         <div>
                             <Textarea/>
                         </div>
-                        <div style={common.supportiveText}>{faker.lorem.paragraph()}</div>
+                        <div style={styleSystem.supportiveText}>{faker.lorem.paragraph()}</div>
                     </div>
                 </div>
                 <div>
-                    <Button $root:style={common.textBox({inverted:true})}>Save</Button>
+                    <Button $root:style={styleSystem.textBox({inverted:true})}>Save</Button>
                 </div>
             </div>
         </div>

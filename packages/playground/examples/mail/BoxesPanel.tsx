@@ -1,6 +1,6 @@
 import {atom, JSXElement, RenderContext, RxList} from "axii";
 
-import {common} from '../../common.js'
+import {styleSystem} from '../../styleSystem'
 
 import InboxIcon from 'axii-icon-park/Inbox.js'
 import FileEditingOne from 'axii-icon-park/FileEditingOne.js'
@@ -45,8 +45,8 @@ export function BoxesPanel({}, {createElement}: RenderContext) {
     }])
 
     const boxesPanelStyle = {
-        ...common.boxPaddingContainer,
-        ...common.layout.flexColumnStretched({gap: common.sizes.space.itemGap()}),
+        ...styleSystem.boxPaddingContainer,
+        ...styleSystem.layout.flexColumnStretched({gap: styleSystem.sizes.space.itemGap()}),
         flexBasis: 200,
     }
 
@@ -55,20 +55,20 @@ export function BoxesPanel({}, {createElement}: RenderContext) {
     return <div style={boxesPanelStyle}>
         {boxesWithSelected.map(([box, selected]) => {
             const style = () => ({
-                ...common.textPaddingContainer,
-                ...common.layout.twoSide(),
-                color: selected() ? common.colors.text.active(true) : common.colors.text.normal(),
-                backgroundColor: selected() ? common.colors.background.box.active() : common.colors.background.box.normal(),
-                borderRadius: common.sizes.radius.box(),
+                ...styleSystem.textPaddingContainer,
+                ...styleSystem.layout.twoSide(),
+                color: selected() ? styleSystem.colors.text.active(true) : styleSystem.colors.text.normal(),
+                backgroundColor: selected() ? styleSystem.colors.background.box.active() : styleSystem.colors.background.box.normal(),
+                borderRadius: styleSystem.sizes.radius.box(),
                 cursor: 'pointer',
                 '&:hover': {
-                    backgroundColor: selected() ? common.colors.background.box.active() : common.colors.background.box.focus(),
+                    backgroundColor: selected() ? styleSystem.colors.background.box.active() : styleSystem.colors.background.box.focus(),
                 }
             })
 
             const labelContainerStyle = {
-                ...common.layout.row(),
-                gap: common.sizes.space.gap(),
+                ...styleSystem.layout.row(),
+                gap: styleSystem.sizes.space.gap(),
             }
             return <div style={style}>
                 <div style={labelContainerStyle}>

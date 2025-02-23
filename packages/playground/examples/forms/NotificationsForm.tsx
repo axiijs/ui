@@ -1,5 +1,5 @@
 import {atom, RenderContext, RxList} from "axii";
-import {common} from '../../common.js'
+import {styleSystem} from '../../styleSystem'
 
 import {Button, Checkbox, RadioGroup, Switch} from 'axii-ui'
 import {faker} from "@faker-js/faker";
@@ -13,16 +13,16 @@ type NotifyOptionType = {
 export function NotificationsForm({}, {createElement}: RenderContext) {
 
     const itemListContainerStyle = {
-        ...common.layout.flexColumnStretched(({gap: common.sizes.space.panel(3)})),
+        ...styleSystem.layout.flexColumnStretched(({gap: styleSystem.sizes.space.panel(3)})),
         '&>*': {
-            ...common.layout.flexColumnStretched({gap: common.sizes.space.panel(1)})
+            ...styleSystem.layout.flexColumnStretched({gap: styleSystem.sizes.space.panel(1)})
         },
-        marginBottom: common.sizes.space.panel(3)
+        marginBottom: styleSystem.sizes.space.panel(3)
 
     }
 
     const titleStyle = {
-        fontSize: common.sizes.fontSize.title()
+        fontSize: styleSystem.sizes.fontSize.title()
     }
 
     const notifyOptions = new RxList<NotifyOptionType>([{
@@ -39,28 +39,28 @@ export function NotificationsForm({}, {createElement}: RenderContext) {
     const currentOption = atom<NotifyOptionType|null>(null)
 
     const notifyStyle = {
-        ...common.layout.flexColumn({gap: common.sizes.space.panel(1)})
+        ...styleSystem.layout.flexColumn({gap: styleSystem.sizes.space.panel(1)})
     }
 
     const notificationPanelContainerStyle = {
-        ...common.layout.flexColumnStretched(({gap: common.sizes.space.panel()})),
+        ...styleSystem.layout.flexColumnStretched(({gap: styleSystem.sizes.space.panel()})),
     }
 
     const notificationPanelTitleStyle = {
-        ...common.layout.flexColumn({gap: common.sizes.space.itemGap()}),
+        ...styleSystem.layout.flexColumn({gap: styleSystem.sizes.space.itemGap()}),
         '&>*:first-child': {
-            ...common.mainText
+            ...styleSystem.mainText
         },
         '&>*:last-child': {
-            ...common.supportiveText,
+            ...styleSystem.supportiveText,
         }
     }
 
     const notificationPanelStyle = {
-        ...common.layout.row(),
-        ...common.layout.twoSide(),
-        ...common.enclosedContainer,
-        padding: common.sizes.space.panel(),
+        ...styleSystem.layout.row(),
+        ...styleSystem.layout.twoSide(),
+        ...styleSystem.enclosedContainer,
+        padding: styleSystem.sizes.space.panel(),
         '&>*:first-child': notificationPanelTitleStyle
     }
 
@@ -68,9 +68,9 @@ export function NotificationsForm({}, {createElement}: RenderContext) {
         <div>
             <div>
                 <div style={titleStyle}>Notification</div>
-                <div style={common.supportiveText}>{faker.lorem.paragraph()}</div>
+                <div style={styleSystem.supportiveText}>{faker.lorem.paragraph()}</div>
             </div>
-            <div style={{...common.separator(false, 2)}}></div>
+            <div style={{...styleSystem.separator(false, 2)}}></div>
             <div>
                 <div style={itemListContainerStyle}>
                     <div>
@@ -104,19 +104,19 @@ export function NotificationsForm({}, {createElement}: RenderContext) {
                     </div>
                 </div>
                 <div style={{
-                    ...common.layout.flexRow({gap: common.sizes.space.gap()}),
-                    marginBottom: common.sizes.space.panel(3)
+                    ...styleSystem.layout.flexRow({gap: styleSystem.sizes.space.gap()}),
+                    marginBottom: styleSystem.sizes.space.panel(3)
                 }}>
                     <div>
                         <Checkbox />
                     </div>
                     <div>
-                        <div style={common.mainText}>Use different settings for my mobile devices</div>
-                        <div style={common.supportiveText}>You can manage your mobile notifications in the mobile settings page.</div>
+                        <div style={styleSystem.mainText}>Use different settings for my mobile devices</div>
+                        <div style={styleSystem.supportiveText}>You can manage your mobile notifications in the mobile settings page.</div>
                     </div>
                 </div>
                 <div>
-                    <Button $root:style={common.textBox({inverted:true})}>Save</Button>
+                    <Button $root:style={styleSystem.textBox({inverted:true})}>Save</Button>
                 </div>
             </div>
         </div>

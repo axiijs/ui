@@ -2,7 +2,6 @@
 import {Component, createElement, createRoot} from 'axii'
 import {install as installInc} from 'axii-ui-theme-inc'
 import {install as installFallout} from "axii-ui-theme-fallout";
-import {getDemos} from "./files.macro.js" with {type: "macro"};
 
 
 const themeToInstall: {[k:string]:any} = {

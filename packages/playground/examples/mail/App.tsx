@@ -1,5 +1,5 @@
 import {atom, RenderContext} from "axii";
-import {common} from '../../common.js'
+import {styleSystem} from '../../styleSystem'
 import {ControlPanel} from "./ControlPanel.js";
 import {BoxPanel} from "./BoxPanel.js";
 import {DetailPanel} from "./DetailPanel.js";
@@ -26,7 +26,7 @@ export function App({}, {createElement}: RenderContext) {
         width: '100%',
         display: 'flex',
         '&>*': {
-            borderRight: `1px solid ${common.colors.line.border.normal()}`,
+            borderRight: `1px solid ${styleSystem.colors.line.border.normal()}`,
             '&:last-child': {
                 borderRight: 'none'
             }

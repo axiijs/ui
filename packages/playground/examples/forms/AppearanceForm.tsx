@@ -1,5 +1,5 @@
 import {atom, RenderContext, RxList} from "axii";
-import {common} from '../../common.js'
+import {styleSystem} from '../../styleSystem'
 import {Button, Select} from 'axii-ui'
 import {faker} from "@faker-js/faker";
 
@@ -12,27 +12,27 @@ type ThemeItemType = {
 export function AppearanceForm({}, {createElement}: RenderContext) {
 
     const itemListContainerStyle = {
-        ...common.layout.flexColumnStretched(({gap: common.sizes.space.panel(3)})),
+        ...styleSystem.layout.flexColumnStretched(({gap: styleSystem.sizes.space.panel(3)})),
         '&>*': {
-            ...common.layout.flexColumnStretched({gap: common.sizes.space.panel(1)})
+            ...styleSystem.layout.flexColumnStretched({gap: styleSystem.sizes.space.panel(1)})
         },
-        marginBottom: common.sizes.space.panel(3)
+        marginBottom: styleSystem.sizes.space.panel(3)
 
     }
 
     const titleStyle = {
-        fontSize: common.sizes.fontSize.title()
+        fontSize: styleSystem.sizes.fontSize.title()
     }
 
 
     const themes = new RxList<ThemeItemType>([
         {
             name: 'light',
-            color: common.colors.background.item.normal()
+            color: styleSystem.colors.background.item.normal()
         },
         {
             name: 'dark',
-            color: common.colors.background.box.active()
+            color: styleSystem.colors.background.box.active()
         }
     ])
     const selectedTheme = atom<ThemeItemType>(themes.at(0)!)
@@ -45,9 +45,9 @@ export function AppearanceForm({}, {createElement}: RenderContext) {
         <div>
             <div>
                 <div style={titleStyle}>Appearance</div>
-                <div style={common.supportiveText}>{faker.lorem.paragraph()}</div>
+                <div style={styleSystem.supportiveText}>{faker.lorem.paragraph()}</div>
             </div>
-            <div style={{...common.separator(false, 2)}}></div>
+            <div style={{...styleSystem.separator(false, 2)}}></div>
             <div>
                 <div style={itemListContainerStyle}>
                     <div>
@@ -55,29 +55,29 @@ export function AppearanceForm({}, {createElement}: RenderContext) {
                         <div>
                             <Select options={fontSizes} placeholder={'Choose'}/>
                         </div>
-                        <div style={common.supportiveText}>{faker.lorem.paragraph()}</div>
+                        <div style={styleSystem.supportiveText}>{faker.lorem.paragraph()}</div>
                     </div>
                     <div>
                         <div>Theme</div>
-                        <div style={{...common.layout.flexRow({gap:common.sizes.space.gap()})}}>
+                        <div style={{...styleSystem.layout.flexRow({gap:styleSystem.sizes.space.gap()})}}>
                             {themesWithSelected.map(([item, selected]) => {
                                 const {name, color} = item
                                 const style=() =>({
-                                    borderRadius: common.sizes.radius.box(),
-                                    border: `1px solid ${selected() ? common.colors.line.border.focused() : common.colors.line.border.normal()}`,
-                                    padding: common.sizes.space.gap(),
+                                    borderRadius: styleSystem.sizes.radius.box(),
+                                    border: `1px solid ${selected() ? styleSystem.colors.line.border.focused() : styleSystem.colors.line.border.normal()}`,
+                                    padding: styleSystem.sizes.space.gap(),
                                     cursor: 'pointer',
                                 })
 
                                 const contentStyle = () => ({
-                                    borderRadius: common.sizes.radius.box(),
-                                    width: common.sizes.thing.box(4),
-                                    height: common.sizes.thing.box(3),
+                                    borderRadius: styleSystem.sizes.radius.box(),
+                                    width: styleSystem.sizes.thing.box(4),
+                                    height: styleSystem.sizes.thing.box(3),
                                     backgroundColor: color,
                                 })
 
                                 const containerStyle= {
-                                    ...common.layout.column({gap: common.sizes.space.gap()}),
+                                    ...styleSystem.layout.column({gap: styleSystem.sizes.space.gap()}),
                                 }
                                 return (
                                     <div style={containerStyle}>
@@ -89,12 +89,12 @@ export function AppearanceForm({}, {createElement}: RenderContext) {
                                 )
                             })}
                         </div>
-                        <div style={common.supportiveText}>{faker.lorem.paragraph()}</div>
+                        <div style={styleSystem.supportiveText}>{faker.lorem.paragraph()}</div>
                     </div>
 
                 </div>
                 <div>
-                    <Button $root:style={common.textBox({inverted:true})}>Save</Button>
+                    <Button $root:style={styleSystem.textBox({inverted:true})}>Save</Button>
                 </div>
             </div>
         </div>

@@ -1,6 +1,6 @@
 import {RenderContext, RxList} from "axii";
 import {Button, Column} from "axii-ui";
-import {common} from "../common.js";
+import {styleSystem} from "../styleSystem";
 
 
 
@@ -36,8 +36,8 @@ export function Demo({}, {createElement}: RenderContext) {
         }
     }
 
-    return (<div style={common.layout.column({gap:10})}>
-        <div style={common.layout.row({gap:10, flexWrap:'wrap'})}>
+    return (<div style={styleSystem.layout.column({gap:10})}>
+        <div style={styleSystem.layout.row({gap:10, flexWrap:'wrap'})}>
             <Button $root:onClick={swap1To3}>swap 1 to 3</Button>
             <Button $root:onClick={reposition3To5}>reposition</Button>
             <Button $root:onClick={sort}>sort</Button>
@@ -46,7 +46,7 @@ export function Demo({}, {createElement}: RenderContext) {
         </div>
         <Column gap={10} $root:style={columnStyle}>
             {staticItemsWithOrder.map(([item, index]) => {
-                const style = {borderWidth:1,...common.textBox({color:'black',colorBox:true })}
+                const style = {borderWidth:1,...styleSystem.textBox({color:'black',colorBox:true })}
                 return (
                     <div style={style} data-order={index}>
                         <span>{item.value}</span>

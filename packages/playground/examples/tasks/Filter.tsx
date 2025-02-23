@@ -10,7 +10,7 @@ import {
     RxList
 } from "axii";
 import {Button, Dropdown} from 'axii-ui'
-import {common} from '../../common.js'
+import {styleSystem} from '../../styleSystem'
 import Search from 'axii-icon-park/Search.js'
 
 const FilterPropTypes = {
@@ -30,7 +30,7 @@ export const Filter: Component = function (props: FixedCompatiblePropsType<typeo
     return <Button>
         <div
             ref={rxLabelPosition.ref}
-            style={common.layout.row({ gap: common.sizes.space.gap()})}
+            style={styleSystem.layout.row({ gap: styleSystem.sizes.space.gap()})}
             onClick={() => dropdownVisible(true)}
         >
             <div>
@@ -38,15 +38,15 @@ export const Filter: Component = function (props: FixedCompatiblePropsType<typeo
             </div>
         </div>
         <Dropdown visible={dropdownVisible} targetPosition={rxLabelPosition.value}>
-            <div style={common.layout.flexColumn({})}>
-                <div style={{...common.boxPaddingContainer, ...common.layout.row({gap: common.sizes.space.gap()})}}>
+            <div style={styleSystem.layout.flexColumn({})}>
+                <div style={{...styleSystem.boxPaddingContainer, ...styleSystem.layout.row({gap: styleSystem.sizes.space.gap()})}}>
                     <Search />
-                    <input placeholder={'Search'} style={common.rawControl} type="text" value={search} onChange={(e:any) => search(e.target.value)}/>
+                    <input placeholder={'Search'} style={styleSystem.rawControl} type="text" value={search} onChange={(e:any) => search(e.target.value)}/>
                 </div>
 
-                <div style={common.separator(false, 0)}/>
+                <div style={styleSystem.separator(false, 0)}/>
 
-                <div style={{...common.boxPaddingContainer,...common.layout.flexColumn({gap: common.sizes.space.gap()})}}>
+                <div style={{...styleSystem.boxPaddingContainer,...styleSystem.layout.flexColumn({gap: styleSystem.sizes.space.gap()})}}>
                     {options.map((option) => {
                         return <div as='option' prop:option={option}>{option}</div>
                     })}

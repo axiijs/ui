@@ -1,5 +1,5 @@
 import {Atom, atom, RenderContext} from "axii";
-import {common} from '../../common.js'
+import {styleSystem} from '../../styleSystem'
 
 import {Tabs} from 'axii-ui'
 import {MailListPanel} from "./MailListPanel.js";
@@ -17,7 +17,7 @@ export function BoxPanel({data, selected}: BoxPanelProps, {createElement}: Rende
         display: 'flex',
         flexDirection: 'column',
         '&>*': {
-            borderBottom: `1px solid ${common.colors.line.border.normal()}`,
+            borderBottom: `1px solid ${styleSystem.colors.line.border.normal()}`,
             '&:last-child': {
                 borderRight: 'none'
             }
@@ -25,9 +25,9 @@ export function BoxPanel({data, selected}: BoxPanelProps, {createElement}: Rende
     }
 
     const headerStyle = {
-        ...common.boxPaddingContainer,
-        ...common.layout.row(),
-        ...common.layout.twoSide(),
+        ...styleSystem.boxPaddingContainer,
+        ...styleSystem.layout.row(),
+        ...styleSystem.layout.twoSide(),
         flexGrow: 0,
     }
 
@@ -35,7 +35,7 @@ export function BoxPanel({data, selected}: BoxPanelProps, {createElement}: Rende
     return (
         <div style={containerStyle}>
             <div style={headerStyle}>
-                <div style={common.heading()}>
+                <div style={styleSystem.heading()}>
                     Inbox
                 </div>
                 <div>

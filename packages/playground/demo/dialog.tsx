@@ -1,13 +1,13 @@
 import {atom, RenderContext} from "axii";
 import {Button, Dialog} from "axii-ui";
-import {common} from "../common.js";
+import {styleSystem} from "../styleSystem";
 const showDialog = atom(false)
 
 export function Demo({}, {createElement}: RenderContext) {
     return (
         <div>
             <Button
-                $root:style={common.textBox()}
+                $root:style={styleSystem.textBox()}
                 $root:onClick={() => showDialog(true)}
             >
                 Open Dialog

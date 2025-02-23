@@ -1,5 +1,5 @@
 import {atom, FixedCompatiblePropsType, PropsType, PropTypes, RenderContext} from "axii";
-import {common} from '../..//common.js'
+import {styleSystem} from '../../styleSystem'
 
 import {Avatar, Button, Switch, Textarea} from 'axii-ui'
 import { MailData} from "./Mail.js";
@@ -12,26 +12,26 @@ const ContentPropTypes = {
 export function ContentPanel(props: FixedCompatiblePropsType<typeof ContentPropTypes>, {createElement}: RenderContext) {
     const {mail} = props as PropsType<typeof ContentPropTypes>
     const containerStyle = {
-        ...common.layout.middleGrow(true),
-        ...common.separatedList(true)
+        ...styleSystem.layout.middleGrow(true),
+        ...styleSystem.separatedList(true)
     }
 
     const headerStyle = {
-        ...common.panelPaddingContainer,
-        ...common.layout.twoSide()
+        ...styleSystem.panelPaddingContainer,
+        ...styleSystem.layout.twoSide()
     }
 
     const bodyStyle = {
-        ...common.panelPaddingContainer
+        ...styleSystem.panelPaddingContainer
     }
 
     const operationContainerStyle = {
-        ...common.panelPaddingContainer,
-        ...common.layout.flexColumn({gap: common.sizes.space.gap()})
+        ...styleSystem.panelPaddingContainer,
+        ...styleSystem.layout.flexColumn({gap: styleSystem.sizes.space.gap()})
     }
 
     const nameAndAvatarStyle = {
-        ...common.layout.flexRow({gap: common.sizes.space.gap()}),
+        ...styleSystem.layout.flexRow({gap: styleSystem.sizes.space.gap()}),
         overflow: 'hidden',
         '& *': {
             overflow: 'hidden',
@@ -40,19 +40,19 @@ export function ContentPanel(props: FixedCompatiblePropsType<typeof ContentPropT
     }
 
     const nameAndTitleStyle = {
-        ...common.layout.flexColumn({gap: common.sizes.space.gap()}),
+        ...styleSystem.layout.flexColumn({gap: styleSystem.sizes.space.gap()}),
     }
 
     const fromStyle = {
-        fontSize: common.sizes.fontSize.title(),
-        color: common.colors.text.normal(),
-        fontWeight: common.sizes.fontWeight(4),
+        fontSize: styleSystem.sizes.fontSize.title(),
+        color: styleSystem.colors.text.normal(),
+        fontWeight: styleSystem.sizes.fontWeight(4),
     }
 
     const avatarStyle = {
-        height: common.sizes.thing.box(1.5),
-        width: common.sizes.thing.box(1.5),
-        fontSize: common.sizes.fontSize.title(),
+        height: styleSystem.sizes.thing.box(1.5),
+        width: styleSystem.sizes.thing.box(1.5),
+        fontSize: styleSystem.sizes.fontSize.title(),
         flexShrink: 0
     }
 
@@ -66,7 +66,7 @@ export function ContentPanel(props: FixedCompatiblePropsType<typeof ContentPropT
                         <div>{() => mail()?.title}</div>
                     </div>
                 </div>
-                <div style={{color: common.colors.text.normal(false, 'supportive')}}>
+                <div style={{color: styleSystem.colors.text.normal(false, 'supportive')}}>
                     {() => mail()?.date}
                 </div>
             </div>
@@ -75,8 +75,8 @@ export function ContentPanel(props: FixedCompatiblePropsType<typeof ContentPropT
             </div>
             <div style={operationContainerStyle}>
                 <Textarea placeholder="Type your message here" />
-                <div style={{...common.layout.twoSide()}}>
-                    <div style={{...common.layout.row(), gap: common.sizes.space.itemGap()}}>
+                <div style={{...styleSystem.layout.twoSide()}}>
+                    <div style={{...styleSystem.layout.row(), gap: styleSystem.sizes.space.itemGap()}}>
                         <Switch />
                         <span>Mute this thread</span>
                     </div>

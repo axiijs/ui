@@ -1,5 +1,5 @@
 import {Atom, atom, RectObject, RenderContext, RxDOMRect} from "axii";
-import {common} from '../../common.js'
+import {styleSystem} from '../../styleSystem'
 import {Popover} from 'axii-ui'
 import JunkOne from 'axii-icon-park/DeleteOne.js'
 import TrashOne from 'axii-icon-park/Delete.js'
@@ -18,9 +18,9 @@ export function DetailPanel({ mail }: DetailProps, {createElement}: RenderContex
     const containerStyle = {
         height: '100%',
         width: '100%',
-        ...common.layout.middleGrow(true),
+        ...styleSystem.layout.middleGrow(true),
         '&>*': {
-            borderBottom: `1px solid ${common.colors.line.border.normal()}`,
+            borderBottom: `1px solid ${styleSystem.colors.line.border.normal()}`,
             '&:last-child': {
                 borderRight: 'none'
             }
@@ -28,17 +28,17 @@ export function DetailPanel({ mail }: DetailProps, {createElement}: RenderContex
     }
 
     const headerStyle = {
-        ...common.boxPaddingContainer,
-        ...common.layout.twoSide(),
-        ...common.layout.row(),
+        ...styleSystem.boxPaddingContainer,
+        ...styleSystem.layout.twoSide(),
+        ...styleSystem.layout.row(),
         flexGrow: 0,
     }
 
     const operationContainerStyle = {
-        ...common.layout.row(),
+        ...styleSystem.layout.row(),
         '& > *' : {
-            ...common.iconBox,
-            ...common.interactableItem
+            ...styleSystem.iconBox,
+            ...styleSystem.interactableItem
         }
     }
 
@@ -50,13 +50,13 @@ export function DetailPanel({ mail }: DetailProps, {createElement}: RenderContex
     })
 
     const popoverContainerStyle = {
-        ...common.boxPaddingContainer,
-        ...common.layout.flexColumnStretched({gap: common.sizes.space.itemGap()}),
+        ...styleSystem.boxPaddingContainer,
+        ...styleSystem.layout.flexColumnStretched({gap: styleSystem.sizes.space.itemGap()}),
         flexBasis: 200,
         '& > *': {
-            ...common.textPaddingContainer,
-            ...common.layout.twoSide(),
-            ...common.interactableItem
+            ...styleSystem.textPaddingContainer,
+            ...styleSystem.layout.twoSide(),
+            ...styleSystem.interactableItem
         }
     }
 
@@ -69,13 +69,13 @@ export function DetailPanel({ mail }: DetailProps, {createElement}: RenderContex
                     <JunkOne size={14}/>
                     <TrashOne size={14}/>
                 </div>
-                <div style={{...common.layout.row()}}>
+                <div style={{...styleSystem.layout.row()}}>
                     <div style={operationContainerStyle}>
                         <CornerUpLeft size={14}/>
                         <CornerUpRight size={14}/>
                     </div>
                     <div>
-                        <span style={{...common.separator(true)}}/>
+                        <span style={{...styleSystem.separator(true)}}/>
                     </div>
                     <div style={operationContainerStyle}>
                         <span onClick={() => popoverVisible(true)} ref={rxMoreIconPosition.ref}>

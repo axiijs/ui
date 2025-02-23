@@ -1,6 +1,6 @@
 import {atom, RectObject, RenderContext, RxDOMRect} from "axii";
 import {Button, Popover} from 'axii-ui'
-import {common} from "../common.js";
+import {styleSystem} from "../styleSystem";
 
 export function Demo({}, {createElement}: RenderContext) {
     const rxPosition = new RxDOMRect(atom<RectObject>(null),{type: 'interval', duration: 100})
@@ -77,9 +77,9 @@ export function Demo({}, {createElement}: RenderContext) {
     }
 
 
-    return <div style={common.layout.column({gap: common.sizes.space.gap()})}>
-        <div ref={rxPosition.ref} style={{marginLeft: 100, width: 100, height: 100, border: '1px dashed #000', ...common.layout.center()}}>target</div>
-        <div style={common.layout.row({gap: common.sizes.space.gap(), flexWrap: 'wrap'})}>
+    return <div style={styleSystem.layout.column({gap: styleSystem.sizes.space.gap()})}>
+        <div ref={rxPosition.ref} style={{marginLeft: 100, width: 100, height: 100, border: '1px dashed #000', ...styleSystem.layout.center()}}>target</div>
+        <div style={styleSystem.layout.row({gap: styleSystem.sizes.space.gap(), flexWrap: 'wrap'})}>
             <Button $root:onClick={LLTB}>LLTB</Button>
             <Button $root:onClick={LLBT}>LLBT</Button>
             <Button $root:onClick={RRTB}>RRTB</Button>

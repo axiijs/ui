@@ -1,6 +1,6 @@
 import {Atom, atom, autorun, computed, RenderContext, RxList, RxSet} from "axii";
 import {Avatar, Button, Checkbox, Dropdown, Input} from 'axii-ui'
-import {common} from '../../common.js'
+import {styleSystem} from '../../styleSystem'
 import {Filter} from "./Filter.js";
 import AddOne from "axii-icon-park/AddOne.js";
 import {data, Task} from "./data.js";
@@ -19,7 +19,7 @@ type StatusFilterOptionProps = {
 }
 
 function StatusFilterOption({option}: StatusFilterOptionProps, {createElement}: RenderContext) {
-    return <div style={common.layout.row({gap: common.sizes.space.gap()})}>
+    return <div style={styleSystem.layout.row({gap: styleSystem.sizes.space.gap()})}>
         <Checkbox value={option[1]} as='toggle' />
         <span>{option[0]}</span>
     </div>
@@ -36,8 +36,8 @@ export function App({}, {createElement, Fragment, createRef}: RenderContext) {
     })
 
     const statusLabelNode = (
-        <div style={common.layout.row({gap: common.sizes.space.itemGap()})}>
-            <span style={common.layout.row({gap: common.sizes.space.itemGap()})}>
+        <div style={styleSystem.layout.row({gap: styleSystem.sizes.space.itemGap()})}>
+            <span style={styleSystem.layout.row({gap: styleSystem.sizes.space.itemGap()})}>
                 <AddOne/>
                 <span>Status</span>
             </span>
@@ -94,11 +94,11 @@ export function App({}, {createElement, Fragment, createRef}: RenderContext) {
     })
 
     const paginationButtonsStyle ={
-        ...common.layout.row({gap: common.sizes.space.gap()}),
+        ...styleSystem.layout.row({gap: styleSystem.sizes.space.gap()}),
         '&>*': {
-            ...common.enclosedContainer,
-            ...common.layout.center(),
-            ...common.boxPaddingContainer,
+            ...styleSystem.enclosedContainer,
+            ...styleSystem.layout.center(),
+            ...styleSystem.boxPaddingContainer,
             cursor: 'pointer'
         }
     }
@@ -107,10 +107,10 @@ export function App({}, {createElement, Fragment, createRef}: RenderContext) {
 
 
     const loadingMaskStyle = {
-        ...common.mask,
-        ...common.layout.center(),
+        ...styleSystem.mask,
+        ...styleSystem.layout.center(),
         opacity: .8,
-        backgroundColor: common.colors.background.box.normal(),
+        backgroundColor: styleSystem.colors.background.box.normal(),
     }
 
     const selectedIds = new RxSet<string>([])
@@ -163,12 +163,12 @@ export function App({}, {createElement, Fragment, createRef}: RenderContext) {
 
 
     const columnHeadStyle = {
-        ...common.layout.row({gap: common.sizes.space.itemGap()}),
+        ...styleSystem.layout.row({gap: styleSystem.sizes.space.itemGap()}),
         cursor: 'pointer'
     }
 
     const columnHeadListItemStyle = {
-        ...common.listItem, gap: common.sizes.space.gap()
+        ...styleSystem.listItem, gap: styleSystem.sizes.space.gap()
     }
 
     const headTitleRef = createRef()
@@ -185,25 +185,25 @@ export function App({}, {createElement, Fragment, createRef}: RenderContext) {
 
 
 
-    return <div style={{...common.layout.flexColumn({gap: common.sizes.space.gap(2)})}}>
-        <div style={{...common.layout.row(), ...common.layout.twoSide(), marginBottom:common.sizes.space.gap()}}>
-            <div style={{...common.layout.flexColumn({gap: common.sizes.space.gap()})}}>
-                <div style={common.heading()}>
+    return <div style={{...styleSystem.layout.flexColumn({gap: styleSystem.sizes.space.gap(2)})}}>
+        <div style={{...styleSystem.layout.row(), ...styleSystem.layout.twoSide(), marginBottom:styleSystem.sizes.space.gap()}}>
+            <div style={{...styleSystem.layout.flexColumn({gap: styleSystem.sizes.space.gap()})}}>
+                <div style={styleSystem.heading()}>
                     Tasks
                 </div>
-                <div style={common.descriptionText}>
+                <div style={styleSystem.descriptionText}>
                     Here's a list of your tasks for this month!
                 </div>
             </div>
 
             <Avatar alt={"avatar"} src={"https://i.pravatar.cc/100"} />
         </div>
-        <div style={{...common.layout.row(), ...common.layout.twoSide(), }}>
+        <div style={{...styleSystem.layout.row(), ...styleSystem.layout.twoSide(), }}>
             <div>
-                <div style={{...common.layout.row({gap: common.sizes.space.gap()})}}>
+                <div style={{...styleSystem.layout.row({gap: styleSystem.sizes.space.gap()})}}>
                     <Input placeholder={"Filter tasks"} value={titleSearch}/>
                     <Filter $option:_use={StatusFilterOption} $option={{'$toggle': {'$root:onClick': onStatusToggle}}} search={statusSearch} options={displayStatus} label={statusLabelNode}/>
-                    <Button $root:style={common.textBox({colorBox:true})}>Reset</Button>
+                    <Button $root:style={styleSystem.textBox({colorBox:true})}>Reset</Button>
                 </div>
             </div>
             <div>
@@ -212,7 +212,7 @@ export function App({}, {createElement, Fragment, createRef}: RenderContext) {
         </div>
 
         <div style={{position: 'relative'}}>
-            <div ref={tableContainerRef} style={{...common.table()}}>
+            <div ref={tableContainerRef} style={{...styleSystem.table()}}>
                 <table>
                     <thead>
                     <tr>
@@ -239,7 +239,7 @@ export function App({}, {createElement, Fragment, createRef}: RenderContext) {
                                                 <ArrowDown/>
                                                 <span>DESC</span>
                                             </div>
-                                            <div style={common.separator(false, 0)}></div>
+                                            <div style={styleSystem.separator(false, 0)}></div>
                                             <div style={columnHeadListItemStyle}>
                                                 <PreviewCloseOne/>
                                                 <span>Hide</span>
@@ -266,7 +266,7 @@ export function App({}, {createElement, Fragment, createRef}: RenderContext) {
                                                 <ArrowDown/>
                                                 <span>DESC</span>
                                             </div>
-                                            <div style={common.separator(false, 0)}></div>
+                                            <div style={styleSystem.separator(false, 0)}></div>
                                             <div style={columnHeadListItemStyle}>
                                                 <PreviewCloseOne/>
                                                 <span>Hide</span>
@@ -294,7 +294,7 @@ export function App({}, {createElement, Fragment, createRef}: RenderContext) {
                                                 <ArrowDown/>
                                                 <span>DESC</span>
                                             </div>
-                                            <div style={common.separator(false, 0)}></div>
+                                            <div style={styleSystem.separator(false, 0)}></div>
                                             <div style={columnHeadListItemStyle}>
                                                 <PreviewCloseOne/>
                                                 <span>Hide</span>
@@ -321,12 +321,12 @@ export function App({}, {createElement, Fragment, createRef}: RenderContext) {
 
                 </table>
             </div>
-            {() => tasks.asyncStatus!() ? <div style={loadingMaskStyle}><span style={common.spin(1)}><Loading/></span></div> : null}
+            {() => tasks.asyncStatus!() ? <div style={loadingMaskStyle}><span style={styleSystem.spin(1)}><Loading/></span></div> : null}
             {/*<div style={loadingMaskStyle}><span style={common.spin(1)}><Loading/></span></div>*/}
         </div>
 
-        <div style={{...common.layout.row(), ...common.layout.twoSide(),}}>
-            <div style={{...common.layout.row({gap: common.sizes.space.itemGap()}), color: common.colors.text.normal(false,'supportive')}}>
+        <div style={{...styleSystem.layout.row(), ...styleSystem.layout.twoSide(),}}>
+            <div style={{...styleSystem.layout.row({gap: styleSystem.sizes.space.itemGap()}), color: styleSystem.colors.text.normal(false,'supportive')}}>
                 <span>
                     {selectedIds.size}
                 </span>
@@ -334,14 +334,14 @@ export function App({}, {createElement, Fragment, createRef}: RenderContext) {
                     selected
                 </span>
             </div>
-            <div style={{...common.layout.row({gap: common.sizes.space.gap()})}}>
-                <div style={common.layout.row({gap: common.sizes.space.itemGap()})}>
+            <div style={{...styleSystem.layout.row({gap: styleSystem.sizes.space.gap()})}}>
+                <div style={styleSystem.layout.row({gap: styleSystem.sizes.space.itemGap()})}>
                     <span>{rowsPerPage}</span>
                     <span>rows</span>
                     <span>per</span>
                     <span>page</span>
                 </div>
-                <div style={common.layout.row({gap: common.sizes.space.itemGap()})}>
+                <div style={styleSystem.layout.row({gap: styleSystem.sizes.space.itemGap()})}>
                     <span>page</span>
                     <span>{currentPage}</span>
                     <span>of</span>

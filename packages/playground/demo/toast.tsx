@@ -1,6 +1,6 @@
 import {RenderContext} from "axii";
 import {Button, Toast} from "axii-ui";
-import {common} from "../common.js";
+import {styleSystem} from "../styleSystem";
 
 const toastStack = Toast.propTypes!.stack.defaultValue
 let toastStackTimes = 1
@@ -12,7 +12,7 @@ export function Demo({}, {createElement}: RenderContext) {
     return (
         <div>
             <Button
-                $root:style={common.textBox()}
+                $root:style={styleSystem.textBox()}
                 $root:onClick={addToast}
             >
                 add toast

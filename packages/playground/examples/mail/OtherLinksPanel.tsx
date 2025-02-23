@@ -1,6 +1,6 @@
 import {JSXElement, RenderContext, RxList} from "axii";
 
-import {common} from '../../common.js'
+import {styleSystem} from '../../styleSystem'
 import UserIcon from 'axii-icon-park/AddUser.js'
 import TipsIcon from 'axii-icon-park/TipsOne.js'
 import CommentIcon from 'axii-icon-park/CommentOne.js'
@@ -38,28 +38,28 @@ export function OtherLinksPanel({}, {createElement}: RenderContext) {
     }])
 
     const boxesPanelStyle = {
-        ...common.boxPaddingContainer,
-        ...common.layout.flexColumnStretched({gap: common.sizes.space.itemGap()}),
+        ...styleSystem.boxPaddingContainer,
+        ...styleSystem.layout.flexColumnStretched({gap: styleSystem.sizes.space.itemGap()}),
         flexBasis: 200,
     }
 
     return <div style={boxesPanelStyle}>
         {boxes.map((box) => {
             const style = () => ({
-                ...common.textPaddingContainer,
-                ...common.layout.twoSide(),
-                color: common.colors.text.normal(),
-                backgroundColor: common.colors.background.box.normal(),
-                borderRadius: common.sizes.radius.box(),
+                ...styleSystem.textPaddingContainer,
+                ...styleSystem.layout.twoSide(),
+                color: styleSystem.colors.text.normal(),
+                backgroundColor: styleSystem.colors.background.box.normal(),
+                borderRadius: styleSystem.sizes.radius.box(),
                 cursor: 'pointer',
                 '&:hover': {
-                    backgroundColor: common.colors.background.box.focus(),
+                    backgroundColor: styleSystem.colors.background.box.focus(),
                 }
             })
 
             const labelContainerStyle = {
-                ...common.layout.row(),
-                gap: common.sizes.space.gap(),
+                ...styleSystem.layout.row(),
+                gap: styleSystem.sizes.space.gap(),
             }
             return <div as='root' style={style}>
                 <div style={labelContainerStyle}>
