@@ -27,11 +27,11 @@ export function ContentPanel(props: FixedCompatiblePropsType<typeof ContentPropT
 
     const operationContainerStyle = {
         ...styleSystem.panelPaddingContainer,
-        ...styleSystem.layout.flexColumn({gap: styleSystem.sizes.space.gap()})
+        ...styleSystem.layout.column({gap: styleSystem.sizes.space.gap()})
     }
 
     const nameAndAvatarStyle = {
-        ...styleSystem.layout.flexRow({gap: styleSystem.sizes.space.gap()}),
+        ...styleSystem.layout.row({gap: styleSystem.sizes.space.gap()}),
         overflow: 'hidden',
         '& *': {
             overflow: 'hidden',
@@ -40,7 +40,7 @@ export function ContentPanel(props: FixedCompatiblePropsType<typeof ContentPropT
     }
 
     const nameAndTitleStyle = {
-        ...styleSystem.layout.flexColumn({gap: styleSystem.sizes.space.gap()}),
+        ...styleSystem.layout.column({gap: styleSystem.sizes.space.gap()}),
     }
 
     const fromStyle = {

@@ -51,7 +51,7 @@ export function DetailPanel({ mail }: DetailProps, {createElement}: RenderContex
 
     const popoverContainerStyle = {
         ...styleSystem.boxPaddingContainer,
-        ...styleSystem.layout.flexColumnStretched({gap: styleSystem.sizes.space.itemGap()}),
+        ...styleSystem.layout.column({gap: styleSystem.sizes.space.itemGap()}),
         flexBasis: 200,
         '& > *': {
             ...styleSystem.textPaddingContainer,

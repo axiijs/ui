@@ -22,7 +22,7 @@ export function Mail({item}: MailProps, {createElement}: RenderContext) {
         '&:hover': {
             backgroundColor: styleSystem.colors.background.box.focus(),
         },
-        ...styleSystem.layout.flexColumnStretched({gap: styleSystem.sizes.space.gap()}),
+        ...styleSystem.layout.column({gap: styleSystem.sizes.space.gap()}),
     }
     const headerStyle = {
         ...styleSystem.layout.row(),

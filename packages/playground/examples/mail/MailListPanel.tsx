@@ -1,5 +1,5 @@
 import {Atom, RenderContext} from "axii";
-import {styleSystem} from '../../styleSystem'
+import {styleSystem} from '../../styleSystem.js'
 import {Input} from 'axii-ui'
 import {Mail, MailData} from "./Mail.js";
 
@@ -23,7 +23,7 @@ export function MailListPanel({data, selected}: MailListPanelProps, {createEleme
 
     const listStyle = {
         ...styleSystem.panelPaddingContainer,
-        ...styleSystem.layout.flexColumnStretched({gap: styleSystem.sizes.space.gap()}),
+        ...styleSystem.layout.column({gap: styleSystem.sizes.space.gap()}),
         paddingTop: 0,
         overflowY: 'auto',
         '&>*': {

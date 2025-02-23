@@ -1,6 +1,6 @@
 import {atom, RenderContext} from "axii";
 import {Button, Drawer} from "axii-ui";
-import { styleSystem } from "../styleSystem";
+import { styleSystem } from "../styleSystem.js";
 
 const showDrawer = atom(false)
 
@@ -14,15 +14,17 @@ export function Demo({}, {createElement}: RenderContext) {
                 Open Drawer
             </Button>
             <Drawer visible={showDrawer} $content:style={{minHeight: '30vh', ...styleSystem.layout.center()}}>
-                <div style={styleSystem.layout.column({gap:10})}>
-                    <div>Drawer Content</div>
-                    <Button
-                        $root:style={styleSystem.textBox()}
-                        $root:onClick={() => showDrawer(false)}
-                    >
-                        Close Drawer
-                    </Button>
-                </div>
+                {() => (
+                    <div style={styleSystem.layout.column({gap: 10})}>
+                        <div>Drawer Content</div>
+                        <Button
+                            $root:style={styleSystem.textBox()}
+                            $root:onClick={() => showDrawer(false)}
+                        >
+                            Close Drawer
+                        </Button>
+                    </div>
+                )}
             </Drawer>
         </div>
     )

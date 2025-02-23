@@ -39,7 +39,7 @@ export function OtherLinksPanel({}, {createElement}: RenderContext) {
 
     const boxesPanelStyle = {
         ...styleSystem.boxPaddingContainer,
-        ...styleSystem.layout.flexColumnStretched({gap: styleSystem.sizes.space.itemGap()}),
+        ...styleSystem.layout.column({gap: styleSystem.sizes.space.itemGap()}),
         flexBasis: 200,
     }
 

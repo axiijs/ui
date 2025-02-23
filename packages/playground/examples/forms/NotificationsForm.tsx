@@ -13,9 +13,9 @@ type NotifyOptionType = {
 export function NotificationsForm({}, {createElement}: RenderContext) {
 
     const itemListContainerStyle = {
-        ...styleSystem.layout.flexColumnStretched(({gap: styleSystem.sizes.space.panel(3)})),
+        ...styleSystem.layout.column(({gap: styleSystem.sizes.space.panel(3)})),
         '&>*': {
-            ...styleSystem.layout.flexColumnStretched({gap: styleSystem.sizes.space.panel(1)})
+            ...styleSystem.layout.column({gap: styleSystem.sizes.space.panel(1)})
         },
         marginBottom: styleSystem.sizes.space.panel(3)
 
@@ -39,15 +39,15 @@ export function NotificationsForm({}, {createElement}: RenderContext) {
     const currentOption = atom<NotifyOptionType|null>(null)
 
     const notifyStyle = {
-        ...styleSystem.layout.flexColumn({gap: styleSystem.sizes.space.panel(1)})
+        ...styleSystem.layout.column({gap: styleSystem.sizes.space.panel(1)})
     }
 
     const notificationPanelContainerStyle = {
-        ...styleSystem.layout.flexColumnStretched(({gap: styleSystem.sizes.space.panel()})),
+        ...styleSystem.layout.column(({gap: styleSystem.sizes.space.panel()})),
     }
 
     const notificationPanelTitleStyle = {
-        ...styleSystem.layout.flexColumn({gap: styleSystem.sizes.space.itemGap()}),
+        ...styleSystem.layout.column({gap: styleSystem.sizes.space.itemGap()}),
         '&>*:first-child': {
             ...styleSystem.mainText
         },
@@ -104,7 +104,7 @@ export function NotificationsForm({}, {createElement}: RenderContext) {
                     </div>
                 </div>
                 <div style={{
-                    ...styleSystem.layout.flexRow({gap: styleSystem.sizes.space.gap()}),
+                    ...styleSystem.layout.row({gap: styleSystem.sizes.space.gap()}),
                     marginBottom: styleSystem.sizes.space.panel(3)
                 }}>
                     <div>

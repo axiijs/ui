@@ -9,7 +9,7 @@ const themeToInstall: {[k:string]:any} = {
     fallout: installFallout
 }
 const search = new URLSearchParams(location.search)
-const theme: keyof typeof themeToInstall = search.get('theme') || 'inc'
+const theme: keyof typeof themeToInstall = (search.get('theme') || 'inc').toLowerCase()
 themeToInstall[theme]()
 const rootEl = document.getElementById('root')!;
 const root = createRoot(rootEl);

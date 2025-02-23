@@ -1,5 +1,5 @@
 import {Atom, N_ATTR, RenderContext} from "axii";
-import {styleSystem} from '../../styleSystem'
+import {styleSystem} from '../../styleSystem.js'
 import {Select} from 'axii-ui'
 import {BoxesPanel} from "./BoxesPanel.js";
 import {OtherLinksPanel} from "./OtherLinksPanel.js";

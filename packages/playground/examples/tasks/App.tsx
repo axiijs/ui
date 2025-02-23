@@ -1,6 +1,6 @@
 import {Atom, atom, autorun, computed, RenderContext, RxList, RxSet} from "axii";
 import {Avatar, Button, Checkbox, Dropdown, Input} from 'axii-ui'
-import {styleSystem} from '../../styleSystem'
+import {styleSystem} from '../../styleSystem.js'
 import {Filter} from "./Filter.js";
 import AddOne from "axii-icon-park/AddOne.js";
 import {data, Task} from "./data.js";
@@ -13,6 +13,7 @@ import ArrowUp from "axii-icon-park/ArrowUp.js";
 import ArrowDown from "axii-icon-park/ArrowDown.js";
 import PreviewCloseOne from "axii-icon-park/PreviewCloseOne.js";
 import Sort from 'axii-icon-park/SortFour.js'
+import {Header} from "../Header.js";
 
 type StatusFilterOptionProps = {
     option: [string, Atom<boolean>]
@@ -185,183 +186,199 @@ export function App({}, {createElement, Fragment, createRef}: RenderContext) {
 
 
 
-    return <div style={{...styleSystem.layout.flexColumn({gap: styleSystem.sizes.space.gap(2)})}}>
-        <div style={{...styleSystem.layout.row(), ...styleSystem.layout.twoSide(), marginBottom:styleSystem.sizes.space.gap()}}>
-            <div style={{...styleSystem.layout.flexColumn({gap: styleSystem.sizes.space.gap()})}}>
-                <div style={styleSystem.heading()}>
-                    Tasks
+    return (
+        <div style={{height:'100%',...styleSystem.layout.column({gap: 10}) }}>
+            <Header/>
+            <div style={{...styleSystem.panelPaddingContainer,...styleSystem.layout.column({gap: styleSystem.sizes.space.gap(2)})}}>
+                <div style={{
+                    ...styleSystem.layout.row(), ...styleSystem.layout.twoSide(),
+                    marginBottom: styleSystem.sizes.space.gap()
+                }}>
+                    <div style={{...styleSystem.layout.column({gap: styleSystem.sizes.space.gap()})}}>
+                        <div style={styleSystem.heading()}>
+                            Tasks
+                        </div>
+                        <div style={styleSystem.descriptionText}>
+                            Here's a list of your tasks for this month!
+                        </div>
+                    </div>
+
+                    <Avatar alt={"avatar"} src={"https://i.pravatar.cc/100"}/>
                 </div>
-                <div style={styleSystem.descriptionText}>
-                    Here's a list of your tasks for this month!
+                <div style={{...styleSystem.layout.row(), ...styleSystem.layout.twoSide(),}}>
+                    <div>
+                        <div style={{...styleSystem.layout.row({gap: styleSystem.sizes.space.gap()})}}>
+                            <Input placeholder={"Filter tasks"} value={titleSearch}/>
+                            <Filter $option:_use={StatusFilterOption}
+                                    $option={{'$toggle': {'$root:onClick': onStatusToggle}}} search={statusSearch}
+                                    options={displayStatus} label={statusLabelNode}/>
+                            <Button $root:style={styleSystem.textBox({colorBox: true})}>Reset</Button>
+                        </div>
+                    </div>
+                    <div>
+                        view
+                    </div>
                 </div>
-            </div>
 
-            <Avatar alt={"avatar"} src={"https://i.pravatar.cc/100"} />
-        </div>
-        <div style={{...styleSystem.layout.row(), ...styleSystem.layout.twoSide(), }}>
-            <div>
-                <div style={{...styleSystem.layout.row({gap: styleSystem.sizes.space.gap()})}}>
-                    <Input placeholder={"Filter tasks"} value={titleSearch}/>
-                    <Filter $option:_use={StatusFilterOption} $option={{'$toggle': {'$root:onClick': onStatusToggle}}} search={statusSearch} options={displayStatus} label={statusLabelNode}/>
-                    <Button $root:style={styleSystem.textBox({colorBox:true})}>Reset</Button>
+                <div style={{position: 'relative'}}>
+                    <div ref={tableContainerRef} style={{...styleSystem.table()}}>
+                        <table>
+                            <thead>
+                            <tr>
+                                <th>
+                                    <Checkbox value={allSelected} $root:onClick={toggleAllInCurrentPage}/>
+                                </th>
+                                <th>
+                                    <div>ID</div>
+                                </th>
+                                <th>
+                                    <div style={columnHeadStyle} ref={headTitleRef}
+                                         onClick={() => headTitleVisible(true)}>
+                                        <span>Title</span>
+                                        <Sort/>
+                                        <Dropdown targetPosition={headTitlePos} visible={headTitleVisible}>
+                                            {() => {
+                                                return <div onclick={() => headTitleVisible(false)}>
+                                                    <div style={columnHeadListItemStyle}
+                                                         onClick={() => sort({...sort(), title: 'asc'})}>
+                                                        <ArrowUp/>
+                                                        <span>ASC</span>
+                                                    </div>
+                                                    <div style={columnHeadListItemStyle}
+                                                         onClick={() => sort({...sort(), title: 'desc'})}>
+                                                        <ArrowDown/>
+                                                        <span>DESC</span>
+                                                    </div>
+                                                    <div style={styleSystem.separator(false, 0)}></div>
+                                                    <div style={columnHeadListItemStyle}>
+                                                        <PreviewCloseOne/>
+                                                        <span>Hide</span>
+                                                    </div>
+                                                </div>
+                                            }}
+                                        </Dropdown>
+                                    </div>
+                                </th>
+                                <th>
+                                    <div style={columnHeadStyle} ref={headStatusRef}
+                                         onClick={() => headStatusVisible(true)}>
+                                        <span>Status</span>
+                                        <Sort/>
+                                        <Dropdown targetPosition={headStatusPos} visible={headStatusVisible}>
+                                            {() => {
+                                                return <div onclick={() => headStatusVisible(false)}>
+                                                    <div style={columnHeadListItemStyle}
+                                                         onClick={() => sort({...sort(), status: 'asc'})}>
+                                                        <ArrowUp/>
+                                                        <span>ASC</span>
+                                                    </div>
+                                                    <div style={columnHeadListItemStyle}
+                                                         onClick={() => sort({...sort(), status: 'desc'})}>
+                                                        <ArrowDown/>
+                                                        <span>DESC</span>
+                                                    </div>
+                                                    <div style={styleSystem.separator(false, 0)}></div>
+                                                    <div style={columnHeadListItemStyle}>
+                                                        <PreviewCloseOne/>
+                                                        <span>Hide</span>
+                                                    </div>
+                                                </div>
+                                            }}
+                                        </Dropdown>
+                                    </div>
+                                </th>
+                                <th>
+                                    <div style={columnHeadStyle} ref={headPriorityRef}
+                                         onClick={() => headPriorityVisible(true)}>
+                                        <span>Priority</span>
+                                        <Sort/>
+                                        <Dropdown targetPosition={headPriorityPos} visible={headPriorityVisible}>
+                                            {() => {
+                                                return <div onclick={() => headPriorityVisible(false)}>
+                                                    <div style={columnHeadListItemStyle}
+                                                         onClick={() => sort({...sort(), priority: 'asc'})}>
+                                                        <ArrowUp/>
+                                                        <span>ASC</span>
+                                                    </div>
+                                                    <div style={columnHeadListItemStyle}
+                                                         onClick={() => sort({...sort(), priority: 'desc'})}>
+                                                        <ArrowDown/>
+                                                        <span>DESC</span>
+                                                    </div>
+                                                    <div style={styleSystem.separator(false, 0)}></div>
+                                                    <div style={columnHeadListItemStyle}>
+                                                        <PreviewCloseOne/>
+                                                        <span>Hide</span>
+                                                    </div>
+                                                </div>
+                                            }}
+                                        </Dropdown>
+                                    </div>
+                                </th>
+                            </tr>
+                            </thead>
+
+                            <tbody>
+                            {tasksWithSelection.map(({task, selected}) => {
+                                return <tr>
+                                    <td><Checkbox value={selected} $root:onClick={() => toggleSelect(task.id)}/></td>
+                                    <td>{task.id}</td>
+                                    <td>{task.title}</td>
+                                    <td>{task.status}</td>
+                                    <td>{task.priority}</td>
+                                </tr>
+                            })}
+                            </tbody>
+
+                        </table>
+                    </div>
+                    {() => tasks.asyncStatus!() ?
+                        <div style={loadingMaskStyle}><span style={styleSystem.spin(1)}><Loading/></span></div> : null}
+                    {/*<div style={loadingMaskStyle}><span style={common.spin(1)}><Loading/></span></div>*/}
                 </div>
-            </div>
-            <div>
-                view
-            </div>
-        </div>
 
-        <div style={{position: 'relative'}}>
-            <div ref={tableContainerRef} style={{...styleSystem.table()}}>
-                <table>
-                    <thead>
-                    <tr>
-                        <th>
-                            <Checkbox value={allSelected} $root:onClick={toggleAllInCurrentPage}/>
-                        </th>
-                        <th>
-                            <div>ID</div>
-                        </th>
-                        <th>
-                            <div style={columnHeadStyle} ref={headTitleRef} onClick={() => headTitleVisible(true)}>
-                                <span>Title</span>
-                                <Sort/>
-                                <Dropdown targetPosition={headTitlePos} visible={headTitleVisible}>
-                                    {() => {
-                                        return <div onclick={() => headTitleVisible(false)}>
-                                            <div style={columnHeadListItemStyle}
-                                                 onClick={() => sort({...sort(), title: 'asc'})}>
-                                                <ArrowUp/>
-                                                <span>ASC</span>
-                                            </div>
-                                            <div style={columnHeadListItemStyle}
-                                                 onClick={() => sort({...sort(), title: 'desc'})}>
-                                                <ArrowDown/>
-                                                <span>DESC</span>
-                                            </div>
-                                            <div style={styleSystem.separator(false, 0)}></div>
-                                            <div style={columnHeadListItemStyle}>
-                                                <PreviewCloseOne/>
-                                                <span>Hide</span>
-                                            </div>
-                                        </div>
-                                    }}
-                                </Dropdown>
-                            </div>
-                        </th>
-                        <th>
-                            <div style={columnHeadStyle} ref={headStatusRef} onClick={() => headStatusVisible(true)}>
-                                <span>Status</span>
-                                <Sort/>
-                                <Dropdown targetPosition={headStatusPos} visible={headStatusVisible}>
-                                    {() => {
-                                        return <div onclick={() => headStatusVisible(false)}>
-                                            <div style={columnHeadListItemStyle}
-                                                 onClick={() => sort({...sort(), status: 'asc'})}>
-                                                <ArrowUp/>
-                                                <span>ASC</span>
-                                            </div>
-                                            <div style={columnHeadListItemStyle}
-                                                 onClick={() => sort({...sort(), status: 'desc'})}>
-                                                <ArrowDown/>
-                                                <span>DESC</span>
-                                            </div>
-                                            <div style={styleSystem.separator(false, 0)}></div>
-                                            <div style={columnHeadListItemStyle}>
-                                                <PreviewCloseOne/>
-                                                <span>Hide</span>
-                                            </div>
-                                        </div>
-                                    }}
-                                </Dropdown>
-                            </div>
-                        </th>
-                        <th>
-                            <div style={columnHeadStyle} ref={headPriorityRef}
-                                 onClick={() => headPriorityVisible(true)}>
-                                <span>Priority</span>
-                                <Sort/>
-                                <Dropdown targetPosition={headPriorityPos} visible={headPriorityVisible}>
-                                    {() => {
-                                        return <div onclick={() => headPriorityVisible(false)}>
-                                            <div style={columnHeadListItemStyle}
-                                                 onClick={() => sort({...sort(), priority: 'asc'})}>
-                                                <ArrowUp/>
-                                                <span>ASC</span>
-                                            </div>
-                                            <div style={columnHeadListItemStyle}
-                                                 onClick={() => sort({...sort(), priority: 'desc'})}>
-                                                <ArrowDown/>
-                                                <span>DESC</span>
-                                            </div>
-                                            <div style={styleSystem.separator(false, 0)}></div>
-                                            <div style={columnHeadListItemStyle}>
-                                                <PreviewCloseOne/>
-                                                <span>Hide</span>
-                                            </div>
-                                        </div>
-                                    }}
-                                </Dropdown>
-                            </div>
-                        </th>
-                    </tr>
-                    </thead>
-
-                    <tbody>
-                    {tasksWithSelection.map(({task, selected}) => {
-                        return <tr>
-                            <td><Checkbox value={selected} $root:onClick={() => toggleSelect(task.id)}/></td>
-                            <td>{task.id}</td>
-                            <td>{task.title}</td>
-                            <td>{task.status}</td>
-                            <td>{task.priority}</td>
-                        </tr>
-                    })}
-                    </tbody>
-
-                </table>
-            </div>
-            {() => tasks.asyncStatus!() ? <div style={loadingMaskStyle}><span style={styleSystem.spin(1)}><Loading/></span></div> : null}
-            {/*<div style={loadingMaskStyle}><span style={common.spin(1)}><Loading/></span></div>*/}
-        </div>
-
-        <div style={{...styleSystem.layout.row(), ...styleSystem.layout.twoSide(),}}>
-            <div style={{...styleSystem.layout.row({gap: styleSystem.sizes.space.itemGap()}), color: styleSystem.colors.text.normal(false,'supportive')}}>
+                <div style={{...styleSystem.layout.row(), ...styleSystem.layout.twoSide(),}}>
+                    <div style={{
+                        ...styleSystem.layout.row({gap: styleSystem.sizes.space.itemGap()}),
+                        color: styleSystem.colors.text.normal(false, 'supportive')
+                    }}>
                 <span>
                     {selectedIds.size}
                 </span>
-                <span>
+                        <span>
                     selected
                 </span>
-            </div>
-            <div style={{...styleSystem.layout.row({gap: styleSystem.sizes.space.gap()})}}>
-                <div style={styleSystem.layout.row({gap: styleSystem.sizes.space.itemGap()})}>
-                    <span>{rowsPerPage}</span>
-                    <span>rows</span>
-                    <span>per</span>
-                    <span>page</span>
-                </div>
-                <div style={styleSystem.layout.row({gap: styleSystem.sizes.space.itemGap()})}>
-                    <span>page</span>
-                    <span>{currentPage}</span>
-                    <span>of</span>
-                    <span>10</span>
-                </div>
-                <div style={paginationButtonsStyle}>
+                    </div>
+                    <div style={{...styleSystem.layout.row({gap: styleSystem.sizes.space.gap()})}}>
+                        <div style={styleSystem.layout.row({gap: styleSystem.sizes.space.itemGap()})}>
+                            <span>{rowsPerPage}</span>
+                            <span>rows</span>
+                            <span>per</span>
+                            <span>page</span>
+                        </div>
+                        <div style={styleSystem.layout.row({gap: styleSystem.sizes.space.itemGap()})}>
+                            <span>page</span>
+                            <span>{currentPage}</span>
+                            <span>of</span>
+                            <span>10</span>
+                        </div>
+                        <div style={paginationButtonsStyle}>
                     <span onClick={() => currentPage(1)}>
                         <DoubleLeft/>
                     </span>
-                    <span onClick={() => currentPage(Math.max(currentPage() - 1, 1))}>
+                            <span onClick={() => currentPage(Math.max(currentPage() - 1, 1))}>
                         <Left/>
                     </span>
-                    <span onClick={() => currentPage(currentPage() + 1)}>
+                            <span onClick={() => currentPage(currentPage() + 1)}>
                         <Right/>
                     </span>
-                    <span>
+                            <span>
                         <DoubleRight/>
                     </span>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
-    </div>
+    )
 }

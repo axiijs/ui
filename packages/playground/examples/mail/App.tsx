@@ -1,10 +1,11 @@
 import {atom, RenderContext} from "axii";
-import {styleSystem} from '../../styleSystem'
+import {styleSystem} from '../../styleSystem.js'
 import {ControlPanel} from "./ControlPanel.js";
 import {BoxPanel} from "./BoxPanel.js";
 import {DetailPanel} from "./DetailPanel.js";
 import {MailData} from "./Mail.js";
 import { faker } from '@faker-js/faker';
+import {Header} from "../Header.js";
 
 const data: MailData[] = Array(10).fill(0).map(() => {
     return {
@@ -22,7 +23,8 @@ export function App({}, {createElement}: RenderContext) {
     const selected = atom<MailData|null>(null)
 
     const containerStyle = {
-        height: '100%',
+        minHeight:0,
+        overflow:'hidden',
         width: '100%',
         display: 'flex',
         '&>*': {
@@ -34,9 +36,10 @@ export function App({}, {createElement}: RenderContext) {
     }
 
     const controlPanelStyle = {
-        flexBasis: 200,
+        flexBasis: '15rem',
         flexShrink:1,
-        flexGrow: 0
+        flexGrow: 0,
+        overflow: 'auto'
     }
 
     const boxPanelStyle = {
@@ -51,15 +54,18 @@ export function App({}, {createElement}: RenderContext) {
         flexGrow: 0
     }
 
-    return <div style={containerStyle}>
-        <div style={controlPanelStyle}>
-            <ControlPanel/>
-        </div>
-        <div style={boxPanelStyle}>
-            <BoxPanel data={data} selected={selected}/>
-        </div>
-        <div style={DetailPanelStyle}>
-            <DetailPanel mail={selected}/>
+    return <div style={{ ...styleSystem.layout.column(), height: '100%'}}>
+        <Header />
+        <div style={containerStyle}>
+            <div style={controlPanelStyle}>
+                <ControlPanel/>
+            </div>
+            <div style={boxPanelStyle}>
+                <BoxPanel data={data} selected={selected}/>
+            </div>
+            <div style={DetailPanelStyle}>
+                <DetailPanel mail={selected}/>
+            </div>
         </div>
     </div>;
 }

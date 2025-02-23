@@ -12,9 +12,9 @@ type ThemeItemType = {
 export function AppearanceForm({}, {createElement}: RenderContext) {
 
     const itemListContainerStyle = {
-        ...styleSystem.layout.flexColumnStretched(({gap: styleSystem.sizes.space.panel(3)})),
+        ...styleSystem.layout.column(({gap: styleSystem.sizes.space.panel(3)})),
         '&>*': {
-            ...styleSystem.layout.flexColumnStretched({gap: styleSystem.sizes.space.panel(1)})
+            ...styleSystem.layout.column({gap: styleSystem.sizes.space.panel(1)})
         },
         marginBottom: styleSystem.sizes.space.panel(3)
 
@@ -59,7 +59,7 @@ export function AppearanceForm({}, {createElement}: RenderContext) {
                     </div>
                     <div>
                         <div>Theme</div>
-                        <div style={{...styleSystem.layout.flexRow({gap:styleSystem.sizes.space.gap()})}}>
+                        <div style={{...styleSystem.layout.row({gap:styleSystem.sizes.space.gap()})}}>
                             {themesWithSelected.map(([item, selected]) => {
                                 const {name, color} = item
                                 const style=() =>({

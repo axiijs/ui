@@ -7,9 +7,9 @@ import {faker} from "@faker-js/faker";
 export function AccountForm({}, {createElement}: RenderContext) {
 
     const itemListContainerStyle = {
-        ...styleSystem.layout.flexColumnStretched(({gap: styleSystem.sizes.space.panel(3)})),
+        ...styleSystem.layout.column(({gap: styleSystem.sizes.space.panel(3)})),
         '&>*': {
-            ...styleSystem.layout.flexColumnStretched({gap: styleSystem.sizes.space.panel(1)})
+            ...styleSystem.layout.column({gap: styleSystem.sizes.space.panel(1)})
         },
         marginBottom: styleSystem.sizes.space.panel(3)
 
