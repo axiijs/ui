@@ -1,4 +1,4 @@
-import {ColorSchema, createCommon, createRange} from "axii-ui-theme-common";
+import {ColorSchema, createStyleSystem, createRange} from "axii-ui-theme-common";
 import {StyleSize} from "axii";
 
 
@@ -29,7 +29,7 @@ const weights = createRange(
 )
 
 // 外部也可以使用
-export const common = createCommon(
+export const common = createStyleSystem(
     colorSchema,
     false,
     new StyleSize(4, 'px'),

@@ -66,7 +66,7 @@ export type ColorSchema = {
     [k:string]: any
 }
 
-export function createCommon(
+export function createStyleSystem(
     themeColorSchema: ColorSchema,
     themeDark = false,
     themeBorderWidth: StyleSize = new StyleSize(1, 'px'),
