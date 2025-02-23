@@ -21,11 +21,22 @@ export function em(value: number = 0) {
     return new StyleSize(value, 'em')
 }
 
-type flexRowProps = {
+type FlexboxMainProps = {
     gap?: number|StyleSize,
     align?: 'start' | 'center' | 'end' | 'stretch' | 'baseline',
     justify?: 'start' | 'center' | 'end' | 'space-between' | 'around' | 'evenly' | 'stretch'
 }
+
+type FlexboxSecondaryProps = {
+    flexWrap?: 'wrap' | 'nowrap' | 'wrap-reverse',
+    flexDirection?: 'row' | 'column',
+    alignItems?: 'start' | 'center' | 'end' | 'stretch' | 'baseline',
+    justifyContent?: 'start' | 'center' | 'end' | 'space-between' | 'around' | 'evenly' | 'stretch'
+    alignContent?: 'start' | 'center' | 'end' | 'space-between' | 'around' | 'stretch'
+    justifyItems?: 'start' | 'center' | 'end' | 'stretch' | 'baseline'
+}
+
+type FlexboxProps = FlexboxMainProps & FlexboxSecondaryProps
 
 type TextType = 'text' | 'description' | 'supportive' | 'heading'
 
@@ -248,67 +259,42 @@ export function createCommon(
     })
 
     const layout = {
-        flexRow({gap, align, justify}: flexRowProps) {
-            return {
-                display: 'flex',
-                flexDirection: 'row',
-                gap,
-                alignItems: align,
-                justifyContent: justify,
-                // 允许换行
-                flexWrap: 'wrap',
-            }
-        },
-        flexColumn({gap, align, justify}: flexRowProps) {
-            return {
-                display: 'flex',
-                flexDirection: 'column',
-                gap,
-                alignItems: align,
-                justifyContent: justify,
-            }
-        },
-        flexColumnStretched({gap}: flexRowProps) {
-            return {
-                display: 'flex',
-                flexDirection: 'column',
-                gap,
-                alignItems: 'stretch',
-            }
-        },
-        center() {
+        center(props: FlexboxProps = {}) {
             return {
                 display: 'flex',
                 justifyContent: 'center',
                 alignItems: 'center',
+                ...props
             }
         },
-        row({gap, justify}: flexRowProps = {}) {
+        row({justify, ...rest}: FlexboxProps = {}) {
             return {
                 display: 'flex',
                 flexDirection: 'row',
                 alignItems: 'center',
-                gap,
-                justifyContent: justify
+                justifyContent: justify,
+                ...rest
             }
         },
-        column({gap}: flexRowProps = {}) {
+        column({justify, ...rest}: FlexboxProps = {}) {
             return {
                 display: 'flex',
                 flexDirection: 'column',
-                gap,
-                alignItems: 'center',
+                alignItems: 'stretch',
+                justifyContent: justify,
+                ...rest
             }
         },
-        twoSide(column = false, align = 'center') {
+        twoSide(column = false, align = 'center', rest: FlexboxProps = {}) {
             return {
                 display: 'flex',
                 alignItems: align,
                 flexDirection: column ? 'column' : 'row',
                 justifyContent: 'space-between',
+                ...rest
             }
         },
-        middleGrow(column = false, middleOffset = 2, {gap, align, justify}: flexRowProps = {}) {
+        middleGrow(column = false, middleOffset = 2, {align, justify, ...rest}: FlexboxProps = {}) {
             return {
                 display: 'flex',
                 minHeight: 0,
@@ -325,9 +311,9 @@ export function createCommon(
                     flexGrow:0,
                     flexShrink:0,
                 },
-                gap,
                 alignItems: align,
                 justifyContent: justify,
+                ...rest
             }
         },
         evenlyGrid: (rowGap: string | number | StyleSize, columnGap: string | number | StyleSize, minWidth: string | number | StyleSize) => ({
