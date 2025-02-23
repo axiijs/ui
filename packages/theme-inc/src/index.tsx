@@ -28,7 +28,7 @@ import {
     Toast
 } from "axii-ui";
 import dayjs from "dayjs";
-import {common} from "./common.js";
+import {styleSystem as common} from "./common.js";
 
 const {
     colors,

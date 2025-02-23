@@ -43,7 +43,7 @@ const weights = createRange([100, 200, 300, 400, 500, 600, 700, 800, 900], 3)
 
 
 // 外部也可以使用
-export const common = createStyleSystem(
+export const styleSystem = createStyleSystem(
     colorSchema,
     dark,
     new StyleSize(1, 'px'),
