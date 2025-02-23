@@ -824,3 +824,5 @@ export const variants = {
         // size 信息？？
     }
 }
+
+export * from "./common.js";
