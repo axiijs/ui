@@ -31,8 +31,8 @@
               justify-content: center;
               align-items: center;
               font-size: 2em;
-            gap:60px;
-            overflow: hidden;
+                gap:20px;
+                overflow: hidden;
           }
 
         #root>*{
@@ -42,17 +42,28 @@
         }
 
         #root>*>*{
-            font-size: 24px;
+            font-size: 1rem;
             color: #999;
         }
 
         #root>*>*:first-child{
             color: #000;
             font-size: 36px;
+            font-weight: 500;
+        }
+
+        #root>*>*:nth-child(2){
+            font-style: italic;
+        }
+
+        #root>*>*:last-child{
+            display: flex;
+            gap:10px;
+            color: #000;
         }
 
         #root>*:last-child{
-            background-color: #fcfcfc;
+            background-color: #efefef;
         }
 
         .link{
@@ -71,16 +82,16 @@
     <div style="background:#000;color:white">
         <img src="https://axii.dev/logos/axii-logo-white.svg" alt="Axii Logo" style="height: 30%"/>
         <div style="display: flex;flex-direction: column;align-items: center;gap:10px">
-            <img src="https://img.shields.io/npm/v/axii-ui?style=flat-square&color=%23f1f1f1" />
+            <img src="https://img.shields.io/npm/v/axii-ui?style=flat-square" />
             <div style="color:#fff;font-size:50px">Axii UI</div>
         </div>
 
     </div>
     <div onclick="window.open('/list.html')">
         <div>Components</div>
-        <div>Headless components</div>
+        <div>27 Headless components</div>
     </div>
-    <div>
+    <div onclick="window.open('/forms.html')">
         <div>Pages</div>
         <div>ShadCN style examples</div>
         <div>
@@ -90,7 +101,7 @@
         </div>
     </div>
     <a>
-        <div>Styling System</div>
+        <div>Style System</div>
         <div>Computable Style System</div>
         <div>(WIP)</div>
     </a>
