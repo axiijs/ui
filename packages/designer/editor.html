@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&family=Source+Sans+3:ital,wght@0,200..900;1,200..900&display=swap" rel="stylesheet">
+    <style>
+        html {
+            height: 100vh;
+            width:100vw;
+        }
+        body, #root{
+            height: 100%;
+            margin: 0;
+            padding: 0;
+            overflow: hidden;
+        }
+        @scope (#root) to (.scope-independent) {
+            font-size: 11px;
+            font-family: "Inter", Serif;
+            font-weight: 200;
+        }
+    </style>
+</head>
+<body>
+<div id="root"></div>
+<script type="module" src="editor.tsx" ></script>
+</body>
+</html>
