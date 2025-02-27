@@ -5,6 +5,7 @@
 
 // 节点类型枚举
 export enum NodeType {
+  PAGE = 'page',
   GROUP = 'group',
   TEXT = 'text',
   ICON = 'icon'
@@ -157,6 +158,14 @@ export interface IconNode extends BaseNode {
   size?: [number, UnitType];
   color?: string;
   box?: BoxInfo;
+}
+
+// 页面节点接口
+export interface PageNode extends BaseNode {
+  type: NodeType.PAGE;
+  children: Node[];
+  box?: BoxInfo;
+  font?: FontInfo;
 }
 
 // 组节点接口

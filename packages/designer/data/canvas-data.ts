@@ -20,11 +20,12 @@ import {
   TextNode,
   IconNode,
   GroupNode,
+  PageNode,
   Node
 } from './types';
 
 // 示例画布数据
-export const canvasData: GroupNode = {
+const rootNode: GroupNode = {
   id: 'root',
   type: NodeType.GROUP,
   name: '画布根节点',
@@ -1600,6 +1601,24 @@ export const canvasData: GroupNode = {
       ]
     }
   ]
+};
+
+// 新的页面根节点
+export const canvasData: PageNode = {
+  id: 'page',
+  type: NodeType.PAGE,
+  name: '设计页面',
+  box: {
+    width: [1920, UnitType.PX],
+    height: [1080, UnitType.PX],
+    overflow: 'auto'
+  },
+  font: {
+    fontFamily: 'Arial, sans-serif',
+    fontSize: [14, UnitType.PX],
+    color: '#333333'
+  },
+  children: [rootNode]
 };
 
 export default canvasData; 
