@@ -10,8 +10,9 @@
     "vite": "^6.1.1"
   },
   "dependencies": {
-    "axii": "^3.1.0",
+    "axii": "^3.1.1",
     "axii-ui": "^2.0.2",
-    "axii-ui-theme-inc": "^4.1.1"
+    "axii-ui-theme-inc": "^4.1.1",
+    "lucide": "^0.476.0"
   }
 }

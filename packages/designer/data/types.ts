@@ -34,7 +34,8 @@ export enum UnitType {
   REM = 'rem',
   EM = 'em',
   VH = 'vh',
-  VW = 'vw'
+  VW = 'vw',
+  PERCENT = "%"
 }
 
 // 盒模型信息接口
