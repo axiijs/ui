@@ -5,7 +5,6 @@ import {GroupNode, LayoutInfo, LayoutType, NodeType, StrokeInfo, TextNode, PageN
 import { RxCanvas, RxCollection, RxGroup, RxIconNode, RxNode, RxNodeType, RxPage, RxTextNode } from "./RxPage";
 import { throttleTimeout } from "./util";
 
-const nodeDomMap = new WeakMap<RxPage|RxGroup|RxTextNode|RxIconNode, HTMLElement>()
 
 
 // 在构造函数中初始化时先push一个状态
@@ -23,78 +22,72 @@ window.addEventListener('popstate', (event) => {
 
 
 function textAttributesToStyle(node: RxTextNode) {
-    const boxStyle = () => {
-        const result= {
-            boxSizing: 'border-box',
-            ...Object.fromEntries(Object.entries(node.box).map(([key, value]) => [key, value()])),
-        }
-        return result
-    }
+    const boxStyle = () => toBoxStyle(node)
 
-    const fontStyle = () => Object.fromEntries(Object.entries(node.font).map(([key, value]) => [key, value()]))
+    const fontStyle = () => Object.fromEntries(Object.entries(node.font).map(([key, value]) => [key, value.value()]))
 
-    const otherStyle = {
+    const otherStyle = () => ({
         display: 'inline-block',
-        ...node.textLayout,
-    }
+        ...Object.fromEntries(Object.entries(node.textLayout).map(([key, value]) => [key, value.value()])),
+    })
 
     return [boxStyle, fontStyle, otherStyle]
 }
 
 
-function toLayoutStyle(layout?: LayoutInfo) {
+function toLayoutStyle(node: RxGroup) {
+    const layout = node.layout
     return {
-        display: layout?.type === LayoutType.GRID ?  'grid' : (layout?.type === LayoutType.ROW||layout?.type === LayoutType.COLUMN) ? 'flex' : 'block',
-        flexDirection: layout?.type === LayoutType.COLUMN ? 'column' : (layout?.type === LayoutType.ROW ? 'row' : undefined),
-        ...layout,
+        display: layout?.type?.value() === LayoutType.GRID ?  'grid' : (layout?.type?.value() === LayoutType.ROW||layout?.type?.value() === LayoutType.COLUMN) ? 'flex' : 'block',
+        flexDirection: layout?.type?.value() === LayoutType.COLUMN ? 'column' : (layout?.type?.value() === LayoutType.ROW ? 'row' : undefined),
+        ...Object.fromEntries(Object.entries(layout).map(([key, value]) => [key, value.value()])),
     }
 }
 
-
+function toBackgroundStyle(node: RxGroup) {
+    console.log(node.fills?.map(fill => fill.value).toArray())
+    // TODO 支持渐变/图片/纯色
+    return ({background: node.fills?.map(fill => fill.value.value).toArray()})
+}
 
 function groupAttributesToStyle(node: RxGroup) {
-
-    const boxStyle = () => {
-        const result= {
-            boxSizing: 'border-box',
-            ...Object.fromEntries(Object.entries(node.box).map(([key, value]) => [key, value()])),
-        }
-        return result
-    }
-
-    const layoutStyle = () => {
-        return {
-            ...toLayoutStyle(
-                Object.fromEntries(Object.entries(node.layout).map(([key, value]) => [key, value()])) as LayoutInfo
-            ),
-        }
-    }
+    const boxStyle = () => toBoxStyle(node)
+    const layoutStyle = () => toLayoutStyle(node)
+    const backgroundStyle = () => toBackgroundStyle(node)
 
     const stroke = node.data.strokes?.[0]
-
-   
     const otherStyle= {
-        ...node.data.appearance,
-        background: node.data.fills?.map(fill => fill.value),
+        // ...Object.fromEntries(Object.entries(node.appearance||{}).map(([key, value]) => [key, value.value()])),
         borderWidth: stroke?.width,
         borderStyle: stroke?.style,
         borderColor: stroke?.color,
-        boxShadow: node.data.effects?.filter(e => e.type === 'shadow').map((e) => {
+        boxShadow: node.data.effects?.filter(e => e.type.value === 'shadow').map((e) => {
             const { offsetX, offsetY, blur, spread, color } = e
-            return `${offsetX![0]}${offsetX![1]} ${offsetY![0]}${offsetY![1]} ${blur![0]}${blur![1]} ${spread![0]}${spread![1]} ${color}`
+            return `${offsetX!.value[0]}${offsetX!.value[1]} ${offsetY!.value[0]}${offsetY!.value[1]} ${blur!.value[0]}${blur!.value[1]} ${spread!.value[0]}${spread!.value[1]} ${color!.value}`
         }),
     }
 
-    return [boxStyle, layoutStyle, otherStyle]
+    return [boxStyle, layoutStyle, backgroundStyle, otherStyle]
 }
 
-function pageAttributesToStyle(node: PageNode) {
+function pageAttributesToStyle(node: RxPage) {
+    const boxStyle = () => toBoxStyle(node)
+
+    return [
+        boxStyle, 
+        {
+            boxSizing: 'border-box',
+            fontFamily: node.data.font?.fontFamily?.value,
+            fontSize: node.data.font?.fontSize?.value,
+            color: node.data.font?.color?.value,
+        }
+    ]
+}
+
+function toBoxStyle(node: RxPage|RxGroup|RxTextNode|RxIconNode) {
     return {
         boxSizing: 'border-box',
-        ...node.box,
-        fontFamily: node.font?.fontFamily,
-        fontSize: node.font?.fontSize,
-        color: node.font?.color,
+        ...Object.fromEntries(Object.entries(node.box||{}).map(([key, value]) => [key, value.value()])),
     }
 }
 
@@ -117,7 +110,7 @@ function renderNode(node: RxPage|RxGroup|RxTextNode|RxIconNode, selected: Atom<b
 
 function renderText(node: RxTextNode, selected: Atom<boolean>, createElement: RenderContext['createElement']) {
     const data = node.data
-    return <div data-name={data.name} style={textAttributesToStyle(node)}>{data.content}</div>
+    return <div data-name={data.name} style={textAttributesToStyle(node)}>{data.content.value}</div>
 }
 
 
@@ -131,7 +124,7 @@ function renderGroupNode(node: RxGroup, selected: Atom<boolean>, createElement: 
 
 function renderPageNode(node: RxPage, selected: Atom<boolean>, createElement: RenderContext['createElement']) {
     const data = node.data
-    return <div style={() => pageAttributesToStyle(data)} data-name={data.name}>
+    return <div style={pageAttributesToStyle(node)} data-name={data.name}>
         {node.children.map(([child, selected]) => renderNode(child, selected, createElement))}
     </div>
 }
@@ -149,7 +142,7 @@ export function App({data}: {data: PageNode[]}, {createElement, createRef, useLa
         width:'100%',
         // position:'relative',
         overflow:'scroll',
-        background: '#f5f5f5',
+        background: '#252525',
         boxSizing:'border-box',
         padding: [0, 300]
     }
@@ -197,6 +190,7 @@ export function App({data}: {data: PageNode[]}, {createElement, createRef, useLa
             willChange:'transform',
             transform:`scale(${scale()})`,
             transformOrigin,
+            background: '#fff',
         }
     }
 
@@ -243,14 +237,14 @@ export function App({data}: {data: PageNode[]}, {createElement, createRef, useLa
             return null
         } else {
             // 监听 box
-            Object.values(node!.box).forEach((value) => value())
+            Object.values(node!.box).forEach((value) => value.value())
             // 监听 layout
             if(node instanceof RxCollection) {
-                Object.values(node!.layout).forEach((value) => value())
+                Object.values(node!.layout).forEach((value) => value.value())
             }
             // 监听 font
             if(node instanceof RxTextNode) {
-                Object.values(node!.font).forEach((value) => value())
+                Object.values(node!.font).forEach((value) => value.value())
             }
         }
 

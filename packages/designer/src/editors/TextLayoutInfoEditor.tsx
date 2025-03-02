@@ -1,13 +1,21 @@
 import { Atom, RenderContext, RxList } from "axii";
 import { RxTextNode } from "../RxPage";
-import { commonOptionStyle, panelNameStyle, subPanelStyle } from "../style";
+import { commonOptionStyle,  subPanelStyle } from "../style";
 import { createElement as icon, AlignHorizontalDistributeStart, AlignHorizontalDistributeEnd } from 'lucide';
 import { SizeInput } from "../lib/SizeInput";
 import { DisplayOption, DisplayValue, Select } from "../lib/Select";
 import { UnitType } from "../../data/types";
 
+// Define type for TextIndentInput props
+type TextIndentInputProps = {
+    value: {
+        value: Atom<[number, UnitType] | null>
+        variable: Atom<string | undefined>
+    }
+}
+
 // Text indent input component
-function TextIndentInput({value}: {value: Atom<[number, UnitType] | null>}, {createElement}: RenderContext) {
+function TextIndentInput({value}: TextIndentInputProps, {createElement}: RenderContext) {
     const inputContainerStyle = {
         display: 'flex',
         flexDirection: 'row',
@@ -34,13 +42,21 @@ function TextIndentInput({value}: {value: Atom<[number, UnitType] | null>}, {cre
     return (
         <div style={inputContainerStyle}>
             <div>{icon(AlignHorizontalDistributeStart, {stroke: 'white', width:12, height:12})}</div>
-            <SizeInput value={value} $main:placeholder="Text Indent" />
+            <SizeInput value={value.value} $main:placeholder="Text Indent" />
         </div>
     )
 }
 
+// Define type for WhiteSpaceSelector props
+type WhiteSpaceSelectorProps = {
+    value: {
+        value: Atom<'normal' | 'nowrap' | 'pre' | 'pre-wrap' | 'pre-line' | null>
+        variable: Atom<string | undefined>
+    }
+}
+
 // White space selector component
-function WhiteSpaceSelector({value}: {value: Atom<'normal' | 'nowrap' | 'pre' | 'pre-wrap' | 'pre-line' | null>}, {createElement}: RenderContext) {
+function WhiteSpaceSelector({value}: WhiteSpaceSelectorProps, {createElement}: RenderContext) {
     const options = new RxList<{label: string, value: 'normal' | 'nowrap' | 'pre' | 'pre-wrap' | 'pre-line'}>([
         { label: 'Normal', value: 'normal' },
         { label: 'No Wrap', value: 'nowrap' },
@@ -49,10 +65,10 @@ function WhiteSpaceSelector({value}: {value: Atom<'normal' | 'nowrap' | 'pre' | 
         { label: 'Pre Line', value: 'pre-line' }
     ]);
 
-    const selectedOption = options.find(option => option.value === value());
+    const selectedOption = options.find(option => option.value === value.value());
 
-    function Option({value: optionValue, selected}: {value: {label: string, value: string}, selected: Atom<boolean>}, {createElement}: RenderContext) {
-        return <div style={[commonOptionStyle(selected), () => ({whiteSpace: optionValue.value})]} onClick={() => value(optionValue.value)}>
+    function Option({value: optionValue, selected}: {value: {label: string, value: 'normal' | 'nowrap' | 'pre' | 'pre-wrap' | 'pre-line'}, selected: Atom<boolean>}, {createElement}: RenderContext) {
+        return <div style={[commonOptionStyle(selected), () => ({whiteSpace: optionValue.value})]} onClick={() => value.value(optionValue.value)}>
             {optionValue.label}
         </div>
     }
@@ -60,17 +76,25 @@ function WhiteSpaceSelector({value}: {value: Atom<'normal' | 'nowrap' | 'pre' | 
     return <Select options={options} value={selectedOption} $option:_use={Option} $displayValue:_use={DisplayValue} />;
 }
 
+// Define type for TextOverflowSelector props
+type TextOverflowSelectorProps = {
+    value: {
+        value: Atom<'clip' | 'ellipsis' | null>
+        variable: Atom<string | undefined>
+    }
+}
+
 // Text overflow selector component
-function TextOverflowSelector({value}: {value: Atom<'clip' | 'ellipsis' | null>}, {createElement}: RenderContext) {
+function TextOverflowSelector({value}: TextOverflowSelectorProps, {createElement}: RenderContext) {
     const options = new RxList<{label: string, value: 'clip' | 'ellipsis'}>([
         { label: 'Clip', value: 'clip' },
         { label: 'Ellipsis', value: 'ellipsis' }
     ]);
 
-    const selectedOption = options.find(option => option.value === value());
+    const selectedOption = options.find(option => option.value === value.value());
 
-    function Option({value: optionValue, selected}: {value: {label: string, value: string}, selected: Atom<boolean>}, {createElement}: RenderContext) {
-        return <div style={[commonOptionStyle(selected), () => ({textOverflow: optionValue.value})]} onClick={() => value(optionValue.value)}>
+    function Option({value: optionValue, selected}: {value: {label: string, value: 'clip' | 'ellipsis'}, selected: Atom<boolean>}, {createElement}: RenderContext) {
+        return <div style={[commonOptionStyle(selected), () => ({textOverflow: optionValue.value})]} onClick={() => value.value(optionValue.value)}>
             {optionValue.label}
         </div>
     }
@@ -78,8 +102,16 @@ function TextOverflowSelector({value}: {value: Atom<'clip' | 'ellipsis' | null>}
     return <Select options={options} value={selectedOption} $option:_use={Option} $displayValue:_use={DisplayValue} />;
 }
 
+// Define type for WordBreakSelector props
+type WordBreakSelectorProps = {
+    value: {
+        value: Atom<'normal' | 'break-all' | 'keep-all' | 'break-word' | null>
+        variable: Atom<string | undefined>
+    }
+}
+
 // Word break selector component
-function WordBreakSelector({value}: {value: Atom<'normal' | 'break-all' | 'keep-all' | 'break-word' | null>}, {createElement}: RenderContext) {
+function WordBreakSelector({value}: WordBreakSelectorProps, {createElement}: RenderContext) {
     const options = new RxList<{label: string, value: 'normal' | 'break-all' | 'keep-all' | 'break-word'}>([
         { label: 'Normal', value: 'normal' },
         { label: 'Break All', value: 'break-all' },
@@ -87,10 +119,10 @@ function WordBreakSelector({value}: {value: Atom<'normal' | 'break-all' | 'keep-
         { label: 'Break Word', value: 'break-word' }
     ]);
 
-    const selectedOption = options.find(option => option.value === value());
+    const selectedOption = options.find(option => option.value === value.value());
 
-    function Option({value: optionValue, selected}: {value: {label: string, value: string}, selected: Atom<boolean>}, {createElement}: RenderContext) {
-        return <div style={[commonOptionStyle(selected), () => ({wordBreak: optionValue.value})]} onClick={() => value(optionValue.value)}>
+    function Option({value: optionValue, selected}: {value: {label: string, value: 'normal' | 'break-all' | 'keep-all' | 'break-word'}, selected: Atom<boolean>}, {createElement}: RenderContext) {
+        return <div style={[commonOptionStyle(selected), () => ({wordBreak: optionValue.value})]} onClick={() => value.value(optionValue.value)}>
             {optionValue.label}
         </div>
     }
@@ -98,17 +130,25 @@ function WordBreakSelector({value}: {value: Atom<'normal' | 'break-all' | 'keep-
     return <Select options={options} value={selectedOption} $option:_use={Option} $displayValue:_use={DisplayValue} />;
 }
 
+// Define type for OverflowWrapSelector props
+type OverflowWrapSelectorProps = {
+    value: {
+        value: Atom<'normal' | 'break-word' | null>
+        variable: Atom<string | undefined>
+    }
+}
+
 // Overflow wrap selector component
-function OverflowWrapSelector({value}: {value: Atom<'normal' | 'break-word' | null>}, {createElement}: RenderContext) {
+function OverflowWrapSelector({value}: OverflowWrapSelectorProps, {createElement}: RenderContext) {
     const options = new RxList<{label: string, value: 'normal' | 'break-word'}>([
         { label: 'Normal', value: 'normal' },
         { label: 'Break Word', value: 'break-word' }
     ]);
 
-    const selectedOption = options.find(option => option.value === value());
+    const selectedOption = options.find(option => option.value === value.value());
 
-    function Option({value: optionValue, selected}: {value: {label: string, value: string}, selected: Atom<boolean>}, {createElement}: RenderContext) {
-        return <div style={[commonOptionStyle(selected), () => ({overflowWrap: optionValue.value})]} onClick={() => value(optionValue.value)}>
+    function Option({value: optionValue, selected}: {value: {label: string, value: 'normal' | 'break-word'}, selected: Atom<boolean>}, {createElement}: RenderContext) {
+        return <div style={[commonOptionStyle(selected), () => ({overflowWrap: optionValue.value})]} onClick={() => value.value(optionValue.value)}>
             {optionValue.label}
         </div>
     }
@@ -116,18 +156,26 @@ function OverflowWrapSelector({value}: {value: Atom<'normal' | 'break-word' | nu
     return <Select options={options} value={selectedOption} $option:_use={Option} $displayValue:_use={DisplayValue} />;
 }
 
+// Define type for HyphensSelector props
+type HyphensSelectorProps = {
+    value: {
+        value: Atom<'none' | 'manual' | 'auto' | null>
+        variable: Atom<string | undefined>
+    }
+}
+
 // Hyphens selector component
-function HyphensSelector({value}: {value: Atom<'none' | 'manual' | 'auto' | null>}, {createElement}: RenderContext) {
+function HyphensSelector({value}: HyphensSelectorProps, {createElement}: RenderContext) {
     const options = new RxList<{label: string, value: 'none' | 'manual' | 'auto'}>([
         { label: 'None', value: 'none' },
         { label: 'Manual', value: 'manual' },
         { label: 'Auto', value: 'auto' }
     ]);
 
-    const selectedOption = options.find(option => option.value === value());
+    const selectedOption = options.find(option => option.value === value.value());
 
-    function Option({value: optionValue, selected}: {value: {label: string, value: string}, selected: Atom<boolean>}, {createElement}: RenderContext) {
-        return <div style={[commonOptionStyle(selected), () => ({hyphens: optionValue.value})]} onClick={() => value(optionValue.value)}>
+    function Option({value: optionValue, selected}: {value: {label: string, value: 'none' | 'manual' | 'auto'}, selected: Atom<boolean>}, {createElement}: RenderContext) {
+        return <div style={[commonOptionStyle(selected), () => ({hyphens: optionValue.value})]} onClick={() => value.value(optionValue.value)}>
             {optionValue.label}
         </div>
     }
@@ -135,17 +183,25 @@ function HyphensSelector({value}: {value: Atom<'none' | 'manual' | 'auto' | null
     return <Select options={options} value={selectedOption} $option:_use={Option} $displayValue:_use={DisplayValue} />;
 }
 
+// Define type for DirectionSelector props
+type DirectionSelectorProps = {
+    value: {
+        value: Atom<'ltr' | 'rtl' | null>
+        variable: Atom<string | undefined>
+    }
+}
+
 // Direction selector component
-function DirectionSelector({value}: {value: Atom<'ltr' | 'rtl' | null>}, {createElement}: RenderContext) {
+function DirectionSelector({value}: DirectionSelectorProps, {createElement}: RenderContext) {
     const options = new RxList<{label: string, value: 'ltr' | 'rtl'}>([
         { label: 'Left to Right', value: 'ltr' },
         { label: 'Right to Left', value: 'rtl' }
     ]);
 
-    const selectedOption = options.find(option => option.value === value());
+    const selectedOption = options.find(option => option.value === value.value());
 
-    function Option({value: optionValue, selected}: {value: {label: string, value: string}, selected: Atom<boolean>}, {createElement}: RenderContext) {
-        return <div style={[commonOptionStyle(selected), () => ({direction: optionValue.value})]} onClick={() => value(optionValue.value)}>
+    function Option({value: optionValue, selected}: {value: {label: string, value: 'ltr' | 'rtl'}, selected: Atom<boolean>}, {createElement}: RenderContext) {
+        return <div style={[commonOptionStyle(selected), () => ({direction: optionValue.value})]} onClick={() => value.value(optionValue.value)}>
             {optionValue.label}
         </div>
     }

@@ -11,7 +11,8 @@ import {
   PageNode,
   GroupNode,
   TextNode,
-  IconNode
+  IconNode,
+  VariableValue
 } from './types';
 
 // 截图页面数据描述
@@ -20,21 +21,23 @@ export const screenshotDescription: PageNode = {
   type: NodeType.PAGE,
   name: '截图页面',
   box: {
-    width: '100%',
-    height: '100%',
-    padding: [
-      [16, UnitType.PX], // top
-      [16, UnitType.PX], // right
-      [16, UnitType.PX], // bottom
-      [16, UnitType.PX]  // left
-    ],
-    overflow: 'auto'
+    width: { value: [100, UnitType.PERCENT] },
+    height: { value: [100, UnitType.PERCENT] },
+    padding: {
+      value: [
+        [16, UnitType.PX], // top
+        [16, UnitType.PX], // right
+        [16, UnitType.PX], // bottom
+        [16, UnitType.PX]  // left
+      ]
+    },
+    overflow: { value: 'auto' }
   },
   font: {
-    fontFamily: 'Inter, sans-serif',
-    fontSize: [14, UnitType.PX],
-    color: '#333333',
-    lineHeight: [1.5, UnitType.EM]
+    fontFamily: { value: 'Inter, sans-serif' },
+    fontSize: { value: [14, UnitType.PX] },
+    color: { value: '#333333' },
+    lineHeight: { value: [1.5, UnitType.EM] }
   },
   children: [
     // 顶部导航栏
@@ -43,31 +46,45 @@ export const screenshotDescription: PageNode = {
       type: NodeType.GROUP,
       name: '顶部导航栏',
       box: {
-        width: '100%',
-        height: [64, UnitType.PX],
-        padding: [
-          [0, UnitType.PX],
-          [16, UnitType.PX],
-          [0, UnitType.PX],
-          [16, UnitType.PX]
-        ]
+        width: { value: [100, UnitType.PERCENT] },
+        height: { value: [64, UnitType.PX] },
+        padding: {
+          value: [
+            [0, UnitType.PX],
+            [16, UnitType.PX],
+            [0, UnitType.PX],
+            [16, UnitType.PX]
+          ]
+        }
       },
       layout: {
-        type: LayoutType.ROW,
-        justifyContent: AlignType.SPACE_BETWEEN,
-        alignItems: AlignType.CENTER
+        type: { value: LayoutType.ROW },
+        justifyContent: { value: AlignType.SPACE_BETWEEN },
+        alignItems: { value: AlignType.CENTER },
+        rowGap: { value: [8, UnitType.PX] },
+        columnGap: { value: [8, UnitType.PX] }
       },
       fills: [
         {
-          type: 'color',
-          value: '#FFFFFF'
+          type: { value: 'color' },
+          value: { value: '#ffffff' }
         }
       ],
       strokes: [
         {
-          width: [1, UnitType.PX],
-          style: 'solid',
-          color: '#EEEEEE'
+          width: { value: [1, UnitType.PX] },
+          style: { value: 'solid' },
+          color: { value: '#e0e0e0' }
+        }
+      ],
+      effects: [
+        {
+          type: { value: 'shadow' },
+          offsetX: { value: [0, UnitType.PX] },
+          offsetY: { value: [2, UnitType.PX] },
+          blur: { value: [4, UnitType.PX] },
+          spread: { value: [0, UnitType.PX] },
+          color: { value: 'rgba(0, 0, 0, 0.1)' }
         }
       ],
       children: [
@@ -77,10 +94,10 @@ export const screenshotDescription: PageNode = {
           type: NodeType.GROUP,
           name: 'Logo和标题',
           layout: {
-            type: LayoutType.ROW,
-            rowGap: [12, UnitType.PX],
-            columnGap: [12, UnitType.PX],
-            alignItems: AlignType.CENTER
+            type: { value: LayoutType.ROW },
+            rowGap: { value: [12, UnitType.PX] },
+            columnGap: { value: [12, UnitType.PX] },
+            alignItems: { value: AlignType.CENTER }
           },
           children: [
             {
@@ -88,18 +105,20 @@ export const screenshotDescription: PageNode = {
               type: NodeType.ICON,
               name: '应用Logo',
               iconName: 'logo',
-              size: [32, UnitType.PX],
-              color: '#4285F4'
+              size: { value: [32, UnitType.PX] },
+              color: { value: '#4285F4' }
             },
             {
-              id: 'app-title',
+              id: 'logo-text',
               type: NodeType.TEXT,
-              name: '应用标题',
-              content: 'Design System',
+              name: 'Logo文字',
+              content: { value: 'Design System' },
               font: {
-                fontSize: [18, UnitType.PX],
-                fontWeight: 600,
-                color: '#333333'
+                fontSize: { value: [18, UnitType.PX] },
+                fontWeight: { value: 700 },
+                color: { value: '#333333' },
+                fontFamily: { value: 'Inter, sans-serif' },
+                lineHeight: { value: [1.5, UnitType.EM] }
               }
             }
           ]
@@ -110,10 +129,10 @@ export const screenshotDescription: PageNode = {
           type: NodeType.GROUP,
           name: '用户信息',
           layout: {
-            type: LayoutType.ROW,
-            rowGap: [16, UnitType.PX],
-            columnGap: [16, UnitType.PX],
-            alignItems: AlignType.CENTER
+            type: { value: LayoutType.ROW },
+            rowGap: { value: [16, UnitType.PX] },
+            columnGap: { value: [16, UnitType.PX] },
+            alignItems: { value: AlignType.CENTER }
           },
           children: [
             {
@@ -121,16 +140,16 @@ export const screenshotDescription: PageNode = {
               type: NodeType.ICON,
               name: '通知图标',
               iconName: 'notification',
-              size: [20, UnitType.PX],
-              color: '#666666'
+              size: { value: [20, UnitType.PX] },
+              color: { value: '#666666' }
             },
             {
               id: 'user-avatar',
               type: NodeType.ICON,
               name: '用户头像',
               iconName: 'user-avatar',
-              size: [32, UnitType.PX],
-              color: '#4285F4'
+              size: { value: [32, UnitType.PX] },
+              color: { value: '#4285F4' }
             }
           ]
         }
@@ -139,43 +158,45 @@ export const screenshotDescription: PageNode = {
     
     // 主要内容区域
     {
-      id: 'main-content-area',
+      id: 'main-content',
       type: NodeType.GROUP,
       name: '主要内容区域',
       box: {
-        width: '100%',
-        height: 'calc(100% - 64px)'
+        width: { value: [100, UnitType.PERCENT] },
+        height: { value: [936, UnitType.PX] }, // 1000px - 64px (navbar height)
       },
       layout: {
-        type: LayoutType.ROW,
-        rowGap: [0, UnitType.PX],
-        columnGap: [0, UnitType.PX]
+        type: { value: LayoutType.ROW },
+        rowGap: { value: [0, UnitType.PX] },
+        columnGap: { value: [0, UnitType.PX] }
       },
       children: [
         // 左侧边栏
         {
-          id: 'left-sidebar',
+          id: 'sidebar',
           type: NodeType.GROUP,
           name: '左侧边栏',
           box: {
-            width: [240, UnitType.PX],
-            height: '100%',
-            padding: [
-              [16, UnitType.PX],
-              [16, UnitType.PX],
-              [16, UnitType.PX],
-              [16, UnitType.PX]
-            ]
+            width: { value: [240, UnitType.PX] },
+            height: { value: [100, UnitType.PERCENT] },
+            padding: {
+              value: [
+                [16, UnitType.PX],
+                [16, UnitType.PX],
+                [16, UnitType.PX],
+                [16, UnitType.PX]
+              ]
+            }
           },
           layout: {
-            type: LayoutType.COLUMN,
-            rowGap: [24, UnitType.PX],
-            columnGap: [24, UnitType.PX]
+            type: { value: LayoutType.COLUMN },
+            rowGap: { value: [24, UnitType.PX] },
+            columnGap: { value: [24, UnitType.PX] }
           },
           fills: [
             {
-              type: 'color',
-              value: '#F8F9FA'
+              type: { value: 'color' },
+              value: { value: '#F8F9FA' }
             }
           ],
           children: [
@@ -185,29 +206,29 @@ export const screenshotDescription: PageNode = {
               type: NodeType.GROUP,
               name: '导航菜单',
               layout: {
-                type: LayoutType.COLUMN,
-                rowGap: [4, UnitType.PX],
-                columnGap: [4, UnitType.PX]
+                type: { value: LayoutType.COLUMN },
+                rowGap: { value: [4, UnitType.PX] },
+                columnGap: { value: [4, UnitType.PX] }
               },
               children: [
                 {
                   id: 'nav-title',
                   type: NodeType.TEXT,
                   name: '导航标题',
-                  content: '导航',
+                  content: { value: '导航' },
                   font: {
-                    fontSize: [12, UnitType.PX],
-                    fontWeight: 600,
-                    color: '#666666',
-                    textTransform: 'uppercase'
+                    fontSize: { value: [12, UnitType.PX] },
+                    fontWeight: { value: 600 },
+                    color: { value: '#666666' },
+                    textTransform: { value: 'uppercase' }
                   },
                   box: {
-                    margin: [
+                    margin: { value: [
                       [0, UnitType.PX],
                       [0, UnitType.PX],
                       [8, UnitType.PX],
                       [0, UnitType.PX]
-                    ]
+                    ] }
                   }
                 },
                 // 导航项目1 - 选中状态
@@ -216,29 +237,31 @@ export const screenshotDescription: PageNode = {
                   type: NodeType.GROUP,
                   name: '导航项目1',
                   box: {
-                    width: '100%',
-                    height: [40, UnitType.PX],
-                    padding: [
-                      [0, UnitType.PX],
-                      [12, UnitType.PX],
-                      [0, UnitType.PX],
-                      [12, UnitType.PX]
-                    ]
+                    width: { value: [100, UnitType.PERCENT] },
+                    height: { value: [40, UnitType.PX] },
+                    padding: {
+                      value: [
+                        [0, UnitType.PX],
+                        [12, UnitType.PX],
+                        [0, UnitType.PX],
+                        [12, UnitType.PX]
+                      ]
+                    }
                   },
                   layout: {
-                    type: LayoutType.ROW,
-                    rowGap: [8, UnitType.PX],
-                    columnGap: [8, UnitType.PX],
-                    alignItems: AlignType.CENTER
+                    type: { value: LayoutType.ROW },
+                    rowGap: { value: [8, UnitType.PX] },
+                    columnGap: { value: [8, UnitType.PX] },
+                    alignItems: { value: AlignType.CENTER }
                   },
                   fills: [
                     {
-                      type: 'color',
-                      value: '#E8F0FE'
+                      type: { value: 'color' },
+                      value: { value: '#E8F0FE' }
                     }
                   ],
                   appearance: {
-                    borderRadius: [4, UnitType.PX]
+                    borderRadius: { value: [4, UnitType.PX] }
                   },
                   children: [
                     {
@@ -246,18 +269,18 @@ export const screenshotDescription: PageNode = {
                       type: NodeType.ICON,
                       name: '导航项目1图标',
                       iconName: 'dashboard',
-                      size: [20, UnitType.PX],
-                      color: '#4285F4'
+                      size: { value: [20, UnitType.PX] },
+                      color: { value: '#4285F4' }
                     },
                     {
                       id: 'nav-item-1-text',
                       type: NodeType.TEXT,
                       name: '导航项目1文本',
-                      content: '组件',
+                      content: { value: '组件' },
                       font: {
-                        fontSize: [14, UnitType.PX],
-                        fontWeight: 500,
-                        color: '#4285F4'
+                        fontSize: { value: [14, UnitType.PX] },
+                        fontWeight: { value: 500 },
+                        color: { value: '#4285F4' }
                       }
                     }
                   ]
@@ -268,20 +291,22 @@ export const screenshotDescription: PageNode = {
                   type: NodeType.GROUP,
                   name: '导航项目2',
                   box: {
-                    width: '100%',
-                    height: [40, UnitType.PX],
-                    padding: [
-                      [0, UnitType.PX],
-                      [12, UnitType.PX],
-                      [0, UnitType.PX],
-                      [12, UnitType.PX]
-                    ]
+                    width: { value: [100, UnitType.PERCENT] },
+                    height: { value: [40, UnitType.PX] },
+                    padding: {
+                      value: [
+                        [0, UnitType.PX],
+                        [12, UnitType.PX],
+                        [0, UnitType.PX],
+                        [12, UnitType.PX]
+                      ]
+                    }
                   },
                   layout: {
-                    type: LayoutType.ROW,
-                    rowGap: [8, UnitType.PX],
-                    columnGap: [8, UnitType.PX],
-                    alignItems: AlignType.CENTER
+                    type: { value: LayoutType.ROW },
+                    rowGap: { value: [8, UnitType.PX] },
+                    columnGap: { value: [8, UnitType.PX] },
+                    alignItems: { value: AlignType.CENTER }
                   },
                   children: [
                     {
@@ -289,18 +314,18 @@ export const screenshotDescription: PageNode = {
                       type: NodeType.ICON,
                       name: '导航项目2图标',
                       iconName: 'palette',
-                      size: [20, UnitType.PX],
-                      color: '#666666'
+                      size: { value: [20, UnitType.PX] },
+                      color: { value: '#666666' }
                     },
                     {
                       id: 'nav-item-2-text',
                       type: NodeType.TEXT,
                       name: '导航项目2文本',
-                      content: '样式',
+                      content: { value: '样式' },
                       font: {
-                        fontSize: [14, UnitType.PX],
-                        fontWeight: 400,
-                        color: '#666666'
+                        fontSize: { value: [14, UnitType.PX] },
+                        fontWeight: { value: 400 },
+                        color: { value: '#666666' }
                       }
                     }
                   ]
@@ -311,20 +336,22 @@ export const screenshotDescription: PageNode = {
                   type: NodeType.GROUP,
                   name: '导航项目3',
                   box: {
-                    width: '100%',
-                    height: [40, UnitType.PX],
-                    padding: [
-                      [0, UnitType.PX],
-                      [12, UnitType.PX],
-                      [0, UnitType.PX],
-                      [12, UnitType.PX]
-                    ]
+                    width: { value: [100, UnitType.PERCENT] },
+                    height: { value: [40, UnitType.PX] },
+                    padding: {
+                      value: [
+                        [0, UnitType.PX],
+                        [12, UnitType.PX],
+                        [0, UnitType.PX],
+                        [12, UnitType.PX]
+                      ]
+                    }
                   },
                   layout: {
-                    type: LayoutType.ROW,
-                    rowGap: [8, UnitType.PX],
-                    columnGap: [8, UnitType.PX],
-                    alignItems: AlignType.CENTER
+                    type: { value: LayoutType.ROW },
+                    rowGap: { value: [8, UnitType.PX] },
+                    columnGap: { value: [8, UnitType.PX] },
+                    alignItems: { value: AlignType.CENTER }
                   },
                   children: [
                     {
@@ -332,18 +359,18 @@ export const screenshotDescription: PageNode = {
                       type: NodeType.ICON,
                       name: '导航项目3图标',
                       iconName: 'code',
-                      size: [20, UnitType.PX],
-                      color: '#666666'
+                      size: { value: [20, UnitType.PX] },
+                      color: { value: '#666666' }
                     },
                     {
                       id: 'nav-item-3-text',
                       type: NodeType.TEXT,
                       name: '导航项目3文本',
-                      content: '代码',
+                      content: { value: '代码' },
                       font: {
-                        fontSize: [14, UnitType.PX],
-                        fontWeight: 400,
-                        color: '#666666'
+                        fontSize: { value: [14, UnitType.PX] },
+                        fontWeight: { value: 400 },
+                        color: { value: '#666666' }
                       }
                     }
                   ]
@@ -359,24 +386,26 @@ export const screenshotDescription: PageNode = {
           type: NodeType.GROUP,
           name: '右侧内容区域',
           box: {
-            width: 'calc(100% - 240px)',
-            height: '100%',
-            padding: [
-              [24, UnitType.PX],
-              [24, UnitType.PX],
-              [24, UnitType.PX],
-              [24, UnitType.PX]
-            ]
+            width: { value: [1200, UnitType.PX] }, // Approximation for calc(100% - 240px)
+            height: { value: [100, UnitType.PERCENT] },
+            padding: {
+              value: [
+                [24, UnitType.PX],
+                [24, UnitType.PX],
+                [24, UnitType.PX],
+                [24, UnitType.PX]
+              ]
+            }
           },
           layout: {
-            type: LayoutType.COLUMN,
-            rowGap: [24, UnitType.PX],
-            columnGap: [24, UnitType.PX]
+            type: { value: LayoutType.COLUMN },
+            rowGap: { value: [24, UnitType.PX] },
+            columnGap: { value: [24, UnitType.PX] }
           },
           fills: [
             {
-              type: 'color',
-              value: '#FFFFFF'
+              type: { value: 'color' },
+              value: { value: '#FFFFFF' }
             }
           ],
           children: [
@@ -386,40 +415,40 @@ export const screenshotDescription: PageNode = {
               type: NodeType.GROUP,
               name: '页面标题区域',
               box: {
-                width: '100%',
-                margin: [
+                width: { value: [100, UnitType.PERCENT] },
+                margin: { value: [
                   [0, UnitType.PX],
                   [0, UnitType.PX],
                   [16, UnitType.PX],
                   [0, UnitType.PX]
-                ]
+                ] }
               },
               layout: {
-                type: LayoutType.COLUMN,
-                rowGap: [8, UnitType.PX],
-                columnGap: [8, UnitType.PX]
+                type: { value: LayoutType.COLUMN },
+                rowGap: { value: [8, UnitType.PX] },
+                columnGap: { value: [8, UnitType.PX] }
               },
               children: [
                 {
                   id: 'page-title',
                   type: NodeType.TEXT,
                   name: '页面标题',
-                  content: '按钮组件',
+                  content: { value: '按钮组件' },
                   font: {
-                    fontSize: [24, UnitType.PX],
-                    fontWeight: 700,
-                    color: '#202124'
+                    fontSize: { value: [24, UnitType.PX] },
+                    fontWeight: { value: 700 },
+                    color: { value: '#202124' }
                   }
                 },
                 {
                   id: 'page-description',
                   type: NodeType.TEXT,
                   name: '页面描述',
-                  content: '按钮用于触发一个操作或事件，如提交表单、打开对话框、取消操作或执行删除操作。',
+                  content: { value: '按钮用于触发一个操作或事件，如提交表单、打开对话框、取消操作或执行删除操作。' },
                   font: {
-                    fontSize: [14, UnitType.PX],
-                    color: '#5F6368',
-                    lineHeight: [1.5, UnitType.EM]
+                    fontSize: { value: [14, UnitType.PX] },
+                    color: { value: '#5F6368' },
+                    lineHeight: { value: [1.5, UnitType.EM] }
                   }
                 }
               ]
@@ -431,12 +460,12 @@ export const screenshotDescription: PageNode = {
               type: NodeType.GROUP,
               name: '组件展示区域',
               box: {
-                width: '100%'
+                width: { value: [100, UnitType.PERCENT] }
               },
               layout: {
-                type: LayoutType.COLUMN,
-                rowGap: [32, UnitType.PX],
-                columnGap: [32, UnitType.PX]
+                type: { value: LayoutType.COLUMN },
+                rowGap: { value: [32, UnitType.PX] },
+                columnGap: { value: [32, UnitType.PX] }
               },
               children: [
                 // 按钮类型部分
@@ -445,20 +474,20 @@ export const screenshotDescription: PageNode = {
                   type: NodeType.GROUP,
                   name: '按钮类型部分',
                   layout: {
-                    type: LayoutType.COLUMN,
-                    rowGap: [16, UnitType.PX],
-                    columnGap: [16, UnitType.PX]
+                    type: { value: LayoutType.COLUMN },
+                    rowGap: { value: [16, UnitType.PX] },
+                    columnGap: { value: [16, UnitType.PX] }
                   },
                   children: [
                     {
                       id: 'button-types-title',
                       type: NodeType.TEXT,
                       name: '按钮类型标题',
-                      content: '按钮类型',
+                      content: { value: '按钮类型' },
                       font: {
-                        fontSize: [18, UnitType.PX],
-                        fontWeight: 600,
-                        color: '#202124'
+                        fontSize: { value: [18, UnitType.PX] },
+                        fontWeight: { value: 600 },
+                        color: { value: '#202124' }
                       }
                     },
                     // 按钮类型展示
@@ -467,28 +496,30 @@ export const screenshotDescription: PageNode = {
                       type: NodeType.GROUP,
                       name: '按钮类型展示',
                       box: {
-                        width: '100%',
-                        padding: [
-                          [24, UnitType.PX],
-                          [24, UnitType.PX],
-                          [24, UnitType.PX],
-                          [24, UnitType.PX]
-                        ]
+                        width: { value: [100, UnitType.PERCENT] },
+                        padding: {
+                          value: [
+                            [24, UnitType.PX],
+                            [24, UnitType.PX],
+                            [24, UnitType.PX],
+                            [24, UnitType.PX]
+                          ]
+                        }
                       },
                       layout: {
-                        type: LayoutType.ROW,
-                        rowGap: [16, UnitType.PX],
-                        columnGap: [16, UnitType.PX],
-                        alignItems: AlignType.CENTER
+                        type: { value: LayoutType.ROW },
+                        rowGap: { value: [16, UnitType.PX] },
+                        columnGap: { value: [16, UnitType.PX] },
+                        alignItems: { value: AlignType.CENTER }
                       },
                       fills: [
                         {
-                          type: 'color',
-                          value: '#F8F9FA'
+                          type: { value: 'color' },
+                          value: { value: '#F8F9FA' }
                         }
                       ],
                       appearance: {
-                        borderRadius: [8, UnitType.PX]
+                        borderRadius: { value: [8, UnitType.PX] }
                       },
                       children: [
                         // 主要按钮
@@ -497,33 +528,33 @@ export const screenshotDescription: PageNode = {
                           type: NodeType.GROUP,
                           name: '主要按钮',
                           box: {
-                            width: [120, UnitType.PX],
-                            height: [40, UnitType.PX]
+                            width: { value: [120, UnitType.PX] },
+                            height: { value: [40, UnitType.PX] }
                           },
                           layout: {
-                            type: LayoutType.ROW,
-                            justifyContent: AlignType.CENTER,
-                            alignItems: AlignType.CENTER
+                            type: { value: LayoutType.ROW },
+                            justifyContent: { value: AlignType.CENTER },
+                            alignItems: { value: AlignType.CENTER }
                           },
                           fills: [
                             {
-                              type: 'color',
-                              value: '#4285F4'
+                              type: { value: 'color' },
+                              value: { value: '#4285F4' }
                             }
                           ],
                           appearance: {
-                            borderRadius: [4, UnitType.PX]
+                            borderRadius: { value: [4, UnitType.PX] }
                           },
                           children: [
                             {
                               id: 'primary-button-text',
                               type: NodeType.TEXT,
                               name: '主要按钮文本',
-                              content: '主要按钮',
+                              content: { value: '主要按钮' },
                               font: {
-                                fontSize: [14, UnitType.PX],
-                                fontWeight: 500,
-                                color: '#FFFFFF'
+                                fontSize: { value: [14, UnitType.PX] },
+                                fontWeight: { value: 500 },
+                                color: { value: '#FFFFFF' }
                               }
                             }
                           ]
@@ -534,40 +565,40 @@ export const screenshotDescription: PageNode = {
                           type: NodeType.GROUP,
                           name: '次要按钮',
                           box: {
-                            width: [120, UnitType.PX],
-                            height: [40, UnitType.PX]
+                            width: { value: [120, UnitType.PX] },
+                            height: { value: [40, UnitType.PX] }
                           },
                           layout: {
-                            type: LayoutType.ROW,
-                            justifyContent: AlignType.CENTER,
-                            alignItems: AlignType.CENTER
+                            type: { value: LayoutType.ROW },
+                            justifyContent: { value: AlignType.CENTER },
+                            alignItems: { value: AlignType.CENTER }
                           },
                           fills: [
                             {
-                              type: 'color',
-                              value: '#FFFFFF'
+                              type: { value: 'color' },
+                              value: { value: '#FFFFFF' }
                             }
                           ],
                           strokes: [
                             {
-                              width: [1, UnitType.PX],
-                              style: 'solid',
-                              color: '#DADCE0'
+                              width: { value: [1, UnitType.PX] },
+                              style: { value: 'solid' },
+                              color: { value: '#DADCE0' }
                             }
                           ],
                           appearance: {
-                            borderRadius: [4, UnitType.PX]
+                            borderRadius: { value: [4, UnitType.PX] }
                           },
                           children: [
                             {
                               id: 'secondary-button-text',
                               type: NodeType.TEXT,
                               name: '次要按钮文本',
-                              content: '次要按钮',
+                              content: { value: '次要按钮' },
                               font: {
-                                fontSize: [14, UnitType.PX],
-                                fontWeight: 500,
-                                color: '#5F6368'
+                                fontSize: { value: [14, UnitType.PX] },
+                                fontWeight: { value: 500 },
+                                color: { value: '#5F6368' }
                               }
                             }
                           ]
@@ -578,24 +609,24 @@ export const screenshotDescription: PageNode = {
                           type: NodeType.GROUP,
                           name: '文本按钮',
                           box: {
-                            width: [120, UnitType.PX],
-                            height: [40, UnitType.PX]
+                            width: { value: [120, UnitType.PX] },
+                            height: { value: [40, UnitType.PX] }
                           },
                           layout: {
-                            type: LayoutType.ROW,
-                            justifyContent: AlignType.CENTER,
-                            alignItems: AlignType.CENTER
+                            type: { value: LayoutType.ROW },
+                            justifyContent: { value: AlignType.CENTER },
+                            alignItems: { value: AlignType.CENTER }
                           },
                           children: [
                             {
                               id: 'text-button-text',
                               type: NodeType.TEXT,
                               name: '文本按钮文本',
-                              content: '文本按钮',
+                              content: { value: '文本按钮' },
                               font: {
-                                fontSize: [14, UnitType.PX],
-                                fontWeight: 500,
-                                color: '#4285F4'
+                                fontSize: { value: [14, UnitType.PX] },
+                                fontWeight: { value: 500 },
+                                color: { value: '#4285F4' }
                               }
                             }
                           ]
@@ -611,20 +642,20 @@ export const screenshotDescription: PageNode = {
                   type: NodeType.GROUP,
                   name: '按钮尺寸部分',
                   layout: {
-                    type: LayoutType.COLUMN,
-                    rowGap: [16, UnitType.PX],
-                    columnGap: [16, UnitType.PX]
+                    type: { value: LayoutType.COLUMN },
+                    rowGap: { value: [16, UnitType.PX] },
+                    columnGap: { value: [16, UnitType.PX] }
                   },
                   children: [
                     {
                       id: 'button-sizes-title',
                       type: NodeType.TEXT,
                       name: '按钮尺寸标题',
-                      content: '按钮尺寸',
+                      content: { value: '按钮尺寸' },
                       font: {
-                        fontSize: [18, UnitType.PX],
-                        fontWeight: 600,
-                        color: '#202124'
+                        fontSize: { value: [18, UnitType.PX] },
+                        fontWeight: { value: 600 },
+                        color: { value: '#202124' }
                       }
                     },
                     // 按钮尺寸展示
@@ -633,28 +664,30 @@ export const screenshotDescription: PageNode = {
                       type: NodeType.GROUP,
                       name: '按钮尺寸展示',
                       box: {
-                        width: '100%',
-                        padding: [
-                          [24, UnitType.PX],
-                          [24, UnitType.PX],
-                          [24, UnitType.PX],
-                          [24, UnitType.PX]
-                        ]
+                        width: { value: [100, UnitType.PERCENT] },
+                        padding: {
+                          value: [
+                            [24, UnitType.PX],
+                            [24, UnitType.PX],
+                            [24, UnitType.PX],
+                            [24, UnitType.PX]
+                          ]
+                        }
                       },
                       layout: {
-                        type: LayoutType.ROW,
-                        rowGap: [16, UnitType.PX],
-                        columnGap: [16, UnitType.PX],
-                        alignItems: AlignType.CENTER
+                        type: { value: LayoutType.ROW },
+                        rowGap: { value: [16, UnitType.PX] },
+                        columnGap: { value: [16, UnitType.PX] },
+                        alignItems: { value: AlignType.CENTER }
                       },
                       fills: [
                         {
-                          type: 'color',
-                          value: '#F8F9FA'
+                          type: { value: 'color' },
+                          value: { value: '#F8F9FA' }
                         }
                       ],
                       appearance: {
-                        borderRadius: [8, UnitType.PX]
+                        borderRadius: { value: [8, UnitType.PX] }
                       },
                       children: [
                         // 小型按钮
@@ -663,33 +696,33 @@ export const screenshotDescription: PageNode = {
                           type: NodeType.GROUP,
                           name: '小型按钮',
                           box: {
-                            width: [100, UnitType.PX],
-                            height: [32, UnitType.PX]
+                            width: { value: [100, UnitType.PX] },
+                            height: { value: [32, UnitType.PX] }
                           },
                           layout: {
-                            type: LayoutType.ROW,
-                            justifyContent: AlignType.CENTER,
-                            alignItems: AlignType.CENTER
+                            type: { value: LayoutType.ROW },
+                            justifyContent: { value: AlignType.CENTER },
+                            alignItems: { value: AlignType.CENTER }
                           },
                           fills: [
                             {
-                              type: 'color',
-                              value: '#4285F4'
+                              type: { value: 'color' },
+                              value: { value: '#4285F4' }
                             }
                           ],
                           appearance: {
-                            borderRadius: [4, UnitType.PX]
+                            borderRadius: { value: [4, UnitType.PX] }
                           },
                           children: [
                             {
                               id: 'small-button-text',
                               type: NodeType.TEXT,
                               name: '小型按钮文本',
-                              content: '小型',
+                              content: { value: '小型' },
                               font: {
-                                fontSize: [12, UnitType.PX],
-                                fontWeight: 500,
-                                color: '#FFFFFF'
+                                fontSize: { value: [12, UnitType.PX] },
+                                fontWeight: { value: 500 },
+                                color: { value: '#FFFFFF' }
                               }
                             }
                           ]
@@ -700,33 +733,33 @@ export const screenshotDescription: PageNode = {
                           type: NodeType.GROUP,
                           name: '中型按钮',
                           box: {
-                            width: [120, UnitType.PX],
-                            height: [40, UnitType.PX]
+                            width: { value: [120, UnitType.PX] },
+                            height: { value: [40, UnitType.PX] }
                           },
                           layout: {
-                            type: LayoutType.ROW,
-                            justifyContent: AlignType.CENTER,
-                            alignItems: AlignType.CENTER
+                            type: { value: LayoutType.ROW },
+                            justifyContent: { value: AlignType.CENTER },
+                            alignItems: { value: AlignType.CENTER }
                           },
                           fills: [
                             {
-                              type: 'color',
-                              value: '#4285F4'
+                              type: { value: 'color' },
+                              value: { value: '#4285F4' }
                             }
                           ],
                           appearance: {
-                            borderRadius: [4, UnitType.PX]
+                            borderRadius: { value: [4, UnitType.PX] }
                           },
                           children: [
                             {
                               id: 'medium-button-text',
                               type: NodeType.TEXT,
                               name: '中型按钮文本',
-                              content: '中型',
+                              content: { value: '中型' },
                               font: {
-                                fontSize: [14, UnitType.PX],
-                                fontWeight: 500,
-                                color: '#FFFFFF'
+                                fontSize: { value: [14, UnitType.PX] },
+                                fontWeight: { value: 500 },
+                                color: { value: '#FFFFFF' }
                               }
                             }
                           ]
@@ -737,33 +770,33 @@ export const screenshotDescription: PageNode = {
                           type: NodeType.GROUP,
                           name: '大型按钮',
                           box: {
-                            width: [140, UnitType.PX],
-                            height: [48, UnitType.PX]
+                            width: { value: [140, UnitType.PX] },
+                            height: { value: [48, UnitType.PX] }
                           },
                           layout: {
-                            type: LayoutType.ROW,
-                            justifyContent: AlignType.CENTER,
-                            alignItems: AlignType.CENTER
+                            type: { value: LayoutType.ROW },
+                            justifyContent: { value: AlignType.CENTER },
+                            alignItems: { value: AlignType.CENTER }
                           },
                           fills: [
                             {
-                              type: 'color',
-                              value: '#4285F4'
+                              type: { value: 'color' },
+                              value: { value: '#4285F4' }
                             }
                           ],
                           appearance: {
-                            borderRadius: [4, UnitType.PX]
+                            borderRadius: { value: [4, UnitType.PX] }
                           },
                           children: [
                             {
                               id: 'large-button-text',
                               type: NodeType.TEXT,
                               name: '大型按钮文本',
-                              content: '大型',
+                              content: { value: '大型' },
                               font: {
-                                fontSize: [16, UnitType.PX],
-                                fontWeight: 500,
-                                color: '#FFFFFF'
+                                fontSize: { value: [16, UnitType.PX] },
+                                fontWeight: { value: 500 },
+                                color: { value: '#FFFFFF' }
                               }
                             }
                           ]

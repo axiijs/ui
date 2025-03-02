@@ -3,7 +3,7 @@ import { RxCollection } from "../RxPage";
 import { commonOptionStyle, subPanelStyle } from "../style";
 import { createElement as icon, MoveRight, MoveDown, LayoutGrid, MoveLeft, AlignHorizontalJustifyCenter, Dot } from 'lucide';
 import { RowGapInput, ColumnGapInput } from "../lib/SizeInputs";
-import { AlignType } from "../../data/types";
+import { AlignType, LayoutType } from "../../data/types";
 import { DisplayOption, DisplayValue, Select } from "../lib/Select";
 
 
@@ -81,14 +81,14 @@ function AlignGridSelector({node}: {node: RxCollection<any, any>}, {createElemen
     ])
 
     const selectedAlignType = alignTypes.find(alignType => {
-        const alignItems = node.layout.alignItems() || AlignType.START
-        const justifyContent = node.layout.justifyContent() || AlignType.START
+        const alignItems = node.layout.alignItems.value() || AlignType.START
+        const justifyContent = node.layout.justifyContent.value() || AlignType.START
         return alignType.type.alignItems === alignItems && alignType.type.justifyContent === justifyContent
     })
 
     const onClick = (alignType: {alignItems: AlignType, justifyContent: AlignType}) => {
-        node.layout.alignItems(alignType.alignItems)
-        node.layout.justifyContent(alignType.justifyContent)
+        node.layout.alignItems.value(alignType.alignItems)
+        node.layout.justifyContent.value(alignType.justifyContent)
     }
 
 
@@ -130,18 +130,18 @@ function AlignGridSelector({node}: {node: RxCollection<any, any>}, {createElemen
 function LayoutTypeSelector({node}: {node: RxCollection<any, any>}, {createElement}: RenderContext) {
 
 
-const layouts = new RxList<{type: string, icon: any}>([{
-        type: 'row',
-        icon: MoveRight,
-    }, {
-        type: 'column',
-        icon: MoveDown,
-    }, {
-        type: 'grid',
-        icon: LayoutGrid,
+    const layouts = new RxList<{type: string, icon: any}>([{
+            type: 'row',
+            icon: MoveRight,
+        }, {
+            type: 'column',
+            icon: MoveDown,
+        }, {
+            type: 'grid',
+            icon: LayoutGrid,
     }])
 
-    const selectedLayout = layouts.find(layout => layout.type === node.layout.type())
+    const selectedLayout = layouts.find(layout => layout.type === node.layout.type.value())
 
     
 
@@ -167,7 +167,7 @@ const layouts = new RxList<{type: string, icon: any}>([{
 
     return <div style={containerStyle}>
         {layouts.createSelection(selectedLayout).map(([layouts, selected]) => (
-            <div onClick={() => node.layout.type(layouts.type)} >
+            <div onClick={() => node.layout.type.value(layouts.type as LayoutType)} >
                 {() => icon(layouts.icon, {stroke: selected() ? 'white' : 'gray', width:12, height:12})}
             </div>
         ))}
@@ -257,8 +257,8 @@ export function LayoutInfoEditor({node}: {node: RxCollection<any, any>}, {create
                     
                 </div>
                 <div>
-                    <AlignTypeSelector value={node.layout.alignItems} />
-                    <AlignTypeSelector value={node.layout.justifyContent} />
+                    <AlignTypeSelector value={node.layout.alignItems.value} />
+                    <AlignTypeSelector value={node.layout.justifyContent.value} />
                 </div>
             </div>
         </div>

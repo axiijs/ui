@@ -21,7 +21,8 @@ import {
   IconNode,
   GroupNode,
   PageNode,
-  Node
+  Node,
+  VariableValue
 } from './types';
 
 // 示例画布数据
@@ -30,19 +31,23 @@ const rootNode: GroupNode = {
   type: NodeType.GROUP,
   name: '画布根节点',
   box: {
-    padding: [
-      [16, UnitType.PX], // top
-      [16, UnitType.PX], // right
-      [16, UnitType.PX], // bottom
-      [16, UnitType.PX]  // left
-    ],
-    margin: [
-      [0, UnitType.PX], // top
-      [0, UnitType.PX], // right
-      [0, UnitType.PX], // bottom
-      [0, UnitType.PX]  // left
-    ],
-    overflow: 'hidden'
+    padding: {
+      value: [
+        [16, UnitType.PX], // top
+        [16, UnitType.PX], // right
+        [16, UnitType.PX], // bottom
+        [16, UnitType.PX]  // left
+      ]
+    },
+    margin: {
+      value: [
+        [0, UnitType.PX], // top
+        [0, UnitType.PX], // right
+        [0, UnitType.PX], // bottom
+        [0, UnitType.PX]  // left
+      ]
+    },
+    overflow: { value: 'hidden' }
   },
   children: [
     // 导航栏
@@ -52,54 +57,58 @@ const rootNode: GroupNode = {
       name: '导航栏',
       position: { x: [0, UnitType.PX], y: [0, UnitType.PX] },
       box: {
-        width: '100%',
-        height: [64, UnitType.PX],
-        padding: [
-          [0, UnitType.PX],  // top
-          [24, UnitType.PX], // right
-          [0, UnitType.PX],  // bottom
-          [24, UnitType.PX]  // left
-        ],
-        margin: [
-          [0, UnitType.PX],   // top
-          [0, UnitType.PX],   // right
-          [16, UnitType.PX],  // bottom
-          [0, UnitType.PX]    // left
-        ],
-        overflow: 'visible'
+        width: { value: [100, UnitType.PERCENT] },
+        height: { value: [64, UnitType.PX] },
+        padding: {
+          value: [
+            [0, UnitType.PX],  // top
+            [24, UnitType.PX], // right
+            [0, UnitType.PX],  // bottom
+            [24, UnitType.PX]  // left
+          ]
+        },
+        margin: {
+          value: [
+            [0, UnitType.PX],   // top
+            [0, UnitType.PX],   // right
+            [16, UnitType.PX],  // bottom
+            [0, UnitType.PX]    // left
+          ]
+        },
+        overflow: { value: 'visible' }
       },
       layout: {
-        type: LayoutType.ROW,
-        justifyContent: AlignType.SPACE_BETWEEN,
-        alignItems: AlignType.CENTER,
-        rowGap: [16, UnitType.PX],
-        columnGap: [16, UnitType.PX]
+        type: { value: LayoutType.ROW },
+        justifyContent: { value: AlignType.SPACE_BETWEEN },
+        alignItems: { value: AlignType.CENTER },
+        rowGap: { value: [16, UnitType.PX] },
+        columnGap: { value: [16, UnitType.PX] }
       },
       appearance: {
-        opacity: [1, ''],
-        borderRadius: [0, UnitType.PX]
+        opacity: { value: [1, ''] },
+        borderRadius: { value: [0, UnitType.PX] }
       },
       fills: [
         {
-          type: 'color',
-          value: '#ffffff'
+          type: { value: 'color' },
+          value: { value: '#ffffff' }
         }
       ],
       strokes: [
         {
-          width: [1, UnitType.PX],
-          style: 'solid',
-          color: '#e0e0e0'
+          width: { value: [1, UnitType.PX] },
+          style: { value: 'solid' },
+          color: { value: '#e0e0e0' }
         }
       ],
       effects: [
         {
-          type: 'shadow',
-          offsetX: [0, UnitType.PX],
-          offsetY: [2, UnitType.PX],
-          blur: [4, UnitType.PX],
-          spread: [0, UnitType.PX],
-          color: 'rgba(0, 0, 0, 0.1)'
+          type: { value: 'shadow' },
+          offsetX: { value: [0, UnitType.PX] },
+          offsetY: { value: [2, UnitType.PX] },
+          blur: { value: [4, UnitType.PX] },
+          spread: { value: [0, UnitType.PX] },
+          color: { value: 'rgba(0, 0, 0, 0.1)' }
         }
       ],
       children: [
@@ -108,10 +117,10 @@ const rootNode: GroupNode = {
           type: NodeType.GROUP,
           name: 'Logo区域',
           layout: {
-            type: LayoutType.ROW,
-            alignItems: AlignType.CENTER,
-            rowGap: [8, UnitType.PX],
-            columnGap: [8, UnitType.PX]
+            type: { value: LayoutType.ROW },
+            alignItems: { value: AlignType.CENTER },
+            rowGap: { value: [8, UnitType.PX] },
+            columnGap: { value: [8, UnitType.PX] }
           },
           children: [
             {
@@ -119,37 +128,39 @@ const rootNode: GroupNode = {
               type: NodeType.ICON,
               name: 'Logo图标',
               iconName: 'logo',
-              size: [32, UnitType.PX],
-              color: '#4285f4',
+              size: { value: [32, UnitType.PX] },
+              color: { value: '#4285f4' },
               box: {
-                flexShrink: 0
+                flexShrink: { value: 0 }
               }
             },
             {
               id: 'logo-text',
               type: NodeType.TEXT,
               name: 'Logo文字',
-              content: 'Designer',
+              content: { value: 'Designer' },
               font: {
-                fontSize: [20, UnitType.PX],
-                fontWeight: 'bold',
-                color: '#333333',
-                fontFamily: 'Arial, sans-serif',
-                lineHeight: [1.2, UnitType.EM]
+                fontSize: { value: [20, UnitType.PX] },
+                fontWeight: { value: 700 },
+                color: { value: '#333333' },
+                fontFamily: { value: 'Arial, sans-serif' },
+                lineHeight: { value: [1.2, UnitType.EM] }
               },
               box: {
-                padding: [
-                  [2, UnitType.PX],  // top
-                  [4, UnitType.PX],  // right
-                  [2, UnitType.PX],  // bottom
-                  [4, UnitType.PX]   // left
-                ],
-                overflow: 'hidden',
-                flexGrow: 1
+                padding: {
+                  value: [
+                    [2, UnitType.PX],  // top
+                    [4, UnitType.PX],  // right
+                    [2, UnitType.PX],  // bottom
+                    [4, UnitType.PX]   // left
+                  ]
+                },
+                overflow: { value: 'hidden' },
+                flexGrow: { value: 1 }
               },
               textLayout: {
-                textOverflow: 'ellipsis',
-                whiteSpace: 'nowrap'
+                textOverflow: { value: 'ellipsis' },
+                whiteSpace: { value: 'nowrap' }
               }
             }
           ]
@@ -159,76 +170,82 @@ const rootNode: GroupNode = {
           type: NodeType.GROUP,
           name: '导航链接',
           layout: {
-            type: LayoutType.ROW,
-            rowGap: [24, UnitType.PX],
-            columnGap: [24, UnitType.PX],
-            alignItems: AlignType.CENTER
+            type: { value: LayoutType.ROW },
+            rowGap: { value: [24, UnitType.PX] },
+            columnGap: { value: [24, UnitType.PX] },
+            alignItems: { value: AlignType.CENTER }
           },
           children: [
             {
               id: 'nav-link-1',
               type: NodeType.TEXT,
               name: '导航链接1',
-              content: '首页',
+              content: { value: '首页' },
               font: {
-                fontSize: [16, UnitType.PX],
-                color: '#333333',
-                fontFamily: 'Arial, sans-serif',
-                lineHeight: [1.5, UnitType.EM]
+                fontSize: { value: [16, UnitType.PX] },
+                color: { value: '#333333' },
+                fontFamily: { value: 'Arial, sans-serif' },
+                lineHeight: { value: [1.5, UnitType.EM] }
               },
               box: {
-                padding: [
-                  [4, UnitType.PX],  // top
-                  [8, UnitType.PX],  // right
-                  [4, UnitType.PX],  // bottom
-                  [8, UnitType.PX]   // left
-                ],
-                flexShrink: 0
+                padding: {
+                  value: [
+                    [4, UnitType.PX],  // top
+                    [8, UnitType.PX],  // right
+                    [4, UnitType.PX],  // bottom
+                    [8, UnitType.PX]   // left
+                  ]
+                },
+                flexShrink: { value: 0 }
               },
               textLayout: {
-                textOverflow: 'ellipsis',
-                whiteSpace: 'nowrap',
-                wordBreak: 'normal'
+                textOverflow: { value: 'ellipsis' },
+                whiteSpace: { value: 'nowrap' },
+                wordBreak: { value: 'normal' }
               }
             },
             {
               id: 'nav-link-2',
               type: NodeType.TEXT,
               name: '导航链接2',
-              content: '画布',
+              content: { value: '画布' },
               font: {
-                fontSize: [16, UnitType.PX],
-                color: '#333333',
-                fontFamily: 'Arial, sans-serif',
-                lineHeight: [1.5, UnitType.EM]
+                fontSize: { value: [16, UnitType.PX] },
+                color: { value: '#333333' },
+                fontFamily: { value: 'Arial, sans-serif' },
+                lineHeight: { value: [1.5, UnitType.EM] }
               },
               box: {
-                padding: [
-                  [4, UnitType.PX],  // top
-                  [8, UnitType.PX],  // right
-                  [4, UnitType.PX],  // bottom
-                  [8, UnitType.PX]   // left
-                ]
+                padding: {
+                  value: [
+                    [4, UnitType.PX],  // top
+                    [8, UnitType.PX],  // right
+                    [4, UnitType.PX],  // bottom
+                    [8, UnitType.PX]   // left
+                  ]
+                }
               }
             },
             {
               id: 'nav-link-3',
               type: NodeType.TEXT,
               name: '导航链接3',
-              content: '组件',
+              content: { value: '组件' },
               font: {
-                fontSize: [16, UnitType.PX],
-                color: '#333333',
-                fontFamily: 'Arial, sans-serif',
-                lineHeight: [1.5, UnitType.EM]
+                fontSize: { value: [16, UnitType.PX] },
+                color: { value: '#333333' },
+                fontFamily: { value: 'Arial, sans-serif' },
+                lineHeight: { value: [1.5, UnitType.EM] }
               },
               box: {
-                padding: [
-                  [4, UnitType.PX],  // top
-                  [8, UnitType.PX],  // right
-                  [4, UnitType.PX],  // bottom
-                  [8, UnitType.PX]   // left
-                ]
+                padding: {
+                  value: [
+                    [4, UnitType.PX],  // top
+                    [8, UnitType.PX],  // right
+                    [4, UnitType.PX],  // bottom
+                    [8, UnitType.PX]   // left
+                  ]
+                }
               }
             }
           ]
@@ -238,10 +255,10 @@ const rootNode: GroupNode = {
           type: NodeType.GROUP,
           name: '用户信息',
           layout: {
-            type: LayoutType.ROW,
-            alignItems: AlignType.CENTER,
-            rowGap: [8, UnitType.PX],
-            columnGap: [8, UnitType.PX]
+            type: { value: LayoutType.ROW },
+            alignItems: { value: AlignType.CENTER },
+            rowGap: { value: [8, UnitType.PX] },
+            columnGap: { value: [8, UnitType.PX] }
           },
           children: [
             {
@@ -249,27 +266,29 @@ const rootNode: GroupNode = {
               type: NodeType.ICON,
               name: '用户图标',
               iconName: 'user-circle',
-              size: [24, UnitType.PX],
-              color: '#666666'
+              size: { value: [24, UnitType.PX] },
+              color: { value: '#666666' }
             },
             {
               id: 'user-name',
               type: NodeType.TEXT,
               name: '用户名',
-              content: '张三',
+              content: { value: '张三' },
               font: {
-                fontSize: [14, UnitType.PX],
-                color: '#333333',
-                fontFamily: 'Arial, sans-serif',
-                lineHeight: [1.5, UnitType.EM]
+                fontSize: { value: [14, UnitType.PX] },
+                color: { value: '#333333' },
+                fontFamily: { value: 'Arial, sans-serif' },
+                lineHeight: { value: [1.5, UnitType.EM] }
               },
               box: {
-                padding: [
-                  [2, UnitType.PX],  // top
-                  [4, UnitType.PX],  // right
-                  [2, UnitType.PX],  // bottom
-                  [4, UnitType.PX]   // left
-                ]
+                padding: {
+                  value: [
+                    [2, UnitType.PX],  // top
+                    [4, UnitType.PX],  // right
+                    [2, UnitType.PX],  // bottom
+                    [4, UnitType.PX]   // left
+                  ]
+                }
               }
             }
           ]
@@ -284,26 +303,30 @@ const rootNode: GroupNode = {
       name: '主内容区',
       position: { x: [0, UnitType.PX], y: [80, UnitType.PX] },
       box: {
-        width: '100%',
-        height: 'auto',
-        padding: [
-          [24, UnitType.PX], // top
-          [24, UnitType.PX], // right
-          [24, UnitType.PX], // bottom
-          [24, UnitType.PX]  // left
-        ],
-        margin: [
-          [0, UnitType.PX], // top
-          [0, UnitType.PX], // right
-          [0, UnitType.PX], // bottom
-          [0, UnitType.PX]  // left
-        ],
-        overflow: 'visible'
+        width: { value: [100, UnitType.PERCENT] },
+        height: { value: [800, UnitType.PX] },
+        padding: {
+          value: [
+            [24, UnitType.PX], // top
+            [24, UnitType.PX], // right
+            [24, UnitType.PX], // bottom
+            [24, UnitType.PX]  // left
+          ]
+        },
+        margin: {
+          value: [
+            [0, UnitType.PX], // top
+            [0, UnitType.PX], // right
+            [0, UnitType.PX], // bottom
+            [0, UnitType.PX]  // left
+          ]
+        },
+        overflow: { value: 'visible' }
       },
       layout: {
-        type: LayoutType.ROW,
-        rowGap: [24, UnitType.PX],
-        columnGap: [24, UnitType.PX]
+        type: { value: LayoutType.ROW },
+        rowGap: { value: [24, UnitType.PX] },
+        columnGap: { value: [24, UnitType.PX] }
       },
       children: [
         // 侧边栏
@@ -312,35 +335,39 @@ const rootNode: GroupNode = {
           type: NodeType.GROUP,
           name: '侧边栏',
           box: {
-            width: [240, UnitType.PX],
-            height: '100%',
-            padding: [
-              [16, UnitType.PX], // top
-              [16, UnitType.PX], // right
-              [16, UnitType.PX], // bottom
-              [16, UnitType.PX]  // left
-            ],
-            margin: [
-              [0, UnitType.PX],  // top
-              [16, UnitType.PX], // right
-              [0, UnitType.PX],  // bottom
-              [0, UnitType.PX]   // left
-            ],
-            overflow: 'auto',
-            flexShrink: 0
+            width: { value: [240, UnitType.PX] },
+            height: { value: [100, UnitType.PERCENT] },
+            padding: {
+              value: [
+                [16, UnitType.PX], // top
+                [16, UnitType.PX], // right
+                [16, UnitType.PX], // bottom
+                [16, UnitType.PX]  // left
+              ]
+            },
+            margin: {
+              value: [
+                [0, UnitType.PX],  // top
+                [16, UnitType.PX], // right
+                [0, UnitType.PX],  // bottom
+                [0, UnitType.PX]   // left
+              ]
+            },
+            overflow: { value: 'auto' },
+            flexShrink: { value: 0 }
           },
           layout: {
-            type: LayoutType.COLUMN,
-            rowGap: [8, UnitType.PX],
-            columnGap: [8, UnitType.PX]
+            type: { value: LayoutType.COLUMN },
+            rowGap: { value: [8, UnitType.PX] },
+            columnGap: { value: [8, UnitType.PX] }
           },
           appearance: {
-            borderRadius: [8, UnitType.PX]
+            borderRadius: { value: [8, UnitType.PX] }
           },
           fills: [
             {
-              type: 'color',
-              value: '#f5f5f5'
+              type: { value: 'color' },
+              value: { value: '#f5f5f5' }
             }
           ],
           children: [
@@ -348,32 +375,36 @@ const rootNode: GroupNode = {
               id: 'sidebar-title',
               type: NodeType.TEXT,
               name: '侧边栏标题',
-              content: '组件库',
+              content: { value: '组件库' },
               font: {
-                fontSize: [18, UnitType.PX],
-                fontWeight: 'bold',
-                color: '#333333',
-                fontFamily: 'Arial, sans-serif',
-                lineHeight: [1.2, UnitType.EM]
+                fontSize: { value: [18, UnitType.PX] },
+                fontWeight: { value: 700 },
+                color: { value: '#333333' },
+                fontFamily: { value: 'Arial, sans-serif' },
+                lineHeight: { value: [1.2, UnitType.EM] }
               },
               box: {
-                padding: [
-                  [4, UnitType.PX],  // top
-                  [8, UnitType.PX],  // right
-                  [4, UnitType.PX],  // bottom
-                  [8, UnitType.PX]   // left
-                ],
-                margin: [
-                  [0, UnitType.PX],   // top
-                  [0, UnitType.PX],   // right
-                  [12, UnitType.PX],  // bottom
-                  [0, UnitType.PX]    // left
-                ],
-                overflow: 'hidden'
+                padding: {
+                  value: [
+                    [4, UnitType.PX],  // top
+                    [8, UnitType.PX],  // right
+                    [4, UnitType.PX],  // bottom
+                    [8, UnitType.PX]   // left
+                  ]
+                },
+                margin: {
+                  value: [
+                    [0, UnitType.PX],   // top
+                    [0, UnitType.PX],   // right
+                    [12, UnitType.PX],  // bottom
+                    [0, UnitType.PX]    // left
+                  ]
+                },
+                overflow: { value: 'hidden' }
               },
               textLayout: {
-                textOverflow: 'ellipsis',
-                whiteSpace: 'nowrap'
+                textOverflow: { value: 'ellipsis' },
+                whiteSpace: { value: 'nowrap' }
               }
             },
             // 组件分类1
@@ -382,39 +413,43 @@ const rootNode: GroupNode = {
               type: NodeType.GROUP,
               name: '基础组件',
               layout: {
-                type: LayoutType.COLUMN,
-                rowGap: [4, UnitType.PX],
-                columnGap: [4, UnitType.PX]
+                type: { value: LayoutType.COLUMN },
+                rowGap: { value: [4, UnitType.PX] },
+                columnGap: { value: [4, UnitType.PX] }
               },
               appearance: {
-                borderRadius: [4, UnitType.PX]
+                borderRadius: { value: [4, UnitType.PX] }
               },
               box: {
-                padding: [
-                  [8, UnitType.PX],  // top
-                  [8, UnitType.PX],  // right
-                  [8, UnitType.PX],  // bottom
-                  [8, UnitType.PX]   // left
-                ],
-                margin: [
-                  [0, UnitType.PX],  // top
-                  [0, UnitType.PX],  // right
-                  [12, UnitType.PX],  // bottom
-                  [0, UnitType.PX]    // left
-                ],
-                overflow: 'visible'
+                padding: {
+                  value: [
+                    [8, UnitType.PX],  // top
+                    [8, UnitType.PX],  // right
+                    [8, UnitType.PX],  // bottom
+                    [8, UnitType.PX]   // left
+                  ]
+                },
+                margin: {
+                  value: [
+                    [0, UnitType.PX],  // top
+                    [0, UnitType.PX],  // right
+                    [12, UnitType.PX],  // bottom
+                    [0, UnitType.PX]    // left
+                  ]
+                },
+                overflow: { value: 'visible' }
               },
               fills: [
                 {
-                  type: 'color',
-                  value: '#ffffff'
+                  type: { value: 'color' },
+                  value: { value: '#ffffff' }
                 }
               ],
               strokes: [
                 {
-                  width: [1, UnitType.PX],
-                  style: 'solid',
-                  color: '#e0e0e0'
+                  width: { value: [1, UnitType.PX] },
+                  style: { value: 'solid' },
+                  color: { value: '#e0e0e0' }
                 }
               ],
               children: [
@@ -423,10 +458,10 @@ const rootNode: GroupNode = {
                   type: NodeType.GROUP,
                   name: '分类标题1',
                   layout: {
-                    type: LayoutType.ROW,
-                    alignItems: AlignType.CENTER,
-                    rowGap: [8, UnitType.PX],
-                    columnGap: [8, UnitType.PX]
+                    type: { value: LayoutType.ROW },
+                    alignItems: { value: AlignType.CENTER },
+                    rowGap: { value: [8, UnitType.PX] },
+                    columnGap: { value: [8, UnitType.PX] }
                   },
                   children: [
                     {
@@ -434,34 +469,36 @@ const rootNode: GroupNode = {
                       type: NodeType.ICON,
                       name: '分类图标1',
                       iconName: 'cube',
-                      size: [16, UnitType.PX],
-                      color: '#666666'
+                      size: { value: [16, UnitType.PX] },
+                      color: { value: '#666666' }
                     },
                     {
                       id: 'category-title-1',
                       type: NodeType.TEXT,
                       name: '分类标题文本1',
-                      content: '基础组件',
+                      content: { value: '基础组件' },
                       font: {
-                        fontSize: [16, UnitType.PX],
-                        fontWeight: 'bold',
-                        color: '#333333',
-                        fontFamily: 'Arial, sans-serif',
-                        lineHeight: [1.2, UnitType.EM]
+                        fontSize: { value: [16, UnitType.PX] },
+                        fontWeight: { value: 700 },
+                        color: { value: '#333333' },
+                        fontFamily: { value: 'Arial, sans-serif' },
+                        lineHeight: { value: [1.2, UnitType.EM] }
                       },
                       box: {
-                        padding: [
-                          [2, UnitType.PX],  // top
-                          [4, UnitType.PX],  // right
-                          [2, UnitType.PX],  // bottom
-                          [4, UnitType.PX]   // left
-                        ]
+                        padding: {
+                          value: [
+                            [2, UnitType.PX],  // top
+                            [4, UnitType.PX],  // right
+                            [2, UnitType.PX],  // bottom
+                            [4, UnitType.PX]   // left
+                          ]
+                        }
                       },
                       textLayout: {
-                        textOverflow: 'ellipsis',
-                        whiteSpace: 'nowrap',
-                        direction: 'ltr',
-                        textIndent: [0, UnitType.PX]
+                        textOverflow: { value: 'ellipsis' },
+                        whiteSpace: { value: 'nowrap' },
+                        direction: { value: 'ltr' },
+                        textIndent: { value: [0, UnitType.PX] }
                       }
                     }
                   ]
@@ -471,69 +508,75 @@ const rootNode: GroupNode = {
                   type: NodeType.GROUP,
                   name: '组件列表1',
                   layout: {
-                    type: LayoutType.COLUMN,
-                    rowGap: [2, UnitType.PX],
-                    columnGap: [2, UnitType.PX]
+                    type: { value: LayoutType.COLUMN },
+                    rowGap: { value: [2, UnitType.PX] },
+                    columnGap: { value: [2, UnitType.PX] }
                   },
                   children: [
                     {
                       id: 'component-item-1-1',
                       type: NodeType.TEXT,
                       name: '组件项1-1',
-                      content: '按钮',
+                      content: { value: '按钮' },
                       font: {
-                        fontSize: [14, UnitType.PX],
-                        color: '#666666',
-                        fontFamily: 'Arial, sans-serif',
-                        lineHeight: [1.5, UnitType.EM]
+                        fontSize: { value: [14, UnitType.PX] },
+                        color: { value: '#666666' },
+                        fontFamily: { value: 'Arial, sans-serif' },
+                        lineHeight: { value: [1.5, UnitType.EM] }
                       },
                       box: {
-                        padding: [
-                          [2, UnitType.PX],  // top
-                          [4, UnitType.PX],  // right
-                          [2, UnitType.PX],  // bottom
-                          [4, UnitType.PX]   // left
-                        ]
+                        padding: {
+                          value: [
+                            [2, UnitType.PX],  // top
+                            [4, UnitType.PX],  // right
+                            [2, UnitType.PX],  // bottom
+                            [4, UnitType.PX]   // left
+                          ]
+                        }
                       }
                     },
                     {
                       id: 'component-item-1-2',
                       type: NodeType.TEXT,
                       name: '组件项1-2',
-                      content: '输入框',
+                      content: { value: '输入框' },
                       font: {
-                        fontSize: [14, UnitType.PX],
-                        color: '#666666',
-                        fontFamily: 'Arial, sans-serif',
-                        lineHeight: [1.5, UnitType.EM]
+                        fontSize: { value: [14, UnitType.PX] },
+                        color: { value: '#666666' },
+                        fontFamily: { value: 'Arial, sans-serif' },
+                        lineHeight: { value: [1.5, UnitType.EM] }
                       },
                       box: {
-                        padding: [
-                          [2, UnitType.PX],  // top
-                          [4, UnitType.PX],  // right
-                          [2, UnitType.PX],  // bottom
-                          [4, UnitType.PX]   // left
-                        ]
+                        padding: {
+                          value: [
+                            [2, UnitType.PX],  // top
+                            [4, UnitType.PX],  // right
+                            [2, UnitType.PX],  // bottom
+                            [4, UnitType.PX]   // left
+                          ]
+                        }
                       }
                     },
                     {
                       id: 'component-item-1-3',
                       type: NodeType.TEXT,
                       name: '组件项1-3',
-                      content: '选择器',
+                      content: { value: '选择器' },
                       font: {
-                        fontSize: [14, UnitType.PX],
-                        color: '#666666',
-                        fontFamily: 'Arial, sans-serif',
-                        lineHeight: [1.5, UnitType.EM]
+                        fontSize: { value: [14, UnitType.PX] },
+                        color: { value: '#666666' },
+                        fontFamily: { value: 'Arial, sans-serif' },
+                        lineHeight: { value: [1.5, UnitType.EM] }
                       },
                       box: {
-                        padding: [
-                          [2, UnitType.PX],  // top
-                          [4, UnitType.PX],  // right
-                          [2, UnitType.PX],  // bottom
-                          [4, UnitType.PX]   // left
-                        ]
+                        padding: {
+                          value: [
+                            [2, UnitType.PX],  // top
+                            [4, UnitType.PX],  // right
+                            [2, UnitType.PX],  // bottom
+                            [4, UnitType.PX]   // left
+                          ]
+                        }
                       }
                     }
                   ]
@@ -546,24 +589,24 @@ const rootNode: GroupNode = {
               type: NodeType.GROUP,
               name: '布局组件',
               layout: {
-                type: LayoutType.COLUMN,
-                rowGap: [4, UnitType.PX],
-                columnGap: [4, UnitType.PX]
+                type: { value: LayoutType.COLUMN },
+                rowGap: { value: [4, UnitType.PX] },
+                columnGap: { value: [4, UnitType.PX] }
               },
               appearance: {
-                borderRadius: [4, UnitType.PX]
+                borderRadius: { value: [4, UnitType.PX] }
               },
               fills: [
                 {
-                  type: 'color',
-                  value: '#ffffff'
+                  type: { value: 'color' },
+                  value: { value: '#ffffff' }
                 }
               ],
               strokes: [
                 {
-                  width: [1, UnitType.PX],
-                  style: 'solid',
-                  color: '#e0e0e0'
+                  width: { value: [1, UnitType.PX] },
+                  style: { value: 'solid' },
+                  color: { value: '#e0e0e0' }
                 }
               ],
               children: [
@@ -572,10 +615,10 @@ const rootNode: GroupNode = {
                   type: NodeType.GROUP,
                   name: '分类标题2',
                   layout: {
-                    type: LayoutType.ROW,
-                    alignItems: AlignType.CENTER,
-                    rowGap: [8, UnitType.PX],
-                    columnGap: [8, UnitType.PX]
+                    type: { value: LayoutType.ROW },
+                    alignItems: { value: AlignType.CENTER },
+                    rowGap: { value: [8, UnitType.PX] },
+                    columnGap: { value: [8, UnitType.PX] }
                   },
                   children: [
                     {
@@ -583,28 +626,30 @@ const rootNode: GroupNode = {
                       type: NodeType.ICON,
                       name: '分类图标2',
                       iconName: 'layout',
-                      size: [16, UnitType.PX],
-                      color: '#666666'
+                      size: { value: [16, UnitType.PX] },
+                      color: { value: '#666666' }
                     },
                     {
                       id: 'category-title-2',
                       type: NodeType.TEXT,
                       name: '分类标题文本2',
-                      content: '布局组件',
+                      content: { value: '布局组件' },
                       font: {
-                        fontSize: [16, UnitType.PX],
-                        fontWeight: 'bold',
-                        color: '#333333',
-                        fontFamily: 'Arial, sans-serif',
-                        lineHeight: [1.2, UnitType.EM]
+                        fontSize: { value: [16, UnitType.PX] },
+                        fontWeight: { value: 700 },
+                        color: { value: '#333333' },
+                        fontFamily: { value: 'Arial, sans-serif' },
+                        lineHeight: { value: [1.2, UnitType.EM] }
                       },
                       box: {
-                        padding: [
-                          [2, UnitType.PX],  // top
-                          [4, UnitType.PX],  // right
-                          [2, UnitType.PX],  // bottom
-                          [4, UnitType.PX]   // left
-                        ]
+                        padding: {
+                          value: [
+                            [2, UnitType.PX],  // top
+                            [4, UnitType.PX],  // right
+                            [2, UnitType.PX],  // bottom
+                            [4, UnitType.PX]   // left
+                          ]
+                        }
                       }
                     }
                   ]
@@ -614,69 +659,75 @@ const rootNode: GroupNode = {
                   type: NodeType.GROUP,
                   name: '组件列表2',
                   layout: {
-                    type: LayoutType.COLUMN,
-                    rowGap: [2, UnitType.PX],
-                    columnGap: [2, UnitType.PX]
+                    type: { value: LayoutType.COLUMN },
+                    rowGap: { value: [2, UnitType.PX] },
+                    columnGap: { value: [2, UnitType.PX] }
                   },
                   children: [
                     {
                       id: 'component-item-2-1',
                       type: NodeType.TEXT,
                       name: '组件项2-1',
-                      content: '容器',
+                      content: { value: '容器' },
                       font: {
-                        fontSize: [14, UnitType.PX],
-                        color: '#666666',
-                        fontFamily: 'Arial, sans-serif',
-                        lineHeight: [1.5, UnitType.EM]
+                        fontSize: { value: [14, UnitType.PX] },
+                        color: { value: '#666666' },
+                        fontFamily: { value: 'Arial, sans-serif' },
+                        lineHeight: { value: [1.5, UnitType.EM] }
                       },
                       box: {
-                        padding: [
-                          [2, UnitType.PX],  // top
-                          [4, UnitType.PX],  // right
-                          [2, UnitType.PX],  // bottom
-                          [4, UnitType.PX]   // left
-                        ]
+                        padding: {
+                          value: [
+                            [2, UnitType.PX],  // top
+                            [4, UnitType.PX],  // right
+                            [2, UnitType.PX],  // bottom
+                            [4, UnitType.PX]   // left
+                          ]
+                        }
                       }
                     },
                     {
                       id: 'component-item-2-2',
                       type: NodeType.TEXT,
                       name: '组件项2-2',
-                      content: '栅格',
+                      content: { value: '栅格' },
                       font: {
-                        fontSize: [14, UnitType.PX],
-                        color: '#666666',
-                        fontFamily: 'Arial, sans-serif',
-                        lineHeight: [1.5, UnitType.EM]
+                        fontSize: { value: [14, UnitType.PX] },
+                        color: { value: '#666666' },
+                        fontFamily: { value: 'Arial, sans-serif' },
+                        lineHeight: { value: [1.5, UnitType.EM] }
                       },
                       box: {
-                        padding: [
-                          [2, UnitType.PX],  // top
-                          [4, UnitType.PX],  // right
-                          [2, UnitType.PX],  // bottom
-                          [4, UnitType.PX]   // left
-                        ]
+                        padding: {
+                          value: [
+                            [2, UnitType.PX],  // top
+                            [4, UnitType.PX],  // right
+                            [2, UnitType.PX],  // bottom
+                            [4, UnitType.PX]   // left
+                          ]
+                        }
                       }
                     },
                     {
                       id: 'component-item-2-3',
                       type: NodeType.TEXT,
                       name: '组件项2-3',
-                      content: '卡片',
+                      content: { value: '卡片' },
                       font: {
-                        fontSize: [14, UnitType.PX],
-                        color: '#666666',
-                        fontFamily: 'Arial, sans-serif',
-                        lineHeight: [1.5, UnitType.EM]
+                        fontSize: { value: [14, UnitType.PX] },
+                        color: { value: '#666666' },
+                        fontFamily: { value: 'Arial, sans-serif' },
+                        lineHeight: { value: [1.5, UnitType.EM] }
                       },
                       box: {
-                        padding: [
-                          [2, UnitType.PX],  // top
-                          [4, UnitType.PX],  // right
-                          [2, UnitType.PX],  // bottom
-                          [4, UnitType.PX]   // left
-                        ]
+                        padding: {
+                          value: [
+                            [2, UnitType.PX],  // top
+                            [4, UnitType.PX],  // right
+                            [2, UnitType.PX],  // bottom
+                            [4, UnitType.PX]   // left
+                          ]
+                        }
                       }
                     }
                   ]
@@ -692,43 +743,47 @@ const rootNode: GroupNode = {
           type: NodeType.GROUP,
           name: '画布区域',
           box: {
-            width: 'auto',
-            height: [600, UnitType.PX],
-            padding: [
-              [0, UnitType.PX], // top
-              [0, UnitType.PX], // right
-              [0, UnitType.PX], // bottom
-              [0, UnitType.PX]  // left
-            ],
-            margin: [
-              [0, UnitType.PX], // top
-              [0, UnitType.PX], // right
-              [0, UnitType.PX], // bottom
-              [0, UnitType.PX]  // left
-            ],
-            overflow: 'auto',
-            flexGrow: 1,
-            flexBasis: [0, UnitType.PX]
+            width: { value: [600, UnitType.PX] },
+            height: { value: [600, UnitType.PX] },
+            padding: {
+              value: [
+                [0, UnitType.PX], // top
+                [0, UnitType.PX], // right
+                [0, UnitType.PX], // bottom
+                [0, UnitType.PX]  // left
+              ]
+            },
+            margin: {
+              value: [
+                [0, UnitType.PX], // top
+                [0, UnitType.PX], // right
+                [0, UnitType.PX], // bottom
+                [0, UnitType.PX]  // left
+              ]
+            },
+            overflow: { value: 'auto' },
+            flexGrow: { value: 1 },
+            flexBasis: { value: [0, UnitType.PX] }
           },
           layout: {
-            type: LayoutType.COLUMN,
-            rowGap: [16, UnitType.PX],
-            columnGap: [16, UnitType.PX]
+            type: { value: LayoutType.COLUMN },
+            rowGap: { value: [16, UnitType.PX] },
+            columnGap: { value: [16, UnitType.PX] }
           },
           appearance: {
-            borderRadius: [8, UnitType.PX]
+            borderRadius: { value: [8, UnitType.PX] }
           },
           fills: [
             {
-              type: 'color',
-              value: '#ffffff'
+              type: { value: 'color' },
+              value: { value: '#ffffff' }
             }
           ],
           strokes: [
             {
-              width: [1, UnitType.PX],
-              style: 'solid',
-              color: '#e0e0e0'
+              width: { value: [1, UnitType.PX] },
+              style: { value: 'solid' },
+              color: { value: '#e0e0e0' }
             }
           ],
           children: [
@@ -738,37 +793,41 @@ const rootNode: GroupNode = {
               type: NodeType.GROUP,
               name: '工具栏',
               layout: {
-                type: LayoutType.ROW,
-                rowGap: [16, UnitType.PX],
-                columnGap: [16, UnitType.PX],
-                alignItems: AlignType.CENTER
+                type: { value: LayoutType.ROW },
+                rowGap: { value: [16, UnitType.PX] },
+                columnGap: { value: [16, UnitType.PX] },
+                alignItems: { value: AlignType.CENTER }
               },
               box: {
-                width: '100%',
-                height: [48, UnitType.PX],
-                padding: [
-                  [8, UnitType.PX],   // top
-                  [16, UnitType.PX],  // right
-                  [8, UnitType.PX],   // bottom
-                  [16, UnitType.PX]   // left
-                ],
-                margin: [
-                  [0, UnitType.PX],  // top
-                  [0, UnitType.PX],  // right
-                  [0, UnitType.PX],  // bottom
-                  [0, UnitType.PX]   // left
-                ],
-                overflow: 'visible',
-                flexShrink: 0
+                width: { value: [100, UnitType.PERCENT] },
+                height: { value: [48, UnitType.PX] },
+                padding: {
+                  value: [
+                    [8, UnitType.PX],   // top
+                    [16, UnitType.PX],  // right
+                    [8, UnitType.PX],   // bottom
+                    [16, UnitType.PX]   // left
+                  ]
+                },
+                margin: {
+                  value: [
+                    [0, UnitType.PX],  // top
+                    [0, UnitType.PX],  // right
+                    [0, UnitType.PX],  // bottom
+                    [0, UnitType.PX]   // left
+                  ]
+                },
+                overflow: { value: 'visible' },
+                flexShrink: { value: 0 }
               },
               fills: [
                 {
-                  type: 'color',
-                  value: '#f9f9f9'
+                  type: { value: 'color' },
+                  value: { value: '#f9f9f9' }
                 }
               ],
               appearance: {
-                borderRadius: [8, UnitType.PX]
+                borderRadius: { value: [8, UnitType.PX] }
               },
               children: [
                 {
@@ -776,13 +835,13 @@ const rootNode: GroupNode = {
                   type: NodeType.GROUP,
                   name: '选择工具',
                   layout: {
-                    type: LayoutType.ROW,
-                    alignItems: AlignType.CENTER,
-                    rowGap: [4, UnitType.PX],
-                    columnGap: [4, UnitType.PX]
+                    type: { value: LayoutType.ROW },
+                    alignItems: { value: AlignType.CENTER },
+                    rowGap: { value: [4, UnitType.PX] },
+                    columnGap: { value: [4, UnitType.PX] }
                   },
                   box: {
-                    flexShrink: 0
+                    flexShrink: { value: 0 }
                   },
                   children: [
                     {
@@ -790,27 +849,29 @@ const rootNode: GroupNode = {
                       type: NodeType.ICON,
                       name: '选择工具图标',
                       iconName: 'cursor',
-                      size: [16, UnitType.PX],
-                      color: '#333333'
+                      size: { value: [16, UnitType.PX] },
+                      color: { value: '#333333' }
                     },
                     {
                       id: 'tool-select-text',
                       type: NodeType.TEXT,
                       name: '选择工具文本',
-                      content: '选择',
+                      content: { value: '选择' },
                       font: {
-                        fontSize: [14, UnitType.PX],
-                        color: '#333333',
-                        fontFamily: 'Arial, sans-serif',
-                        lineHeight: [1.5, UnitType.EM]
+                        fontSize: { value: [14, UnitType.PX] },
+                        color: { value: '#333333' },
+                        fontFamily: { value: 'Arial, sans-serif' },
+                        lineHeight: { value: [1.5, UnitType.EM] }
                       },
                       box: {
-                        padding: [
-                          [2, UnitType.PX],  // top
-                          [4, UnitType.PX],  // right
-                          [2, UnitType.PX],  // bottom
-                          [4, UnitType.PX]   // left
-                        ]
+                        padding: {
+                          value: [
+                            [2, UnitType.PX],  // top
+                            [4, UnitType.PX],  // right
+                            [2, UnitType.PX],  // bottom
+                            [4, UnitType.PX]   // left
+                          ]
+                        }
                       }
                     }
                   ]
@@ -820,10 +881,10 @@ const rootNode: GroupNode = {
                   type: NodeType.GROUP,
                   name: '矩形工具',
                   layout: {
-                    type: LayoutType.ROW,
-                    alignItems: AlignType.CENTER,
-                    rowGap: [4, UnitType.PX],
-                    columnGap: [4, UnitType.PX]
+                    type: { value: LayoutType.ROW },
+                    alignItems: { value: AlignType.CENTER },
+                    rowGap: { value: [4, UnitType.PX] },
+                    columnGap: { value: [4, UnitType.PX] }
                   },
                   children: [
                     {
@@ -831,27 +892,29 @@ const rootNode: GroupNode = {
                       type: NodeType.ICON,
                       name: '矩形工具图标',
                       iconName: 'square',
-                      size: [16, UnitType.PX],
-                      color: '#333333'
+                      size: { value: [16, UnitType.PX] },
+                      color: { value: '#333333' }
                     },
                     {
                       id: 'tool-rectangle-text',
                       type: NodeType.TEXT,
                       name: '矩形工具文本',
-                      content: '矩形',
+                      content: { value: '矩形' },
                       font: {
-                        fontSize: [14, UnitType.PX],
-                        color: '#333333',
-                        fontFamily: 'Arial, sans-serif',
-                        lineHeight: [1.5, UnitType.EM]
+                        fontSize: { value: [14, UnitType.PX] },
+                        color: { value: '#333333' },
+                        fontFamily: { value: 'Arial, sans-serif' },
+                        lineHeight: { value: [1.5, UnitType.EM] }
                       },
                       box: {
-                        padding: [
-                          [2, UnitType.PX],  // top
-                          [4, UnitType.PX],  // right
-                          [2, UnitType.PX],  // bottom
-                          [4, UnitType.PX]   // left
-                        ]
+                        padding: {
+                          value: [
+                            [2, UnitType.PX],  // top
+                            [4, UnitType.PX],  // right
+                            [2, UnitType.PX],  // bottom
+                            [4, UnitType.PX]   // left
+                          ]
+                        }
                       }
                     }
                   ]
@@ -861,10 +924,10 @@ const rootNode: GroupNode = {
                   type: NodeType.GROUP,
                   name: '文本工具',
                   layout: {
-                    type: LayoutType.ROW,
-                    alignItems: AlignType.CENTER,
-                    rowGap: [4, UnitType.PX],
-                    columnGap: [4, UnitType.PX]
+                    type: { value: LayoutType.ROW },
+                    alignItems: { value: AlignType.CENTER },
+                    rowGap: { value: [4, UnitType.PX] },
+                    columnGap: { value: [4, UnitType.PX] }
                   },
                   children: [
                     {
@@ -872,27 +935,29 @@ const rootNode: GroupNode = {
                       type: NodeType.ICON,
                       name: '文本工具图标',
                       iconName: 'type',
-                      size: [16, UnitType.PX],
-                      color: '#333333'
+                      size: { value: [16, UnitType.PX] },
+                      color: { value: '#333333' }
                     },
                     {
                       id: 'tool-text-text',
                       type: NodeType.TEXT,
                       name: '文本工具文本',
-                      content: '文本',
+                      content: { value: '文本' },
                       font: {
-                        fontSize: [14, UnitType.PX],
-                        color: '#333333',
-                        fontFamily: 'Arial, sans-serif',
-                        lineHeight: [1.5, UnitType.EM]
+                        fontSize: { value: [14, UnitType.PX] },
+                        color: { value: '#333333' },
+                        fontFamily: { value: 'Arial, sans-serif' },
+                        lineHeight: { value: [1.5, UnitType.EM] }
                       },
                       box: {
-                        padding: [
-                          [2, UnitType.PX],  // top
-                          [4, UnitType.PX],  // right
-                          [2, UnitType.PX],  // bottom
-                          [4, UnitType.PX]   // left
-                        ]
+                        padding: {
+                          value: [
+                            [2, UnitType.PX],  // top
+                            [4, UnitType.PX],  // right
+                            [2, UnitType.PX],  // bottom
+                            [4, UnitType.PX]   // left
+                          ]
+                        }
                       }
                     }
                   ]
@@ -906,36 +971,40 @@ const rootNode: GroupNode = {
               type: NodeType.GROUP,
               name: '画布',
               box: {
-                width: 'auto',
-                height: [500, UnitType.PX],
-                padding: [
-                  [20, UnitType.PX],  // top
-                  [20, UnitType.PX],  // right
-                  [20, UnitType.PX],  // bottom
-                  [20, UnitType.PX]   // left
-                ],
-                margin: [
-                  [8, UnitType.PX],  // top
-                  [0, UnitType.PX],  // right
-                  [0, UnitType.PX],  // bottom
-                  [0, UnitType.PX]   // left
-                ],
-                overflow: 'scroll'
+                width: { value: [500, UnitType.PX] },
+                height: { value: [500, UnitType.PX] },
+                padding: {
+                  value: [
+                    [20, UnitType.PX],  // top
+                    [20, UnitType.PX],  // right
+                    [20, UnitType.PX],  // bottom
+                    [20, UnitType.PX]   // left
+                  ]
+                },
+                margin: {
+                  value: [
+                    [8, UnitType.PX],  // top
+                    [0, UnitType.PX],  // right
+                    [0, UnitType.PX],  // bottom
+                    [0, UnitType.PX]   // left
+                  ]
+                },
+                overflow: { value: 'scroll' }
               },
               appearance: {
-                borderRadius: [0, UnitType.PX]
+                borderRadius: { value: [0, UnitType.PX] }
               },
               fills: [
                 {
-                  type: 'color',
-                  value: '#f0f0f0'
+                  type: { value: 'color' },
+                  value: { value: '#f0f0f0' }
                 }
               ],
               strokes: [
                 {
-                  width: [1, UnitType.PX],
-                  style: 'dashed',
-                  color: '#cccccc'
+                  width: { value: [1, UnitType.PX] },
+                  style: { value: 'dashed' },
+                  color: { value: '#cccccc' }
                 }
               ],
               children: [
@@ -946,51 +1015,55 @@ const rootNode: GroupNode = {
                   name: '示例卡片1',
                   position: { x: [50, UnitType.PX], y: [50, UnitType.PX] },
                   box: {
-                    width: [240, UnitType.PX],
-                    height: 'auto',
-                    padding: [
-                      [16, UnitType.PX],  // top
-                      [16, UnitType.PX],  // right
-                      [16, UnitType.PX],  // bottom
-                      [16, UnitType.PX]    // left
-                    ],
-                    margin: [
-                      [0, UnitType.PX],  // top
-                      [0, UnitType.PX],  // right
-                      [0, UnitType.PX],  // bottom
-                      [0, UnitType.PX]    // left
-                    ],
-                    overflow: 'hidden'
+                    width: { value: [240, UnitType.PX] },
+                    height: { value: [200, UnitType.PX] },
+                    padding: {
+                      value: [
+                        [16, UnitType.PX],  // top
+                        [16, UnitType.PX],  // right
+                        [16, UnitType.PX],  // bottom
+                        [16, UnitType.PX]    // left
+                      ]
+                    },
+                    margin: {
+                      value: [
+                        [0, UnitType.PX],  // top
+                        [0, UnitType.PX],  // right
+                        [0, UnitType.PX],  // bottom
+                        [0, UnitType.PX]    // left
+                      ]
+                    },
+                    overflow: { value: 'hidden' }
                   },
                   layout: {
-                    type: LayoutType.COLUMN,
-                    rowGap: [12, UnitType.PX],
-                    columnGap: [12, UnitType.PX]
+                    type: { value: LayoutType.COLUMN },
+                    rowGap: { value: [12, UnitType.PX] },
+                    columnGap: { value: [12, UnitType.PX] }
                   },
                   appearance: {
-                    borderRadius: [8, UnitType.PX]
+                    borderRadius: { value: [8, UnitType.PX] }
                   },
                   fills: [
                     {
-                      type: 'color',
-                      value: '#ffffff'
+                      type: { value: 'color' },
+                      value: { value: '#ffffff' }
                     }
                   ],
                   strokes: [
                     {
-                      width: [1, UnitType.PX],
-                      style: 'solid',
-                      color: '#e0e0e0'
+                      width: { value: [1, UnitType.PX] },
+                      style: { value: 'solid' },
+                      color: { value: '#e0e0e0' }
                     }
                   ],
                   effects: [
                     {
-                      type: 'shadow',
-                      offsetX: [0, UnitType.PX],
-                      offsetY: [2, UnitType.PX],
-                      blur: [8, UnitType.PX],
-                      spread: [0, UnitType.PX],
-                      color: 'rgba(0, 0, 0, 0.1)'
+                      type: { value: 'shadow' },
+                      offsetX: { value: [0, UnitType.PX] },
+                      offsetY: { value: [2, UnitType.PX] },
+                      blur: { value: [8, UnitType.PX] },
+                      spread: { value: [0, UnitType.PX] },
+                      color: { value: 'rgba(0, 0, 0, 0.1)' }
                     }
                   ],
                   children: [
@@ -999,52 +1072,58 @@ const rootNode: GroupNode = {
                       type: NodeType.GROUP,
                       name: '卡片标题1',
                       layout: {
-                        type: LayoutType.ROW,
-                        alignItems: AlignType.CENTER,
-                        justifyContent: AlignType.SPACE_BETWEEN
+                        type: { value: LayoutType.ROW },
+                        alignItems: { value: AlignType.CENTER },
+                        justifyContent: { value: AlignType.SPACE_BETWEEN }
                       },
                       box: {
-                        padding: [
-                          [0, UnitType.PX],  // top
-                          [0, UnitType.PX],  // right
-                          [0, UnitType.PX],  // bottom
-                          [0, UnitType.PX]    // left
-                        ],
-                        margin: [
-                          [0, UnitType.PX],  // top
-                          [0, UnitType.PX],  // right
-                          [8, UnitType.PX],   // bottom
-                          [0, UnitType.PX]    // left
-                        ],
-                        overflow: 'visible'
+                        padding: {
+                          value: [
+                            [0, UnitType.PX],  // top
+                            [0, UnitType.PX],  // right
+                            [0, UnitType.PX],  // bottom
+                            [0, UnitType.PX]    // left
+                          ]
+                        },
+                        margin: {
+                          value: [
+                            [0, UnitType.PX],  // top
+                            [0, UnitType.PX],  // right
+                            [8, UnitType.PX],   // bottom
+                            [0, UnitType.PX]    // left
+                          ]
+                        },
+                        overflow: { value: 'visible' }
                       },
                       children: [
                         {
                           id: 'card-title-1',
                           type: NodeType.TEXT,
                           name: '卡片标题文本1',
-                          content: '产品信息',
+                          content: { value: '产品信息' },
                           font: {
-                            fontSize: [18, UnitType.PX],
-                            fontWeight: 'bold',
-                            color: '#333333',
-                            fontFamily: 'Arial, sans-serif',
-                            lineHeight: [1.2, UnitType.EM]
+                            fontSize: { value: [18, UnitType.PX] },
+                            fontWeight: { value: 700 },
+                            color: { value: '#333333' },
+                            fontFamily: { value: 'Arial, sans-serif' },
+                            lineHeight: { value: [1.2, UnitType.EM] }
                           },
                           box: {
-                            padding: [
-                              [2, UnitType.PX],  // top
-                              [4, UnitType.PX],  // right
-                              [2, UnitType.PX],  // bottom
-                              [4, UnitType.PX]   // left
-                            ],
-                            flexGrow: 1
+                            padding: {
+                              value: [
+                                [2, UnitType.PX],  // top
+                                [4, UnitType.PX],  // right
+                                [2, UnitType.PX],  // bottom
+                                [4, UnitType.PX]   // left
+                              ]
+                            },
+                            flexGrow: { value: 1 }
                           },
                           textLayout: {
-                            textOverflow: 'ellipsis',
-                            whiteSpace: 'nowrap',
-                            direction: 'ltr',
-                            textIndent: [0, UnitType.PX]
+                            textOverflow: { value: 'ellipsis' },
+                            whiteSpace: { value: 'nowrap' },
+                            direction: { value: 'ltr' },
+                            textIndent: { value: [0, UnitType.PX] }
                           }
                         },
                         {
@@ -1052,10 +1131,10 @@ const rootNode: GroupNode = {
                           type: NodeType.ICON,
                           name: '卡片图标1',
                           iconName: 'info-circle',
-                          size: [16, UnitType.PX],
-                          color: '#666666',
+                          size: { value: [16, UnitType.PX] },
+                          color: { value: '#666666' },
                           box: {
-                            flexShrink: 0
+                            flexShrink: { value: 0 }
                           }
                         }
                       ]
@@ -1065,52 +1144,58 @@ const rootNode: GroupNode = {
                       type: NodeType.GROUP,
                       name: '卡片内容1',
                       layout: {
-                        type: LayoutType.COLUMN,
-                        rowGap: [8, UnitType.PX],
-                        columnGap: [8, UnitType.PX]
+                        type: { value: LayoutType.COLUMN },
+                        rowGap: { value: [8, UnitType.PX] },
+                        columnGap: { value: [8, UnitType.PX] }
                       },
                       box: {
-                        padding: [
-                          [8, UnitType.PX],  // top
-                          [0, UnitType.PX],  // right
-                          [8, UnitType.PX],  // bottom
-                          [0, UnitType.PX]    // left
-                        ],
-                        margin: [
-                          [0, UnitType.PX],  // top
-                          [0, UnitType.PX],  // right
-                          [12, UnitType.PX],  // bottom
-                          [0, UnitType.PX]    // left
-                        ],
-                        overflow: 'visible'
+                        padding: {
+                          value: [
+                            [8, UnitType.PX],  // top
+                            [0, UnitType.PX],  // right
+                            [8, UnitType.PX],  // bottom
+                            [0, UnitType.PX]    // left
+                          ]
+                        },
+                        margin: {
+                          value: [
+                            [0, UnitType.PX],  // top
+                            [0, UnitType.PX],  // right
+                            [12, UnitType.PX],  // bottom
+                            [0, UnitType.PX]    // left
+                          ]
+                        },
+                        overflow: { value: 'visible' }
                       },
                       children: [
                         {
                           id: 'card-text-1',
                           type: NodeType.TEXT,
                           name: '卡片文本1',
-                          content: '这是一个示例卡片，展示了基本的布局和样式。您可以拖拽调整位置和大小。',
+                          content: { value: '这是一个示例卡片，展示了基本的布局和样式。您可以拖拽调整位置和大小。' },
                           font: {
-                            fontSize: [14, UnitType.PX],
-                            color: '#666666',
-                            fontFamily: 'Arial, sans-serif',
-                            lineHeight: [1.5, UnitType.EM]
+                            fontSize: { value: [14, UnitType.PX] },
+                            color: { value: '#666666' },
+                            fontFamily: { value: 'Arial, sans-serif' },
+                            lineHeight: { value: [1.5, UnitType.EM] }
                           },
                           box: {
-                            padding: [
-                              [4, UnitType.PX],  // top
-                              [8, UnitType.PX],  // right
-                              [4, UnitType.PX],  // bottom
-                              [8, UnitType.PX]    // left
-                            ],
-                            overflow: 'hidden'
+                            padding: {
+                              value: [
+                                [4, UnitType.PX],  // top
+                                [8, UnitType.PX],  // right
+                                [4, UnitType.PX],  // bottom
+                                [8, UnitType.PX]    // left
+                              ]
+                            },
+                            overflow: { value: 'hidden' }
                           },
                           textLayout: {
-                            whiteSpace: 'normal',
-                            textOverflow: 'ellipsis',
-                            wordBreak: 'break-word',
-                            overflowWrap: 'break-word',
-                            hyphens: 'auto'
+                            whiteSpace: { value: 'normal' },
+                            textOverflow: { value: 'ellipsis' },
+                            wordBreak: { value: 'break-word' },
+                            overflowWrap: { value: 'break-word' },
+                            hyphens: { value: 'auto' }
                           }
                         }
                       ]
@@ -1120,25 +1205,29 @@ const rootNode: GroupNode = {
                       type: NodeType.GROUP,
                       name: '卡片底部1',
                       layout: {
-                        type: LayoutType.ROW,
-                        justifyContent: AlignType.END,
-                        rowGap: [8, UnitType.PX],
-                        columnGap: [8, UnitType.PX]
+                        type: { value: LayoutType.ROW },
+                        justifyContent: { value: AlignType.END },
+                        rowGap: { value: [8, UnitType.PX] },
+                        columnGap: { value: [8, UnitType.PX] }
                       },
                       box: {
-                        padding: [
-                          [8, UnitType.PX],  // top
-                          [0, UnitType.PX],  // right
-                          [0, UnitType.PX],  // bottom
-                          [0, UnitType.PX]    // left
-                        ],
-                        margin: [
-                          [0, UnitType.PX],  // top
-                          [0, UnitType.PX],  // right
-                          [0, UnitType.PX],  // bottom
-                          [0, UnitType.PX]    // left
-                        ],
-                        overflow: 'visible'
+                        padding: {
+                          value: [
+                            [8, UnitType.PX],  // top
+                            [0, UnitType.PX],  // right
+                            [0, UnitType.PX],  // bottom
+                            [0, UnitType.PX]    // left
+                          ]
+                        },
+                        margin: {
+                          value: [
+                            [0, UnitType.PX],  // top
+                            [0, UnitType.PX],  // right
+                            [0, UnitType.PX],  // bottom
+                            [0, UnitType.PX]    // left
+                          ]
+                        },
+                        overflow: { value: 'visible' }
                       },
                       children: [
                         {
@@ -1146,24 +1235,24 @@ const rootNode: GroupNode = {
                           type: NodeType.GROUP,
                           name: '卡片按钮1',
                           layout: {
-                            type: LayoutType.ROW,
-                            alignItems: AlignType.CENTER,
-                            justifyContent: AlignType.CENTER,
-                            rowGap: [4, UnitType.PX],
-                            columnGap: [4, UnitType.PX]
+                            type: { value: LayoutType.ROW },
+                            alignItems: { value: AlignType.CENTER },
+                            justifyContent: { value: AlignType.CENTER },
+                            rowGap: { value: [4, UnitType.PX] },
+                            columnGap: { value: [4, UnitType.PX] }
                           },
                           box: {
-                            width: [80, UnitType.PX],
-                            height: [32, UnitType.PX],
-                            flexShrink: 0
+                            width: { value: [80, UnitType.PX] },
+                            height: { value: [32, UnitType.PX] },
+                            flexShrink: { value: 0 }
                           },
                           appearance: {
-                            borderRadius: [4, UnitType.PX]
+                            borderRadius: { value: [4, UnitType.PX] }
                           },
                           fills: [
                             {
-                              type: 'color',
-                              value: '#4285f4'
+                              type: { value: 'color' },
+                              value: { value: '#4285f4' }
                             }
                           ],
                           children: [
@@ -1171,20 +1260,22 @@ const rootNode: GroupNode = {
                               id: 'button-text-1',
                               type: NodeType.TEXT,
                               name: '按钮文本1',
-                              content: '确定',
+                              content: { value: '确定' },
                               font: {
-                                fontSize: [14, UnitType.PX],
-                                color: '#ffffff',
-                                fontFamily: 'Arial, sans-serif',
-                                lineHeight: [1.5, UnitType.EM]
+                                fontSize: { value: [14, UnitType.PX] },
+                                color: { value: '#ffffff' },
+                                fontFamily: { value: 'Arial, sans-serif' },
+                                lineHeight: { value: [1.5, UnitType.EM] }
                               },
                               box: {
-                                padding: [
-                                  [2, UnitType.PX],  // top
-                                  [4, UnitType.PX],  // right
-                                  [2, UnitType.PX],  // bottom
-                                  [4, UnitType.PX]   // left
-                                ]
+                                padding: {
+                                  value: [
+                                    [2, UnitType.PX],  // top
+                                    [4, UnitType.PX],  // right
+                                    [2, UnitType.PX],  // bottom
+                                    [4, UnitType.PX]   // left
+                                  ]
+                                }
                               }
                             }
                           ]
@@ -1201,44 +1292,48 @@ const rootNode: GroupNode = {
                   name: '示例卡片2',
                   position: { x: [350, UnitType.PX], y: [150, UnitType.PX] },
                   box: {
-                    width: [280, UnitType.PX],
-                    height: 'auto',
-                    padding: [
-                      [20, UnitType.PX],  // top
-                      [20, UnitType.PX],  // right
-                      [20, UnitType.PX],  // bottom
-                      [20, UnitType.PX]    // left
-                    ],
-                    margin: [
-                      [0, UnitType.PX],  // top
-                      [0, UnitType.PX],  // right
-                      [0, UnitType.PX],  // bottom
-                      [0, UnitType.PX]    // left
-                    ],
-                    overflow: 'hidden'
+                    width: { value: [280, UnitType.PX] },
+                    height: { value: [300, UnitType.PX] },
+                    padding: {
+                      value: [
+                        [20, UnitType.PX],  // top
+                        [20, UnitType.PX],  // right
+                        [20, UnitType.PX],  // bottom
+                        [20, UnitType.PX]    // left
+                      ]
+                    },
+                    margin: {
+                      value: [
+                        [0, UnitType.PX],  // top
+                        [0, UnitType.PX],  // right
+                        [0, UnitType.PX],  // bottom
+                        [0, UnitType.PX]    // left
+                      ]
+                    },
+                    overflow: { value: 'auto' }
                   },
                   layout: {
-                    type: LayoutType.COLUMN,
-                    rowGap: [16, UnitType.PX],
-                    columnGap: [16, UnitType.PX]
+                    type: { value: LayoutType.COLUMN },
+                    rowGap: { value: [16, UnitType.PX] },
+                    columnGap: { value: [16, UnitType.PX] }
                   },
                   appearance: {
-                    borderRadius: [12, UnitType.PX]
+                    borderRadius: { value: [12, UnitType.PX] }
                   },
                   fills: [
                     {
-                      type: 'gradient',
-                      value: 'linear-gradient(135deg, #6e8efb, #a777e3)'
+                      type: { value: 'gradient' },
+                      value: { value: 'linear-gradient(135deg, #6e8efb, #a777e3)' }
                     }
                   ],
                   effects: [
                     {
-                      type: 'shadow',
-                      offsetX: [0, UnitType.PX],
-                      offsetY: [4, UnitType.PX],
-                      blur: [12, UnitType.PX],
-                      spread: [0, UnitType.PX],
-                      color: 'rgba(0, 0, 0, 0.2)'
+                      type: { value: 'shadow' },
+                      offsetX: { value: [0, UnitType.PX] },
+                      offsetY: { value: [4, UnitType.PX] },
+                      blur: { value: [12, UnitType.PX] },
+                      spread: { value: [0, UnitType.PX] },
+                      color: { value: 'rgba(0, 0, 0, 0.2)' }
                     }
                   ],
                   children: [
@@ -1247,65 +1342,73 @@ const rootNode: GroupNode = {
                       type: NodeType.GROUP,
                       name: '卡片标题2',
                       layout: {
-                        type: LayoutType.COLUMN,
-                        rowGap: [8, UnitType.PX],
-                        columnGap: [8, UnitType.PX]
+                        type: { value: LayoutType.COLUMN },
+                        rowGap: { value: [8, UnitType.PX] },
+                        columnGap: { value: [8, UnitType.PX] }
                       },
                       box: {
-                        padding: [
-                          [0, UnitType.PX],  // top
-                          [0, UnitType.PX],  // right
-                          [0, UnitType.PX],  // bottom
-                          [0, UnitType.PX]    // left
-                        ],
-                        margin: [
-                          [0, UnitType.PX],  // top
-                          [0, UnitType.PX],  // right
-                          [12, UnitType.PX],  // bottom
-                          [0, UnitType.PX]    // left
-                        ],
-                        overflow: 'visible'
+                        padding: {
+                          value: [
+                            [0, UnitType.PX],  // top
+                            [0, UnitType.PX],  // right
+                            [0, UnitType.PX],  // bottom
+                            [0, UnitType.PX]    // left
+                          ]
+                        },
+                        margin: {
+                          value: [
+                            [0, UnitType.PX],  // top
+                            [0, UnitType.PX],  // right
+                            [12, UnitType.PX],  // bottom
+                            [0, UnitType.PX]    // left
+                          ]
+                        },
+                        overflow: { value: 'visible' }
                       },
                       children: [
                         {
                           id: 'card-title-2',
                           type: NodeType.TEXT,
                           name: '卡片标题文本2',
-                          content: '统计数据',
+                          content: { value: '统计数据' },
                           font: {
-                            fontSize: [20, UnitType.PX],
-                            fontWeight: 'bold',
-                            color: '#ffffff',
-                            fontFamily: 'Arial, sans-serif',
-                            lineHeight: [1.2, UnitType.EM]
+                            fontSize: { value: [20, UnitType.PX] },
+                            fontWeight: { value: 700 },
+                            color: { value: '#ffffff' },
+                            fontFamily: { value: 'Arial, sans-serif' },
+                            lineHeight: { value: [1.2, UnitType.EM] }
                           },
                           box: {
-                            padding: [
-                              [2, UnitType.PX],  // top
-                              [4, UnitType.PX],  // right
-                              [2, UnitType.PX],  // bottom
-                              [4, UnitType.PX]    // left
-                            ]
+                            padding: {
+                              value: [
+                                [2, UnitType.PX],  // top
+                                [4, UnitType.PX],  // right
+                                [2, UnitType.PX],  // bottom
+                                [4, UnitType.PX]    // left
+                              ]
+                            }
                           }
                         },
                         {
                           id: 'card-subtitle-2',
                           type: NodeType.TEXT,
                           name: '卡片副标题2',
-                          content: '最近30天的数据概览',
+                          content: { value: '最近30天的数据概览' },
                           font: {
-                            fontSize: [14, UnitType.PX],
-                            color: 'rgba(255, 255, 255, 0.8)',
-                            fontFamily: 'Arial, sans-serif',
-                            lineHeight: [1.5, UnitType.EM]
+                            fontSize: { value: [14, UnitType.PX] },
+                            color: { value: 'rgba(255, 255, 255, 0.8)' },
+                            fontFamily: { value: 'Arial, sans-serif' },
+                            lineHeight: { value: [1.5, UnitType.EM] }
                           },
                           box: {
-                            padding: [
-                              [2, UnitType.PX],  // top
-                              [4, UnitType.PX],  // right
-                              [2, UnitType.PX],  // bottom
-                              [4, UnitType.PX]    // left
-                            ]
+                            padding: {
+                              value: [
+                                [2, UnitType.PX],  // top
+                                [4, UnitType.PX],  // right
+                                [2, UnitType.PX],  // bottom
+                                [4, UnitType.PX]    // left
+                              ]
+                            }
                           }
                         }
                       ]
@@ -1315,26 +1418,30 @@ const rootNode: GroupNode = {
                       type: NodeType.GROUP,
                       name: '卡片内容2',
                       layout: {
-                        type: LayoutType.GRID,
-                        gridTemplateColumns: '1fr 1fr',
-                        rowGap: [16, UnitType.PX],
-                        columnGap: [16, UnitType.PX]
+                        type: { value: LayoutType.GRID },
+                        gridTemplateColumns: { value: '1fr 1fr' },
+                        rowGap: { value: [16, UnitType.PX] },
+                        columnGap: { value: [16, UnitType.PX] }
                       },
                       box: {
-                        padding: [
-                          [0, UnitType.PX],  // top
-                          [0, UnitType.PX],  // right
-                          [0, UnitType.PX],  // bottom
-                          [0, UnitType.PX]    // left
-                        ],
-                        margin: [
-                          [0, UnitType.PX],  // top
-                          [0, UnitType.PX],  // right
-                          [0, UnitType.PX],  // bottom
-                          [0, UnitType.PX]    // left
-                        ],
-                        overflow: 'visible',
-                        flexGrow: 1
+                        padding: {
+                          value: [
+                            [0, UnitType.PX],  // top
+                            [0, UnitType.PX],  // right
+                            [0, UnitType.PX],  // bottom
+                            [0, UnitType.PX]    // left
+                          ]
+                        },
+                        margin: {
+                          value: [
+                            [0, UnitType.PX],  // top
+                            [0, UnitType.PX],  // right
+                            [0, UnitType.PX],  // bottom
+                            [0, UnitType.PX]    // left
+                          ]
+                        },
+                        overflow: { value: 'visible' },
+                        flexGrow: { value: 1 }
                       },
                       children: [
                         {
@@ -1342,74 +1449,82 @@ const rootNode: GroupNode = {
                           type: NodeType.GROUP,
                           name: '统计项1',
                           layout: {
-                            type: LayoutType.COLUMN,
-                            rowGap: [4, UnitType.PX],
-                            columnGap: [4, UnitType.PX]
+                            type: { value: LayoutType.COLUMN },
+                            rowGap: { value: [4, UnitType.PX] },
+                            columnGap: { value: [4, UnitType.PX] }
                           },
                           box: {
-                            padding: [
-                              [8, UnitType.PX],  // top
-                              [8, UnitType.PX],  // right
-                              [8, UnitType.PX],  // bottom
-                              [8, UnitType.PX]    // left
-                            ],
-                            margin: [
-                              [0, UnitType.PX],  // top
-                              [0, UnitType.PX],  // right
-                              [0, UnitType.PX],  // bottom
-                              [0, UnitType.PX]    // left
-                            ],
-                            overflow: 'hidden'
+                            padding: {
+                              value: [
+                                [8, UnitType.PX],  // top
+                                [8, UnitType.PX],  // right
+                                [8, UnitType.PX],  // bottom
+                                [8, UnitType.PX]    // left
+                              ]
+                            },
+                            margin: {
+                              value: [
+                                [0, UnitType.PX],  // top
+                                [0, UnitType.PX],  // right
+                                [0, UnitType.PX],  // bottom
+                                [0, UnitType.PX]    // left
+                              ]
+                            },
+                            overflow: { value: 'hidden' }
                           },
                           children: [
                             {
                               id: 'stat-label-1',
                               type: NodeType.TEXT,
                               name: '统计标签1',
-                              content: '访问量',
+                              content: { value: '访问量' },
                               font: {
-                                fontSize: [12, UnitType.PX],
-                                color: 'rgba(255, 255, 255, 0.7)',
-                                fontFamily: 'Arial, sans-serif',
-                                lineHeight: [1.5, UnitType.EM]
+                                fontSize: { value: [12, UnitType.PX] },
+                                color: { value: 'rgba(255, 255, 255, 0.7)' },
+                                fontFamily: { value: 'Arial, sans-serif' },
+                                lineHeight: { value: [1.5, UnitType.EM] }
                               },
                               box: {
-                                padding: [
-                                  [2, UnitType.PX],  // top
-                                  [4, UnitType.PX],  // right
-                                  [2, UnitType.PX],  // bottom
-                                  [4, UnitType.PX]    // left
-                                ]
+                                padding: {
+                                  value: [
+                                    [2, UnitType.PX],  // top
+                                    [4, UnitType.PX],  // right
+                                    [2, UnitType.PX],  // bottom
+                                    [4, UnitType.PX]    // left
+                                  ]
+                                }
                               },
                               textLayout: {
-                                textOverflow: 'ellipsis',
-                                whiteSpace: 'nowrap'
+                                textOverflow: { value: 'ellipsis' },
+                                whiteSpace: { value: 'nowrap' }
                               }
                             },
                             {
                               id: 'stat-value-1',
                               type: NodeType.TEXT,
                               name: '统计值1',
-                              content: '12,846',
+                              content: { value: '12,846' },
                               font: {
-                                fontSize: [24, UnitType.PX],
-                                fontWeight: 'bold',
-                                color: '#ffffff',
-                                fontFamily: 'Arial, sans-serif',
-                                lineHeight: [1.2, UnitType.EM]
+                                fontSize: { value: [24, UnitType.PX] },
+                                fontWeight: { value: 700 },
+                                color: { value: '#ffffff' },
+                                fontFamily: { value: 'Arial, sans-serif' },
+                                lineHeight: { value: [1.2, UnitType.EM] }
                               },
                               box: {
-                                padding: [
-                                  [2, UnitType.PX],  // top
-                                  [4, UnitType.PX],  // right
-                                  [2, UnitType.PX],  // bottom
-                                  [4, UnitType.PX]    // left
-                                ]
+                                padding: {
+                                  value: [
+                                    [2, UnitType.PX],  // top
+                                    [4, UnitType.PX],  // right
+                                    [2, UnitType.PX],  // bottom
+                                    [4, UnitType.PX]    // left
+                                  ]
+                                }
                               },
                               textLayout: {
-                                textOverflow: 'ellipsis',
-                                whiteSpace: 'nowrap',
-                                direction: 'ltr'
+                                textOverflow: { value: 'ellipsis' },
+                                whiteSpace: { value: 'nowrap' },
+                                direction: { value: 'ltr' }
                               }
                             }
                           ]
@@ -1419,65 +1534,73 @@ const rootNode: GroupNode = {
                           type: NodeType.GROUP,
                           name: '统计项2',
                           layout: {
-                            type: LayoutType.COLUMN,
-                            rowGap: [4, UnitType.PX],
-                            columnGap: [4, UnitType.PX]
+                            type: { value: LayoutType.COLUMN },
+                            rowGap: { value: [4, UnitType.PX] },
+                            columnGap: { value: [4, UnitType.PX] }
                           },
                           box: {
-                            padding: [
-                              [8, UnitType.PX],  // top
-                              [8, UnitType.PX],  // right
-                              [8, UnitType.PX],  // bottom
-                              [8, UnitType.PX]    // left
-                            ],
-                            margin: [
-                              [0, UnitType.PX],  // top
-                              [0, UnitType.PX],  // right
-                              [0, UnitType.PX],  // bottom
-                              [0, UnitType.PX]    // left
-                            ],
-                            overflow: 'hidden'
+                            padding: {
+                              value: [
+                                [8, UnitType.PX],  // top
+                                [8, UnitType.PX],  // right
+                                [8, UnitType.PX],  // bottom
+                                [8, UnitType.PX]    // left
+                              ]
+                            },
+                            margin: {
+                              value: [
+                                [0, UnitType.PX],  // top
+                                [0, UnitType.PX],  // right
+                                [0, UnitType.PX],  // bottom
+                                [0, UnitType.PX]    // left
+                              ]
+                            },
+                            overflow: { value: 'hidden' }
                           },
                           children: [
                             {
                               id: 'stat-label-2',
                               type: NodeType.TEXT,
                               name: '统计标签2',
-                              content: '转化率',
+                              content: { value: '转化率' },
                               font: {
-                                fontSize: [12, UnitType.PX],
-                                color: 'rgba(255, 255, 255, 0.7)',
-                                fontFamily: 'Arial, sans-serif',
-                                lineHeight: [1.5, UnitType.EM]
+                                fontSize: { value: [12, UnitType.PX] },
+                                color: { value: 'rgba(255, 255, 255, 0.7)' },
+                                fontFamily: { value: 'Arial, sans-serif' },
+                                lineHeight: { value: [1.5, UnitType.EM] }
                               },
                               box: {
-                                padding: [
-                                  [2, UnitType.PX],  // top
-                                  [4, UnitType.PX],  // right
-                                  [2, UnitType.PX],  // bottom
-                                  [4, UnitType.PX]    // left
-                                ]
+                                padding: {
+                                  value: [
+                                    [2, UnitType.PX],  // top
+                                    [4, UnitType.PX],  // right
+                                    [2, UnitType.PX],  // bottom
+                                    [4, UnitType.PX]    // left
+                                  ]
+                                }
                               }
                             },
                             {
                               id: 'stat-value-2',
                               type: NodeType.TEXT,
                               name: '统计值2',
-                              content: '24.3%',
+                              content: { value: '24.3%' },
                               font: {
-                                fontSize: [24, UnitType.PX],
-                                fontWeight: 'bold',
-                                color: '#ffffff',
-                                fontFamily: 'Arial, sans-serif',
-                                lineHeight: [1.2, UnitType.EM]
+                                fontSize: { value: [24, UnitType.PX] },
+                                fontWeight: { value: 700 },
+                                color: { value: '#ffffff' },
+                                fontFamily: { value: 'Arial, sans-serif' },
+                                lineHeight: { value: [1.2, UnitType.EM] }
                               },
                               box: {
-                                padding: [
-                                  [2, UnitType.PX],  // top
-                                  [4, UnitType.PX],  // right
-                                  [2, UnitType.PX],  // bottom
-                                  [4, UnitType.PX]    // left
-                                ]
+                                padding: {
+                                  value: [
+                                    [2, UnitType.PX],  // top
+                                    [4, UnitType.PX],  // right
+                                    [2, UnitType.PX],  // bottom
+                                    [4, UnitType.PX]    // left
+                                  ]
+                                }
                               }
                             }
                           ]
@@ -1487,65 +1610,73 @@ const rootNode: GroupNode = {
                           type: NodeType.GROUP,
                           name: '统计项3',
                           layout: {
-                            type: LayoutType.COLUMN,
-                            rowGap: [4, UnitType.PX],
-                            columnGap: [4, UnitType.PX]
+                            type: { value: LayoutType.COLUMN },
+                            rowGap: { value: [4, UnitType.PX] },
+                            columnGap: { value: [4, UnitType.PX] }
                           },
                           box: {
-                            padding: [
-                              [8, UnitType.PX],  // top
-                              [8, UnitType.PX],  // right
-                              [8, UnitType.PX],  // bottom
-                              [8, UnitType.PX]    // left
-                            ],
-                            margin: [
-                              [0, UnitType.PX],  // top
-                              [0, UnitType.PX],  // right
-                              [0, UnitType.PX],  // bottom
-                              [0, UnitType.PX]    // left
-                            ],
-                            overflow: 'hidden'
+                            padding: {
+                              value: [
+                                [8, UnitType.PX],  // top
+                                [8, UnitType.PX],  // right
+                                [8, UnitType.PX],  // bottom
+                                [8, UnitType.PX]    // left
+                              ]
+                            },
+                            margin: {
+                              value: [
+                                [0, UnitType.PX],  // top
+                                [0, UnitType.PX],  // right
+                                [0, UnitType.PX],  // bottom
+                                [0, UnitType.PX]    // left
+                              ]
+                            },
+                            overflow: { value: 'hidden' }
                           },
                           children: [
                             {
                               id: 'stat-label-3',
                               type: NodeType.TEXT,
                               name: '统计标签3',
-                              content: '用户数',
+                              content: { value: '用户数' },
                               font: {
-                                fontSize: [12, UnitType.PX],
-                                color: 'rgba(255, 255, 255, 0.7)',
-                                fontFamily: 'Arial, sans-serif',
-                                lineHeight: [1.5, UnitType.EM]
+                                fontSize: { value: [12, UnitType.PX] },
+                                color: { value: 'rgba(255, 255, 255, 0.7)' },
+                                fontFamily: { value: 'Arial, sans-serif' },
+                                lineHeight: { value: [1.5, UnitType.EM] }
                               },
                               box: {
-                                padding: [
-                                  [2, UnitType.PX],  // top
-                                  [4, UnitType.PX],  // right
-                                  [2, UnitType.PX],  // bottom
-                                  [4, UnitType.PX]    // left
-                                ]
+                                padding: {
+                                  value: [
+                                    [2, UnitType.PX],  // top
+                                    [4, UnitType.PX],  // right
+                                    [2, UnitType.PX],  // bottom
+                                    [4, UnitType.PX]    // left
+                                  ]
+                                }
                               }
                             },
                             {
                               id: 'stat-value-3',
                               type: NodeType.TEXT,
                               name: '统计值3',
-                              content: '3,254',
+                              content: { value: '3,254' },
                               font: {
-                                fontSize: [24, UnitType.PX],
-                                fontWeight: 'bold',
-                                color: '#ffffff',
-                                fontFamily: 'Arial, sans-serif',
-                                lineHeight: [1.2, UnitType.EM]
+                                fontSize: { value: [24, UnitType.PX] },
+                                fontWeight: { value: 700 },
+                                color: { value: '#ffffff' },
+                                fontFamily: { value: 'Arial, sans-serif' },
+                                lineHeight: { value: [1.2, UnitType.EM] }
                               },
                               box: {
-                                padding: [
-                                  [2, UnitType.PX],  // top
-                                  [4, UnitType.PX],  // right
-                                  [2, UnitType.PX],  // bottom
-                                  [4, UnitType.PX]    // left
-                                ]
+                                padding: {
+                                  value: [
+                                    [2, UnitType.PX],  // top
+                                    [4, UnitType.PX],  // right
+                                    [2, UnitType.PX],  // bottom
+                                    [4, UnitType.PX]    // left
+                                  ]
+                                }
                               }
                             }
                           ]
@@ -1555,65 +1686,73 @@ const rootNode: GroupNode = {
                           type: NodeType.GROUP,
                           name: '统计项4',
                           layout: {
-                            type: LayoutType.COLUMN,
-                            rowGap: [4, UnitType.PX],
-                            columnGap: [4, UnitType.PX]
+                            type: { value: LayoutType.COLUMN },
+                            rowGap: { value: [4, UnitType.PX] },
+                            columnGap: { value: [4, UnitType.PX] }
                           },
                           box: {
-                            padding: [
-                              [8, UnitType.PX],  // top
-                              [8, UnitType.PX],  // right
-                              [8, UnitType.PX],  // bottom
-                              [8, UnitType.PX]    // left
-                            ],
-                            margin: [
-                              [0, UnitType.PX],  // top
-                              [0, UnitType.PX],  // right
-                              [0, UnitType.PX],  // bottom
-                              [0, UnitType.PX]    // left
-                            ],
-                            overflow: 'hidden'
+                            padding: {
+                              value: [
+                                [8, UnitType.PX],  // top
+                                [8, UnitType.PX],  // right
+                                [8, UnitType.PX],  // bottom
+                                [8, UnitType.PX]    // left
+                              ]
+                            },
+                            margin: {
+                              value: [
+                                [0, UnitType.PX],  // top
+                                [0, UnitType.PX],  // right
+                                [0, UnitType.PX],  // bottom
+                                [0, UnitType.PX]    // left
+                              ]
+                            },
+                            overflow: { value: 'hidden' }
                           },
                           children: [
                             {
                               id: 'stat-label-4',
                               type: NodeType.TEXT,
                               name: '统计标签4',
-                              content: '平均停留',
+                              content: { value: '平均停留' },
                               font: {
-                                fontSize: [12, UnitType.PX],
-                                color: 'rgba(255, 255, 255, 0.7)',
-                                fontFamily: 'Arial, sans-serif',
-                                lineHeight: [1.5, UnitType.EM]
+                                fontSize: { value: [12, UnitType.PX] },
+                                color: { value: 'rgba(255, 255, 255, 0.7)' },
+                                fontFamily: { value: 'Arial, sans-serif' },
+                                lineHeight: { value: [1.5, UnitType.EM] }
                               },
                               box: {
-                                padding: [
-                                  [2, UnitType.PX],  // top
-                                  [4, UnitType.PX],  // right
-                                  [2, UnitType.PX],  // bottom
-                                  [4, UnitType.PX]    // left
-                                ]
+                                padding: {
+                                  value: [
+                                    [2, UnitType.PX],  // top
+                                    [4, UnitType.PX],  // right
+                                    [2, UnitType.PX],  // bottom
+                                    [4, UnitType.PX]    // left
+                                  ]
+                                }
                               }
                             },
                             {
                               id: 'stat-value-4',
                               type: NodeType.TEXT,
                               name: '统计值4',
-                              content: '4:32',
+                              content: { value: '4:32' },
                               font: {
-                                fontSize: [24, UnitType.PX],
-                                fontWeight: 'bold',
-                                color: '#ffffff',
-                                fontFamily: 'Arial, sans-serif',
-                                lineHeight: [1.2, UnitType.EM]
+                                fontSize: { value: [24, UnitType.PX] },
+                                fontWeight: { value: 700 },
+                                color: { value: '#ffffff' },
+                                fontFamily: { value: 'Arial, sans-serif' },
+                                lineHeight: { value: [1.2, UnitType.EM] }
                               },
                               box: {
-                                padding: [
-                                  [2, UnitType.PX],  // top
-                                  [4, UnitType.PX],  // right
-                                  [2, UnitType.PX],  // bottom
-                                  [4, UnitType.PX]    // left
-                                ]
+                                padding: {
+                                  value: [
+                                    [2, UnitType.PX],  // top
+                                    [4, UnitType.PX],  // right
+                                    [2, UnitType.PX],  // bottom
+                                    [4, UnitType.PX]    // left
+                                  ]
+                                }
                               }
                             }
                           ]
@@ -1637,14 +1776,14 @@ export const canvasData: PageNode = {
   type: NodeType.PAGE,
   name: '设计页面',
   box: {
-    width: [1920, UnitType.PX],
-    height: [1080, UnitType.PX],
-    overflow: 'auto'
+    width: { value: [1920, UnitType.PX] },
+    height: { value: [1080, UnitType.PX] },
+    overflow: { value: 'auto' }
   },
   font: {
-    fontFamily: 'Arial, sans-serif',
-    fontSize: [14, UnitType.PX],
-    color: '#333333'
+    fontFamily: { value: 'Arial, sans-serif' },
+    fontSize: { value: [14, UnitType.PX] },
+    color: { value: '#333333' }
   },
   children: [rootNode]
 };

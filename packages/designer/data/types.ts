@@ -38,97 +38,103 @@ export enum UnitType {
   PERCENT = "%"
 }
 
+// 支持变量的值类型
+export interface VariableValue<T> {
+  value: T;
+  variable?: string;
+}
+
 // 盒模型信息接口
 export interface BoxInfo {
-  width?: [number, UnitType] ; 
-  height?: [number, UnitType] ;
-  minWidth?: [number, UnitType] ;
-  maxWidth?: [number, UnitType] ;
-  minHeight?: [number, UnitType];
-  maxHeight?: [number, UnitType];
-  padding?: [[number, UnitType], [number, UnitType], [number, UnitType], [number, UnitType]]; // [top, right, bottom, left]
-  margin?: [[number, UnitType], [number, UnitType], [number, UnitType], [number, UnitType]]; // [top, right, bottom, left]
-  overflow?: 'visible' | 'hidden' | 'scroll' | 'auto';
-  flexGrow?: number;
-  flexShrink?: number;
-  flexBasis?: [number, UnitType];
+  width?: VariableValue<[number, UnitType]>; 
+  height?: VariableValue<[number, UnitType]>;
+  minWidth?: VariableValue<[number, UnitType]>;
+  maxWidth?: VariableValue<[number, UnitType]>;
+  minHeight?: VariableValue<[number, UnitType]>;
+  maxHeight?: VariableValue<[number, UnitType]>;
+  padding?: VariableValue<[[number, UnitType], [number, UnitType], [number, UnitType], [number, UnitType]]>; // [top, right, bottom, left]
+  margin?: VariableValue<[[number, UnitType], [number, UnitType], [number, UnitType], [number, UnitType]]>; // [top, right, bottom, left]
+  overflow?: VariableValue<'visible' | 'hidden' | 'scroll' | 'auto'>;
+  flexGrow?: VariableValue<number>;
+  flexShrink?: VariableValue<number>;
+  flexBasis?: VariableValue<[number, UnitType]>;
 }
 
 // 布局信息接口
 export interface LayoutInfo {
-  type: LayoutType;
-  rowGap?: [number, UnitType];
-  columnGap?: [number, UnitType];
-  justifyContent?: AlignType;
-  alignItems?: AlignType;
-  flexWrap?: 'nowrap' | 'wrap' | 'wrap-reverse';
+  type: VariableValue<LayoutType>;
+  rowGap?: VariableValue<[number, UnitType]>;
+  columnGap?: VariableValue<[number, UnitType]>;
+  justifyContent?: VariableValue<AlignType>;
+  alignItems?: VariableValue<AlignType>;
+  flexWrap?: VariableValue<'nowrap' | 'wrap' | 'wrap-reverse'>;
   // Grid 特有属性
-  gridTemplateColumns?: string;
-  gridTemplateRows?: string;
-  gridAutoFlow?: 'row' | 'column' | 'dense';
+  gridTemplateColumns?: VariableValue<string>;
+  gridTemplateRows?: VariableValue<string>;
+  gridAutoFlow?: VariableValue<'row' | 'column' | 'dense'>;
 }
 
 // 外观信息接口
 export interface AppearanceInfo {
-  opacity?: [number, string]; // 0-1
-  borderRadius?: [number, UnitType] | string;
-  visibility?: 'visible' | 'hidden';
-  zIndex?: [number, string];
+  opacity?: VariableValue<[number, string]>; // 0-1
+  borderRadius?: VariableValue<[number, UnitType]>;
+  visibility?: VariableValue<'visible' | 'hidden'>;
+  zIndex?: VariableValue<[number, string]>;
 }
 
 // 描边信息接口
 export interface StrokeInfo {
-  width: [number, UnitType];
-  style: 'solid' | 'dashed' | 'dotted' | 'double';
-  color: string;
+  width: VariableValue<[number, UnitType]>;
+  style: VariableValue<'solid' | 'dashed' | 'dotted' | 'double'>;
+  color: VariableValue<string>;
 }
 
 // 填充信息接口
 export interface FillInfo {
-  type: 'color' | 'gradient' | 'image';
-  value: string; // 颜色值、渐变值或图片URL
+  type: VariableValue<'color' | 'gradient' | 'image'>;
+  value: VariableValue<string>; // 颜色值、渐变值或图片URL
 }
 
 // 效果信息接口
 export interface EffectInfo {
-  type: 'shadow' | 'blur';
+  type: VariableValue<'shadow' | 'blur'>;
   // 阴影属性
-  offsetX?: [number, UnitType];
-  offsetY?: [number, UnitType];
-  blur?: [number, UnitType];
-  spread?: [number, UnitType];
-  color?: string;
-  inset?: boolean;
+  offsetX?: VariableValue<[number, UnitType]>;
+  offsetY?: VariableValue<[number, UnitType]>;
+  blur?: VariableValue<[number, UnitType]>;
+  spread?: VariableValue<[number, UnitType]>;
+  color?: VariableValue<string>;
+  inset?: VariableValue<boolean>;
   // 模糊属性
-  blurAmount?: [number, UnitType];
+  blurAmount?: VariableValue<[number, UnitType]>;
 }
 
 // 字体信息接口
 export interface FontInfo {
-  fontSize?: [number, UnitType];
-  fontFamily?: string;
-  fontWeight?: number;
-  fontStyle?: 'normal' | 'italic';
-  textDecoration?: 'none' | 'underline' | 'line-through';
-  textAlign?: 'left' | 'center' | 'right' | 'justify';
-  color?: string;
-  lineHeight?: [number, UnitType];
-  letterSpacing?: [number, UnitType];
-  wordSpacing?: [number, UnitType];
-  textTransform?: 'none' | 'capitalize' | 'uppercase' | 'lowercase';
-  fontVariant?: 'normal' | 'small-caps';
-  fontStretch?: 'normal' | 'condensed' | 'expanded';
+  fontSize?: VariableValue<[number, UnitType]>;
+  fontFamily?: VariableValue<string>;
+  fontWeight?: VariableValue<number>;
+  fontStyle?: VariableValue<'normal' | 'italic'>;
+  textDecoration?: VariableValue<'none' | 'underline' | 'line-through'>;
+  textAlign?: VariableValue<'left' | 'center' | 'right' | 'justify'>;
+  color?: VariableValue<string>;
+  lineHeight?: VariableValue<[number, UnitType]>;
+  letterSpacing?: VariableValue<[number, UnitType]>;
+  wordSpacing?: VariableValue<[number, UnitType]>;
+  textTransform?: VariableValue<'none' | 'capitalize' | 'uppercase' | 'lowercase'>;
+  fontVariant?: VariableValue<'normal' | 'small-caps'>;
+  fontStretch?: VariableValue<'normal' | 'condensed' | 'expanded'>;
 }
 
 // 文本布局信息接口
 export interface TextLayoutInfo {
-  whiteSpace?: 'normal' | 'nowrap' | 'pre' | 'pre-wrap' | 'pre-line';
-  textOverflow?: 'clip' | 'ellipsis';
-  wordBreak?: 'normal' | 'break-all' | 'keep-all' | 'break-word';
-  overflowWrap?: 'normal' | 'break-word';
-  hyphens?: 'none' | 'manual' | 'auto';
-  direction?: 'ltr' | 'rtl';
-  textIndent?: [number, UnitType];
+  whiteSpace?: VariableValue<'normal' | 'nowrap' | 'pre' | 'pre-wrap' | 'pre-line'>;
+  textOverflow?: VariableValue<'clip' | 'ellipsis'>;
+  wordBreak?: VariableValue<'normal' | 'break-all' | 'keep-all' | 'break-word'>;
+  overflowWrap?: VariableValue<'normal' | 'break-word'>;
+  hyphens?: VariableValue<'none' | 'manual' | 'auto'>;
+  direction?: VariableValue<'ltr' | 'rtl'>;
+  textIndent?: VariableValue<[number, UnitType]>;
 }
 
 // 基础节点接口
@@ -145,7 +151,7 @@ export interface BaseNode {
 // 文本节点接口
 export interface TextNode extends BaseNode {
   type: NodeType.TEXT;
-  content: string;
+  content: VariableValue<string>;
   font?: FontInfo;
   box?: BoxInfo;
   textLayout?: TextLayoutInfo;
@@ -155,8 +161,8 @@ export interface TextNode extends BaseNode {
 export interface IconNode extends BaseNode {
   type: NodeType.ICON;
   iconName: string;
-  size?: [number, UnitType];
-  color?: string;
+  size?: VariableValue<[number, UnitType]>;
+  color?: VariableValue<string>;
   box?: BoxInfo;
 }
 
