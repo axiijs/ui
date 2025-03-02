@@ -2,7 +2,7 @@ import {Atom, atom, computed, JSXElement, RenderContext, RxList, StyleSize} from
 import {LeftPanel} from "./LeftPanel";
 import {RightPanel} from "./RightPanel";
 import {GroupNode, LayoutInfo, LayoutType, NodeType, StrokeInfo, TextNode, PageNode} from "../data/types";
-import { RxCanvas, RxGroup, RxIconNode, RxNode, RxNodeType, RxPage, RxTextNode } from "./RxPage";
+import { RxCanvas, RxCollection, RxGroup, RxIconNode, RxNode, RxNodeType, RxPage, RxTextNode } from "./RxPage";
 import { throttleTimeout } from "./util";
 
 const nodeDomMap = new WeakMap<RxPage|RxGroup|RxTextNode|RxIconNode, HTMLElement>()
@@ -22,13 +22,23 @@ window.addEventListener('popstate', (event) => {
 
 
 
-function textAttributesToStyle(node: TextNode) {
-    return {
+function textAttributesToStyle(node: RxTextNode) {
+    const boxStyle = () => {
+        const result= {
+            boxSizing: 'border-box',
+            ...Object.fromEntries(Object.entries(node.box).map(([key, value]) => [key, value()])),
+        }
+        return result
+    }
+
+    const fontStyle = () => Object.fromEntries(Object.entries(node.font).map(([key, value]) => [key, value()]))
+
+    const otherStyle = {
         display: 'inline-block',
-        ...node.box,
-        ...node.font,
         ...node.textLayout,
     }
+
+    return [boxStyle, fontStyle, otherStyle]
 }
 
 
@@ -49,8 +59,6 @@ function groupAttributesToStyle(node: RxGroup) {
             boxSizing: 'border-box',
             ...Object.fromEntries(Object.entries(node.box).map(([key, value]) => [key, value()])),
         }
-        console.log(node.data.name)
-        console.log(node.data.box)
         return result
     }
 
@@ -109,7 +117,7 @@ function renderNode(node: RxPage|RxGroup|RxTextNode|RxIconNode, selected: Atom<b
 
 function renderText(node: RxTextNode, selected: Atom<boolean>, createElement: RenderContext['createElement']) {
     const data = node.data
-    return <div data-name={data.name} style={() => textAttributesToStyle(data)}>{data.content}</div>
+    return <div data-name={data.name} style={textAttributesToStyle(node)}>{data.content}</div>
 }
 
 
@@ -128,7 +136,7 @@ function renderPageNode(node: RxPage, selected: Atom<boolean>, createElement: Re
     </div>
 }
 
-export function App({data}: {data: PageNode[]}, {createElement, createRef}: RenderContext)  {
+export function App({data}: {data: PageNode[]}, {createElement, createRef, useLayoutEffect}: RenderContext)  {
     // TODO 显示的时候获取一次
     const containerRef = createRef()
     let lastContainerRect:any
@@ -230,11 +238,20 @@ export function App({data}: {data: PageNode[]}, {createElement, createRef}: Rend
     })
 
     const selectedRect = computed<DOMRect|null>(({lastValue}) => {
-        if (!leafSelectedNode()) {
+        const node = leafSelectedNode()
+        if (!node) {
             return null
         } else {
-            // 监听
-            Object.values(leafSelectedNode()!.box).forEach((value) => value())
+            // 监听 box
+            Object.values(node!.box).forEach((value) => value())
+            // 监听 layout
+            if(node instanceof RxCollection) {
+                Object.values(node!.layout).forEach((value) => value())
+            }
+            // 监听 font
+            if(node instanceof RxTextNode) {
+                Object.values(node!.font).forEach((value) => value())
+            }
         }
 
 
@@ -266,6 +283,12 @@ export function App({data}: {data: PageNode[]}, {createElement, createRef}: Rend
             // backgroundSize: '10px 10px',
             // backgroundPosition: '0 0, 5px 5px',
         }
+    })
+
+    useLayoutEffect(() => {
+        const firstPage = rxCanvas.children.raw[0][0]
+        rxCanvas.selectedNode(firstPage);
+        firstPage.selectedNode(firstPage.children.raw[0][0])
     })
     
     return (

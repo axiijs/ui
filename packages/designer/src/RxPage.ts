@@ -1,5 +1,5 @@
 import { Atom, atom, JSXElement, RxList } from "axii";
-import { AlignType, BoxInfo, GroupNode, IconNode, LayoutInfo, LayoutType, NodeType, PageNode, TextNode, UnitType } from "../data/types";
+import { AlignType, BoxInfo, FillInfo, FontInfo, GroupNode, IconNode, LayoutInfo, LayoutType, Node, NodeType, PageNode, TextLayoutInfo, TextNode, UnitType } from "../data/types";
 
 // BoxInfo 的 Atom 版本，所有值都用 Atom 包装
 export interface AtomBoxInfo {
@@ -20,38 +20,67 @@ export interface AtomBoxInfo {
 // LayoutInfo 的 Atom 版本，所有值都用 Atom 包装
 export interface AtomLayoutInfo {
   type: Atom<LayoutType>;
-  gap: Atom<[number, UnitType] | undefined>;
-  rowGap: Atom<[number, UnitType] | undefined>;
-  columnGap: Atom<[number, UnitType] | undefined>;
-  justifyContent: Atom<AlignType | undefined>;
-  alignItems: Atom<AlignType | undefined>;
-  flexWrap: Atom<'nowrap' | 'wrap' | 'wrap-reverse' | undefined>;
+  rowGap: Atom<[number, UnitType] | null>;
+  columnGap: Atom<[number, UnitType] | null>;
+  justifyContent: Atom<AlignType | null>;
+  alignItems: Atom<AlignType | null>;
+  flexWrap: Atom<'nowrap' | 'wrap' | 'wrap-reverse' | null>;
   // Grid 特有属性
-  gridTemplateColumns: Atom<string | undefined>;
-  gridTemplateRows: Atom<string | undefined>;
-  gridAutoFlow: Atom<'row' | 'column' | 'dense' | undefined>;
+  gridTemplateColumns: Atom<string | null>;
+  gridTemplateRows: Atom<string | null>;
+  gridAutoFlow: Atom<'row' | 'column' | 'dense' | null>;
+}
+
+// FontInfo 的 Atom 版本，所有值都用 Atom 包装
+export interface AtomFontInfo {
+  fontSize: Atom<[number, UnitType] | null>;
+  fontFamily: Atom<string | null>;
+  fontWeight: Atom<number | null>;
+  fontStyle: Atom<'normal' | 'italic' | null>;
+  textDecoration: Atom<'none' | 'underline' | 'line-through' | null>;
+  textAlign: Atom<'left' | 'center' | 'right' | 'justify' | null>;
+  color: Atom<string | null>;
+  lineHeight: Atom<[number, UnitType] | null>;
+  letterSpacing: Atom<[number, UnitType] | null>;
+  wordSpacing: Atom<[number, UnitType] | null>;
+  textTransform: Atom<'none' | 'capitalize' | 'uppercase' | 'lowercase' | null>;
+  fontVariant: Atom<'normal' | 'small-caps' | null>;
+  fontStretch: Atom<'normal' | 'condensed' | 'expanded' | null>;
+}
+
+// TextLayoutInfo 的 Atom 版本，所有值都用 Atom 包装
+export interface AtomTextLayoutInfo {
+  whiteSpace: Atom<'normal' | 'nowrap' | 'pre' | 'pre-wrap' | 'pre-line' | null>;
+  textOverflow: Atom<'clip' | 'ellipsis' | null>;
+  wordBreak: Atom<'normal' | 'break-all' | 'keep-all' | 'break-word' | null>;
+  overflowWrap: Atom<'normal' | 'break-word' | null>;
+  hyphens: Atom<'none' | 'manual' | 'auto' | null>;
+  direction: Atom<'ltr' | 'rtl' | null>;
+  textIndent: Atom<[number, UnitType] | null>;
 }
 
 // 基类，所有节点类型都继承自 RxNode
 export abstract class RxNode {
     public box: AtomBoxInfo;
     
-    constructor(public data: any = null, public root: RxCanvas|null = null) {
+    constructor(public data: Node, public root: RxCanvas) {
         // 初始化 box 属性，将 data.box 中的值转换为 Atom
         this.box = {
-            width: atom(data?.box?.width ),
-            height: atom(data?.box?.height ),
-            minWidth: atom(data?.box?.minWidth),
-            maxWidth: atom(data?.box?.maxWidth),
-            minHeight: atom(data?.box?.minHeight),
-            maxHeight: atom(data?.box?.maxHeight),
-            padding: atom(data?.box?.padding),
-            margin: atom(data?.box?.margin),
-            overflow: atom(data?.box?.overflow),
-            flexGrow: atom(data?.box?.flexGrow),
-            flexShrink: atom(data?.box?.flexShrink),
-            flexBasis: atom(data?.box?.flexBasis)
+            width: atom(data.box?.width || null),
+            height: atom(data?.box?.height || null),
+            minWidth: atom(data?.box?.minWidth || null),
+            maxWidth: atom(data?.box?.maxWidth || null),
+            minHeight: atom(data?.box?.minHeight || null),
+            maxHeight: atom(data?.box?.maxHeight || null),
+            padding: atom(data?.box?.padding || null),
+            margin: atom(data?.box?.margin || null),
+            overflow: atom(data?.box?.overflow || null),
+            flexGrow: atom(data?.box?.flexGrow || null),
+            flexShrink: atom(data?.box?.flexShrink || null),
+            flexBasis: atom(data?.box?.flexBasis || null)
         };
+        
+        
     }
 }
 
@@ -61,22 +90,24 @@ export abstract class RxCollection<T, C extends RxNode> extends RxNode {
     public selectedNode = atom<C | null>(null);
     public folded = atom<boolean>(true);
     public layout: AtomLayoutInfo;
+    public fills: RxList<FillInfo>;
     
-    constructor(data: any = null, root: RxCanvas|null = null) {
+    constructor( data: PageNode|GroupNode, root: RxCanvas) {
         super(data, root);
         // 初始化 layout 属性，将 data.layout 中的值转换为 Atom
         this.layout = {
             type: atom(data?.layout?.type || LayoutType.COLUMN),
-            gap: atom(data?.layout?.gap),
-            rowGap: atom(data?.layout?.rowGap),
-            columnGap: atom(data?.layout?.columnGap),
-            justifyContent: atom(data?.layout?.justifyContent),
-            alignItems: atom(data?.layout?.alignItems),
-            flexWrap: atom(data?.layout?.flexWrap),
-            gridTemplateColumns: atom(data?.layout?.gridTemplateColumns),
-            gridTemplateRows: atom(data?.layout?.gridTemplateRows),
-            gridAutoFlow: atom(data?.layout?.gridAutoFlow)
+            rowGap: atom(data?.layout?.rowGap || null),
+            columnGap: atom(data?.layout?.columnGap || null),
+            justifyContent: atom(data?.layout?.justifyContent || null),
+            alignItems: atom(data?.layout?.alignItems || null),
+            flexWrap: atom(data?.layout?.flexWrap || null),
+            gridTemplateColumns: atom(data?.layout?.gridTemplateColumns || null),
+            gridTemplateRows: atom(data?.layout?.gridTemplateRows || null),
+            gridAutoFlow: atom(data?.layout?.gridAutoFlow || null)
         };
+        // 初始化 fills 属性，使用 data.fills 或空数组
+        this.fills = new RxList(data?.fills || []);
     }
 
     // 切换选中节点的方法
@@ -97,8 +128,39 @@ export abstract class RxCollection<T, C extends RxNode> extends RxNode {
 }
 
 export class RxTextNode extends RxNode {
+    public font: AtomFontInfo;
+    public textLayout: AtomTextLayoutInfo;
+    
     constructor(public data: TextNode, public parent: RxGroup | RxPage, root: any) {
         super(data, root);
+        
+        // 初始化 font 属性，将 data.font 中的值转换为 Atom
+        this.font = {
+            fontSize: atom(data?.font?.fontSize || null),
+            fontFamily: atom(data?.font?.fontFamily || null),
+            fontWeight: atom(data?.font?.fontWeight || null),
+            fontStyle: atom(data?.font?.fontStyle || null),
+            textDecoration: atom(data?.font?.textDecoration || null),
+            textAlign: atom(data?.font?.textAlign || null),
+            color: atom(data?.font?.color || null),
+            lineHeight: atom(data?.font?.lineHeight || null),
+            letterSpacing: atom(data?.font?.letterSpacing || null),
+            wordSpacing: atom(data?.font?.wordSpacing || null),
+            textTransform: atom(data?.font?.textTransform || null),
+            fontVariant: atom(data?.font?.fontVariant || null),
+            fontStretch: atom(data?.font?.fontStretch || null)
+        };
+        
+        // 初始化 textLayout 属性，将 data.textLayout 中的值转换为 Atom
+        this.textLayout = {
+            whiteSpace: atom(data?.textLayout?.whiteSpace || null),
+            textOverflow: atom(data?.textLayout?.textOverflow || null),
+            wordBreak: atom(data?.textLayout?.wordBreak || null),
+            overflowWrap: atom(data?.textLayout?.overflowWrap || null),
+            hyphens: atom(data?.textLayout?.hyphens || null),
+            direction: atom(data?.textLayout?.direction || null),
+            textIndent: atom(data?.textLayout?.textIndent || null)
+        };
     }
 }
 
@@ -114,7 +176,7 @@ export class RxGroup extends RxCollection<GroupNode, RxTextNode | RxIconNode | R
         this.children = new RxList(data.children.map(item => 
             item.type===NodeType.GROUP ? new RxGroup(item, this, root) : 
             (item.type===NodeType.TEXT ? new RxTextNode(item, this, root) : 
-            new RxIconNode(item, this, root))
+            new RxIconNode(item as IconNode, this, root))
         )).createSelection(this.selectedNode);
     }
 }
@@ -127,7 +189,7 @@ export class RxPage extends RxCollection<PageNode, RxTextNode | RxIconNode | RxG
         this.children = (new RxList(data.children.map(item => 
             item.type===NodeType.GROUP ? new RxGroup(item, this, this.root) : 
             (item.type===NodeType.TEXT ? new RxTextNode(item, this, this.root) : 
-            new RxIconNode(item, this, this.root))
+            new RxIconNode(item as IconNode, this, this.root))
         ))).createSelection(this.selectedNode);
     }
 }
@@ -135,15 +197,15 @@ export class RxPage extends RxCollection<PageNode, RxTextNode | RxIconNode | RxG
 // 定义 RxNodeType 类型，包含所有节点类型
 export type RxNodeType = RxPage | RxGroup | RxTextNode | RxIconNode;
 
-export class RxCanvas extends RxCollection<PageNode[], RxPage> {
+export class RxCanvas {
     public folded = atom<boolean>(false);
     static canvasNodeToRxNodeMap = new WeakMap<HTMLElement, RxNodeType>();
     static rxNodeToCanvasNodeMap = new WeakMap<RxNodeType, HTMLElement>();
     static NavNodeToRxNodeMap = new WeakMap<HTMLElement, RxNodeType>();
     static rxNodeToNavNodeMap = new WeakMap<RxNodeType, HTMLElement>();
-    
+    public children: RxList<[RxPage, Atom<boolean>]>;
+    public selectedNode = atom<RxPage | null>(null);
     constructor(public data: PageNode[]) {
-        super(null, null);
         this.children = (new RxList(data.map(item => new RxPage(item, this)))).createSelection(this.selectedNode);
     }
     
@@ -175,16 +237,29 @@ export class RxCanvas extends RxCollection<PageNode[], RxPage> {
     
     scrollIntoNavigatorView(rxNode: RxNodeType) {
         const navNode = RxCanvas.rxNodeToNavNodeMap.get(rxNode)
-        console.log(navNode, rxNode)
         navNode?.scrollIntoView({behavior: 'instant', block: 'center'})
     }
     
     scrollIntoCanvasView() {
         
     }
-    
+    // 切换选中节点的方法
+    switchSelectedNode(child: RxPage | null): void {
+        // 如果已有选中节点，先重置它及其子节点
+        const previousSelected = this.selectedNode();
+        if (previousSelected && previousSelected !== child) {
+            // 如果之前选中的节点也是 RxCollection，递归重置其选中状态
+            if (previousSelected instanceof RxCollection) {
+                previousSelected.switchSelectedNode(null);
+            }
+        }
+        
+        // 设置新的选中节点
+        this.selectedNode(child);
+        this.folded(false);
+    }
     selectFirstInPath(rxNodePath: RxNodeType[]) {
-        let parentRxNode: RxCollection<any, any> = this
+        let parentRxNode: RxCollection<any, any>|RxCanvas = this
 
         for (const rxNode of rxNodePath) {
             if (parentRxNode!.selectedNode() === rxNode) {

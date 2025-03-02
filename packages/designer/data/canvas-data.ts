@@ -72,7 +72,8 @@ const rootNode: GroupNode = {
         type: LayoutType.ROW,
         justifyContent: AlignType.SPACE_BETWEEN,
         alignItems: AlignType.CENTER,
-        gap: [16, UnitType.PX]
+        rowGap: [16, UnitType.PX],
+        columnGap: [16, UnitType.PX]
       },
       appearance: {
         opacity: [1, ''],
@@ -109,7 +110,8 @@ const rootNode: GroupNode = {
           layout: {
             type: LayoutType.ROW,
             alignItems: AlignType.CENTER,
-            gap: [8, UnitType.PX]
+            rowGap: [8, UnitType.PX],
+            columnGap: [8, UnitType.PX]
           },
           children: [
             {
@@ -158,7 +160,8 @@ const rootNode: GroupNode = {
           name: '导航链接',
           layout: {
             type: LayoutType.ROW,
-            gap: [24, UnitType.PX],
+            rowGap: [24, UnitType.PX],
+            columnGap: [24, UnitType.PX],
             alignItems: AlignType.CENTER
           },
           children: [
@@ -237,7 +240,8 @@ const rootNode: GroupNode = {
           layout: {
             type: LayoutType.ROW,
             alignItems: AlignType.CENTER,
-            gap: [8, UnitType.PX]
+            rowGap: [8, UnitType.PX],
+            columnGap: [8, UnitType.PX]
           },
           children: [
             {
@@ -298,7 +302,8 @@ const rootNode: GroupNode = {
       },
       layout: {
         type: LayoutType.ROW,
-        gap: [24, UnitType.PX]
+        rowGap: [24, UnitType.PX],
+        columnGap: [24, UnitType.PX]
       },
       children: [
         // 侧边栏
@@ -326,7 +331,8 @@ const rootNode: GroupNode = {
           },
           layout: {
             type: LayoutType.COLUMN,
-            gap: [8, UnitType.PX]
+            rowGap: [8, UnitType.PX],
+            columnGap: [8, UnitType.PX]
           },
           appearance: {
             borderRadius: [8, UnitType.PX]
@@ -377,7 +383,8 @@ const rootNode: GroupNode = {
               name: '基础组件',
               layout: {
                 type: LayoutType.COLUMN,
-                gap: [4, UnitType.PX]
+                rowGap: [4, UnitType.PX],
+                columnGap: [4, UnitType.PX]
               },
               appearance: {
                 borderRadius: [4, UnitType.PX]
@@ -418,7 +425,8 @@ const rootNode: GroupNode = {
                   layout: {
                     type: LayoutType.ROW,
                     alignItems: AlignType.CENTER,
-                    gap: [8, UnitType.PX]
+                    rowGap: [8, UnitType.PX],
+                    columnGap: [8, UnitType.PX]
                   },
                   children: [
                     {
@@ -464,7 +472,8 @@ const rootNode: GroupNode = {
                   name: '组件列表1',
                   layout: {
                     type: LayoutType.COLUMN,
-                    gap: [2, UnitType.PX]
+                    rowGap: [2, UnitType.PX],
+                    columnGap: [2, UnitType.PX]
                   },
                   children: [
                     {
@@ -538,7 +547,8 @@ const rootNode: GroupNode = {
               name: '布局组件',
               layout: {
                 type: LayoutType.COLUMN,
-                gap: [4, UnitType.PX]
+                rowGap: [4, UnitType.PX],
+                columnGap: [4, UnitType.PX]
               },
               appearance: {
                 borderRadius: [4, UnitType.PX]
@@ -564,7 +574,8 @@ const rootNode: GroupNode = {
                   layout: {
                     type: LayoutType.ROW,
                     alignItems: AlignType.CENTER,
-                    gap: [8, UnitType.PX]
+                    rowGap: [8, UnitType.PX],
+                    columnGap: [8, UnitType.PX]
                   },
                   children: [
                     {
@@ -604,7 +615,8 @@ const rootNode: GroupNode = {
                   name: '组件列表2',
                   layout: {
                     type: LayoutType.COLUMN,
-                    gap: [2, UnitType.PX]
+                    rowGap: [2, UnitType.PX],
+                    columnGap: [2, UnitType.PX]
                   },
                   children: [
                     {
@@ -700,7 +712,8 @@ const rootNode: GroupNode = {
           },
           layout: {
             type: LayoutType.COLUMN,
-            gap: [16, UnitType.PX]
+            rowGap: [16, UnitType.PX],
+            columnGap: [16, UnitType.PX]
           },
           appearance: {
             borderRadius: [8, UnitType.PX]
@@ -726,7 +739,8 @@ const rootNode: GroupNode = {
               name: '工具栏',
               layout: {
                 type: LayoutType.ROW,
-                gap: [16, UnitType.PX],
+                rowGap: [16, UnitType.PX],
+                columnGap: [16, UnitType.PX],
                 alignItems: AlignType.CENTER
               },
               box: {
@@ -764,7 +778,8 @@ const rootNode: GroupNode = {
                   layout: {
                     type: LayoutType.ROW,
                     alignItems: AlignType.CENTER,
-                    gap: [4, UnitType.PX]
+                    rowGap: [4, UnitType.PX],
+                    columnGap: [4, UnitType.PX]
                   },
                   box: {
                     flexShrink: 0
@@ -807,7 +822,8 @@ const rootNode: GroupNode = {
                   layout: {
                     type: LayoutType.ROW,
                     alignItems: AlignType.CENTER,
-                    gap: [4, UnitType.PX]
+                    rowGap: [4, UnitType.PX],
+                    columnGap: [4, UnitType.PX]
                   },
                   children: [
                     {
@@ -847,7 +863,8 @@ const rootNode: GroupNode = {
                   layout: {
                     type: LayoutType.ROW,
                     alignItems: AlignType.CENTER,
-                    gap: [4, UnitType.PX]
+                    rowGap: [4, UnitType.PX],
+                    columnGap: [4, UnitType.PX]
                   },
                   children: [
                     {
@@ -947,7 +964,8 @@ const rootNode: GroupNode = {
                   },
                   layout: {
                     type: LayoutType.COLUMN,
-                    gap: [12, UnitType.PX]
+                    rowGap: [12, UnitType.PX],
+                    columnGap: [12, UnitType.PX]
                   },
                   appearance: {
                     borderRadius: [8, UnitType.PX]
@@ -1048,7 +1066,8 @@ const rootNode: GroupNode = {
                       name: '卡片内容1',
                       layout: {
                         type: LayoutType.COLUMN,
-                        gap: [8, UnitType.PX]
+                        rowGap: [8, UnitType.PX],
+                        columnGap: [8, UnitType.PX]
                       },
                       box: {
                         padding: [
@@ -1103,7 +1122,8 @@ const rootNode: GroupNode = {
                       layout: {
                         type: LayoutType.ROW,
                         justifyContent: AlignType.END,
-                        gap: [8, UnitType.PX]
+                        rowGap: [8, UnitType.PX],
+                        columnGap: [8, UnitType.PX]
                       },
                       box: {
                         padding: [
@@ -1129,7 +1149,8 @@ const rootNode: GroupNode = {
                             type: LayoutType.ROW,
                             alignItems: AlignType.CENTER,
                             justifyContent: AlignType.CENTER,
-                            gap: [4, UnitType.PX]
+                            rowGap: [4, UnitType.PX],
+                            columnGap: [4, UnitType.PX]
                           },
                           box: {
                             width: [80, UnitType.PX],
@@ -1198,7 +1219,8 @@ const rootNode: GroupNode = {
                   },
                   layout: {
                     type: LayoutType.COLUMN,
-                    gap: [16, UnitType.PX]
+                    rowGap: [16, UnitType.PX],
+                    columnGap: [16, UnitType.PX]
                   },
                   appearance: {
                     borderRadius: [12, UnitType.PX]
@@ -1226,7 +1248,8 @@ const rootNode: GroupNode = {
                       name: '卡片标题2',
                       layout: {
                         type: LayoutType.COLUMN,
-                        gap: [8, UnitType.PX]
+                        rowGap: [8, UnitType.PX],
+                        columnGap: [8, UnitType.PX]
                       },
                       box: {
                         padding: [
@@ -1294,7 +1317,8 @@ const rootNode: GroupNode = {
                       layout: {
                         type: LayoutType.GRID,
                         gridTemplateColumns: '1fr 1fr',
-                        gap: [16, UnitType.PX]
+                        rowGap: [16, UnitType.PX],
+                        columnGap: [16, UnitType.PX]
                       },
                       box: {
                         padding: [
@@ -1319,7 +1343,8 @@ const rootNode: GroupNode = {
                           name: '统计项1',
                           layout: {
                             type: LayoutType.COLUMN,
-                            gap: [4, UnitType.PX]
+                            rowGap: [4, UnitType.PX],
+                            columnGap: [4, UnitType.PX]
                           },
                           box: {
                             padding: [
@@ -1395,7 +1420,8 @@ const rootNode: GroupNode = {
                           name: '统计项2',
                           layout: {
                             type: LayoutType.COLUMN,
-                            gap: [4, UnitType.PX]
+                            rowGap: [4, UnitType.PX],
+                            columnGap: [4, UnitType.PX]
                           },
                           box: {
                             padding: [
@@ -1462,7 +1488,8 @@ const rootNode: GroupNode = {
                           name: '统计项3',
                           layout: {
                             type: LayoutType.COLUMN,
-                            gap: [4, UnitType.PX]
+                            rowGap: [4, UnitType.PX],
+                            columnGap: [4, UnitType.PX]
                           },
                           box: {
                             padding: [
@@ -1529,7 +1556,8 @@ const rootNode: GroupNode = {
                           name: '统计项4',
                           layout: {
                             type: LayoutType.COLUMN,
-                            gap: [4, UnitType.PX]
+                            rowGap: [4, UnitType.PX],
+                            columnGap: [4, UnitType.PX]
                           },
                           box: {
                             padding: [

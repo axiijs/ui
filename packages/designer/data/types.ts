@@ -40,24 +40,23 @@ export enum UnitType {
 
 // 盒模型信息接口
 export interface BoxInfo {
-  width?: [number, UnitType] | 'auto' | string; 
-  height?: [number, UnitType] | 'auto' | string;
-  minWidth?: [number, UnitType] | string;
-  maxWidth?: [number, UnitType] | string;
-  minHeight?: [number, UnitType] | string;
-  maxHeight?: [number, UnitType] | string;
+  width?: [number, UnitType] ; 
+  height?: [number, UnitType] ;
+  minWidth?: [number, UnitType] ;
+  maxWidth?: [number, UnitType] ;
+  minHeight?: [number, UnitType];
+  maxHeight?: [number, UnitType];
   padding?: [[number, UnitType], [number, UnitType], [number, UnitType], [number, UnitType]]; // [top, right, bottom, left]
   margin?: [[number, UnitType], [number, UnitType], [number, UnitType], [number, UnitType]]; // [top, right, bottom, left]
   overflow?: 'visible' | 'hidden' | 'scroll' | 'auto';
   flexGrow?: number;
   flexShrink?: number;
-  flexBasis?: [number, UnitType] | 'auto' | string;
+  flexBasis?: [number, UnitType];
 }
 
 // 布局信息接口
 export interface LayoutInfo {
   type: LayoutType;
-  gap?: [number, UnitType];
   rowGap?: [number, UnitType];
   columnGap?: [number, UnitType];
   justifyContent?: AlignType;
@@ -108,12 +107,12 @@ export interface EffectInfo {
 export interface FontInfo {
   fontSize?: [number, UnitType];
   fontFamily?: string;
-  fontWeight?: string | number;
+  fontWeight?: number;
   fontStyle?: 'normal' | 'italic';
   textDecoration?: 'none' | 'underline' | 'line-through';
   textAlign?: 'left' | 'center' | 'right' | 'justify';
   color?: string;
-  lineHeight?: [number, UnitType] | 'normal';
+  lineHeight?: [number, UnitType];
   letterSpacing?: [number, UnitType];
   wordSpacing?: [number, UnitType];
   textTransform?: 'none' | 'capitalize' | 'uppercase' | 'lowercase';
@@ -166,6 +165,8 @@ export interface PageNode extends BaseNode {
   type: NodeType.PAGE;
   children: Node[];
   box?: BoxInfo;
+  layout?: LayoutInfo;
+  fills?: FillInfo[];
   font?: FontInfo;
 }
 
@@ -182,4 +183,4 @@ export interface GroupNode extends BaseNode {
 }
 
 // 节点类型联合
-export type Node = GroupNode | TextNode | IconNode; 
+export type Node = GroupNode | TextNode | IconNode | PageNode; 

@@ -78,7 +78,8 @@ export const screenshotDescription: PageNode = {
           name: 'Logo和标题',
           layout: {
             type: LayoutType.ROW,
-            gap: [12, UnitType.PX],
+            rowGap: [12, UnitType.PX],
+            columnGap: [12, UnitType.PX],
             alignItems: AlignType.CENTER
           },
           children: [
@@ -110,7 +111,8 @@ export const screenshotDescription: PageNode = {
           name: '用户信息',
           layout: {
             type: LayoutType.ROW,
-            gap: [16, UnitType.PX],
+            rowGap: [16, UnitType.PX],
+            columnGap: [16, UnitType.PX],
             alignItems: AlignType.CENTER
           },
           children: [
@@ -146,7 +148,8 @@ export const screenshotDescription: PageNode = {
       },
       layout: {
         type: LayoutType.ROW,
-        gap: [0, UnitType.PX]
+        rowGap: [0, UnitType.PX],
+        columnGap: [0, UnitType.PX]
       },
       children: [
         // 左侧边栏
@@ -166,7 +169,8 @@ export const screenshotDescription: PageNode = {
           },
           layout: {
             type: LayoutType.COLUMN,
-            gap: [24, UnitType.PX]
+            rowGap: [24, UnitType.PX],
+            columnGap: [24, UnitType.PX]
           },
           fills: [
             {
@@ -182,7 +186,8 @@ export const screenshotDescription: PageNode = {
               name: '导航菜单',
               layout: {
                 type: LayoutType.COLUMN,
-                gap: [4, UnitType.PX]
+                rowGap: [4, UnitType.PX],
+                columnGap: [4, UnitType.PX]
               },
               children: [
                 {
@@ -222,7 +227,8 @@ export const screenshotDescription: PageNode = {
                   },
                   layout: {
                     type: LayoutType.ROW,
-                    gap: [8, UnitType.PX],
+                    rowGap: [8, UnitType.PX],
+                    columnGap: [8, UnitType.PX],
                     alignItems: AlignType.CENTER
                   },
                   fills: [
@@ -273,7 +279,8 @@ export const screenshotDescription: PageNode = {
                   },
                   layout: {
                     type: LayoutType.ROW,
-                    gap: [8, UnitType.PX],
+                    rowGap: [8, UnitType.PX],
+                    columnGap: [8, UnitType.PX],
                     alignItems: AlignType.CENTER
                   },
                   children: [
@@ -315,7 +322,8 @@ export const screenshotDescription: PageNode = {
                   },
                   layout: {
                     type: LayoutType.ROW,
-                    gap: [8, UnitType.PX],
+                    rowGap: [8, UnitType.PX],
+                    columnGap: [8, UnitType.PX],
                     alignItems: AlignType.CENTER
                   },
                   children: [
@@ -362,7 +370,8 @@ export const screenshotDescription: PageNode = {
           },
           layout: {
             type: LayoutType.COLUMN,
-            gap: [24, UnitType.PX]
+            rowGap: [24, UnitType.PX],
+            columnGap: [24, UnitType.PX]
           },
           fills: [
             {
@@ -387,7 +396,8 @@ export const screenshotDescription: PageNode = {
               },
               layout: {
                 type: LayoutType.COLUMN,
-                gap: [8, UnitType.PX]
+                rowGap: [8, UnitType.PX],
+                columnGap: [8, UnitType.PX]
               },
               children: [
                 {
@@ -425,7 +435,8 @@ export const screenshotDescription: PageNode = {
               },
               layout: {
                 type: LayoutType.COLUMN,
-                gap: [32, UnitType.PX]
+                rowGap: [32, UnitType.PX],
+                columnGap: [32, UnitType.PX]
               },
               children: [
                 // 按钮类型部分
@@ -435,7 +446,8 @@ export const screenshotDescription: PageNode = {
                   name: '按钮类型部分',
                   layout: {
                     type: LayoutType.COLUMN,
-                    gap: [16, UnitType.PX]
+                    rowGap: [16, UnitType.PX],
+                    columnGap: [16, UnitType.PX]
                   },
                   children: [
                     {
@@ -465,7 +477,8 @@ export const screenshotDescription: PageNode = {
                       },
                       layout: {
                         type: LayoutType.ROW,
-                        gap: [16, UnitType.PX],
+                        rowGap: [16, UnitType.PX],
+                        columnGap: [16, UnitType.PX],
                         alignItems: AlignType.CENTER
                       },
                       fills: [
@@ -599,7 +612,8 @@ export const screenshotDescription: PageNode = {
                   name: '按钮尺寸部分',
                   layout: {
                     type: LayoutType.COLUMN,
-                    gap: [16, UnitType.PX]
+                    rowGap: [16, UnitType.PX],
+                    columnGap: [16, UnitType.PX]
                   },
                   children: [
                     {
@@ -629,7 +643,8 @@ export const screenshotDescription: PageNode = {
                       },
                       layout: {
                         type: LayoutType.ROW,
-                        gap: [16, UnitType.PX],
+                        rowGap: [16, UnitType.PX],
+                        columnGap: [16, UnitType.PX],
                         alignItems: AlignType.CENTER
                       },
                       fills: [

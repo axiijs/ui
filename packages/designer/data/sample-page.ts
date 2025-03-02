@@ -53,7 +53,8 @@ export const samplePage: PageNode = {
       },
       layout: {
         type: LayoutType.COLUMN,
-        gap: [16, UnitType.PX],
+        rowGap: [16, UnitType.PX],
+        columnGap: [16, UnitType.PX],
         alignItems: AlignType.START
       },
       children: [
@@ -92,7 +93,8 @@ export const samplePage: PageNode = {
       },
       layout: {
         type: LayoutType.ROW,
-        gap: [24, UnitType.PX],
+        rowGap: [24, UnitType.PX],
+        columnGap: [24, UnitType.PX],
         flexWrap: 'wrap'
       },
       children: [
@@ -112,7 +114,8 @@ export const samplePage: PageNode = {
           },
           layout: {
             type: LayoutType.COLUMN,
-            gap: [16, UnitType.PX],
+            rowGap: [16, UnitType.PX],
+            columnGap: [16, UnitType.PX],
             alignItems: AlignType.START
           },
           appearance: {
@@ -184,7 +187,8 @@ export const samplePage: PageNode = {
           },
           layout: {
             type: LayoutType.COLUMN,
-            gap: [16, UnitType.PX],
+            rowGap: [16, UnitType.PX],
+            columnGap: [16, UnitType.PX],
             alignItems: AlignType.START
           },
           appearance: {
@@ -256,7 +260,8 @@ export const samplePage: PageNode = {
           },
           layout: {
             type: LayoutType.COLUMN,
-            gap: [16, UnitType.PX],
+            rowGap: [16, UnitType.PX],
+            columnGap: [16, UnitType.PX],
             alignItems: AlignType.START
           },
           appearance: {
@@ -283,7 +288,7 @@ export const samplePage: PageNode = {
               id: 'card-3-icon',
               type: NodeType.ICON,
               name: '卡片3图标',
-              iconName: 'info',
+              iconName: 'bolt',
               size: [32, UnitType.PX],
               color: '#FBBC05'
             },

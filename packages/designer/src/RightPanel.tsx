@@ -2,7 +2,11 @@ import {Atom, atom, RenderContext} from "axii";
 import { SizeInput } from "./lib/SizeInput";
 import { UnitType } from "../data/types";
 import { BoxInfoEditor } from "./editors/BoxInfoEditor";
-import { RxCanvas, RxNodeType } from "./RxPage";
+import { RxCanvas, RxCollection, RxNodeType, RxTextNode } from "./RxPage";
+import { LayoutInfoEditor } from "./editors/LayoutInfoEditor";
+import { FillEditor } from "./editors/FillEditor";
+import { TextLayoutInfoEditor } from "./editors/TextLayoutInfoEditor";
+import { FontInfoEditor } from "./editors/FontInfoEditor";
 
 type RightPanelProps = {
     canvas: RxCanvas
@@ -15,9 +19,6 @@ export function RightPanel({canvas, selectedNode}: RightPanelProps, {createEleme
         height: '100%',
         backgroundColor: '#2c2c2c',
         overflow: 'auto',
-        paddingTop: '100px',
-        paddingLeft: '10px',
-        paddingRight: '10px',
     }
 
     return (
@@ -26,6 +27,34 @@ export function RightPanel({canvas, selectedNode}: RightPanelProps, {createEleme
                 const node = selectedNode()
                 if (node) {
                     return <BoxInfoEditor node={node} />
+                }
+                return null
+            }}
+            {() => {
+                const node = selectedNode()
+                if (node instanceof RxCollection) {
+                    return <LayoutInfoEditor node={node} />
+                }
+                return null
+            }}
+            {/* {() => {
+                const node = selectedNode()
+                if (node instanceof RxCollection) {
+                    return <FillEditor node={node} />
+                }
+                return null
+            }} */}
+            {() => {
+                const node = selectedNode()
+                if (node instanceof RxTextNode) {
+                    return <TextLayoutInfoEditor node={node} />
+                }
+                return null
+            }}
+            {() => {
+                const node = selectedNode()
+                if (node instanceof RxTextNode) {
+                    return <FontInfoEditor node={node} />
                 }
                 return null
             }}

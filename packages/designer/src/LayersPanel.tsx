@@ -1,6 +1,5 @@
 import { Atom, JSXElement, RenderContext, RxList } from "axii";
 import { RxCanvas, RxCollection, RxGroup, RxIconNode, RxPage, RxTextNode } from "./RxPage";
-import { panelNameStyle } from "./style";
 
 export type LayersPanelProps = {
     canvas: RxCanvas
@@ -49,7 +48,7 @@ function commonNameStyle(selected: Atom<boolean>, level: number, selectedNode?: 
 export function LayersPanel({ canvas}: LayersPanelProps, {createElement}: RenderContext) {
     return (
         <div as={'root'}>
-            <div as={'title'} style={panelNameStyle}>Layers</div>
+            <div as={'name'}>Layers</div>
             {canvas.children.map(([page, selected]) => (
                 <PageLayer page={page} selected={selected} level={1} />
             ))}

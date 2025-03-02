@@ -1,5 +1,5 @@
 import {RenderContext} from "axii";
-import {panelNameStyle, subPanelStyle} from "./style";
+import {subPanelStyle} from "./style";
 import { LayersPanel } from "./LayersPanel";
 import { RxCanvas } from "./RxPage";
 
@@ -17,10 +17,10 @@ export function LeftPanel({canvas}: LeftPanelProps, {createElement}: RenderConte
     return (
         <div as={'root'} style={containerStyle}>
             <div style={subPanelStyle}>
-                <div style={panelNameStyle}>Components</div>
+                <div as='name'>Components</div>
             </div>
             <div style={subPanelStyle}>
-                <div style={panelNameStyle}>Variables</div>
+                <div as='name'>Variables</div>
             </div>
             <LayersPanel canvas={canvas} $root:style={subPanelStyle}></LayersPanel>
         </div>
