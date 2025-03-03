@@ -101,10 +101,16 @@ if (typeof window !== 'undefined' && !('requestIdleCallback' in window)) {
 }
 
 
-export function nextTick<T>(callback: (...args: any[]) => T) {
+export function scheduleNextTick<T>(callback: (...args: any[]) => T) {
   return (...args: any[]) => {
     setTimeout(() => {
       callback(...args)
     }, 0)
   }
+}
+
+export function nextTick<T>(callback: (...args: any[]) => T) {
+  setTimeout(() => {
+    callback()
+  }, 0)
 }

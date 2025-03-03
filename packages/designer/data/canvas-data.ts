@@ -58,7 +58,7 @@ const rootNode: GroupNode = {
       position: { x: [0, UnitType.PX], y: [0, UnitType.PX] },
       box: {
         width: { value: [100, UnitType.PERCENT] },
-        height: { value: [64, UnitType.PX] },
+        height: { value: [64, UnitType.PX], variable: 'common-height' },
         padding: {
           value: [
             [0, UnitType.PX],  // top

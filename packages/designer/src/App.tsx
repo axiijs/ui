@@ -1,9 +1,11 @@
-import {Atom, atom, computed, JSXElement, RenderContext, RxList, StyleSize} from "axii";
+import {Atom, atom, autorun, computed, DragPosition, JSXElement, RenderContext, RxDOMDragPosition, RxList, StyleSize} from "axii";
 import {LeftPanel} from "./LeftPanel";
 import {RightPanel} from "./RightPanel";
 import {GroupNode, LayoutInfo, LayoutType, NodeType, StrokeInfo, TextNode, PageNode} from "../data/types";
 import { RxCanvas, RxCollection, RxGroup, RxIconNode, RxNode, RxNodeType, RxPage, RxTextNode } from "./RxPage";
 import { throttleTimeout } from "./util";
+import { Canvas } from "./Canvas";
+import { RxVariable, VariableData } from "./RxVariable";
 
 
 
@@ -63,7 +65,7 @@ function groupAttributesToStyle(node: RxGroup) {
         borderColor: stroke?.color,
         boxShadow: node.data.effects?.filter(e => e.type.value === 'shadow').map((e) => {
             const { offsetX, offsetY, blur, spread, color } = e
-            return `${offsetX!.value[0]}${offsetX!.value[1]} ${offsetY!.value[0]}${offsetY!.value[1]} ${blur!.value[0]}${blur!.value[1]} ${spread!.value[0]}${spread!.value[1]} ${color!.value}`
+            return `${offsetX!.value![0]}${offsetX!.value![1]} ${offsetY!.value![0]}${offsetY!.value![1]} ${blur!.value![0]}${blur!.value![1]} ${spread!.value![0]}${spread!.value![1]} ${color!.value}`
         }),
     }
 
@@ -117,7 +119,7 @@ function renderText(node: RxTextNode, selected: Atom<boolean>, createElement: Re
 function renderGroupNode(node: RxGroup, selected: Atom<boolean>, createElement: RenderContext['createElement']) {
     const data = node.data
     return <div style={groupAttributesToStyle(node)} data-name={data.name}>
-        {node.children.map(([child, selected]) => renderNode(child, selected, createElement))
+        {node.childrenWithSelection.map(([child, selected]) => renderNode(child, selected, createElement))
     }</div>
 }
 
@@ -125,18 +127,13 @@ function renderGroupNode(node: RxGroup, selected: Atom<boolean>, createElement: 
 function renderPageNode(node: RxPage, selected: Atom<boolean>, createElement: RenderContext['createElement']) {
     const data = node.data
     return <div style={pageAttributesToStyle(node)} data-name={data.name}>
-        {node.children.map(([child, selected]) => renderNode(child, selected, createElement))}
+        {node.childrenWithSelection.map(([child, selected]) => renderNode(child, selected, createElement))}
     </div>
 }
 
-export function App({data}: {data: PageNode[]}, {createElement, createRef, useLayoutEffect}: RenderContext)  {
+export function App({data, vars}: {data: PageNode[], vars: VariableData<any>[]}, {createElement, createRef, useLayoutEffect}: RenderContext)  {
     // TODO 显示的时候获取一次
-    const containerRef = createRef()
-    let lastContainerRect:any
-    const containerRect = () => {
-        return lastContainerRect || (lastContainerRect = containerRef.current!.getBoundingClientRect())
-    }
-
+   
     const containerStyle={
         height:'100%',
         width:'100%',
@@ -144,56 +141,12 @@ export function App({data}: {data: PageNode[]}, {createElement, createRef, useLa
         overflow:'scroll',
         background: '#252525',
         boxSizing:'border-box',
-        padding: [0, 300]
+        padding: [0, 300],
+        userSelect: 'none',
     }
 
     const lastWheelEvent = atom<WheelEvent>(null)
-    const scale = computed<number>(({lastValue}) => {
-        const last = lastValue.raw||1
-
-        if(lastWheelEvent()) {
-            const zoomFactor = 0.05;
-            const zoomDirection = lastWheelEvent()!.deltaY < 0 ? 1 : -1;
-            return Math.min(Math.max(last + zoomDirection * zoomFactor, .2), 1)
-            // return Math.max(last + zoomDirection * zoomFactor, 1)
-        }
-        return last
-    })
-
-    const resetCanvasStyle= {
-        color: 'initial !important'
-    }
-
-    const canvasStyle= () => {
-
-        const event = lastWheelEvent()!
-        let transformOrigin:any
-        if (event) {
-            const rect = containerRect();
-            const originalWidth = rect.width / scale.raw!;
-            const originalHeight = rect.height / scale.raw;
-
-            // 计算鼠标相对于原始元素尺寸的位置
-            const x = (event.clientX - rect.left) / scale.raw;
-            const y = (event.clientY - rect.top) / scale.raw;
-
-            // 计算鼠标位置相对于原始元素尺寸的百分比
-            const mouseXPercent = `${(x / originalWidth) * 100}%`;
-            const mouseYPercent = `${(y / originalHeight) * 100}%`;
-            transformOrigin = `${mouseXPercent} ${mouseYPercent}`
-        }
-
-        return {
-            position:'relative',
-            height: 2000,
-            width:2000,
-            willChange:'transform',
-            transform:`scale(${scale()})`,
-            transformOrigin,
-            background: '#fff',
-        }
-    }
-
+    
     const onZoom = (event: WheelEvent) => {
         if (event.ctrlKey) {
             event.stopPropagation()
@@ -202,25 +155,10 @@ export function App({data}: {data: PageNode[]}, {createElement, createRef, useLa
         }
     }
 
-    const rxCanvas = new RxCanvas(data)
-    const canvasRef = createRef()
 
-    const onClickCanvas = (event: MouseEvent) => {
-        const rxNodePath: (RxPage|RxGroup|RxTextNode|RxIconNode)[] = []
-        let current = event.target
-        while (current && current !== canvasRef.current) {
-            const rxNode = rxCanvas.getRxNodeFromCanvasNode(current as HTMLElement)
-            if (rxNode) {
-                rxNodePath.push(rxNode)
-            }
-            current = (current as HTMLElement).parentElement
-        }
-        rxNodePath.reverse()
+    const rxVariable = new RxVariable(vars)
+    const rxCanvas = new RxCanvas(data, rxVariable)
 
-        const selectedNode = rxCanvas.selectFirstInPath(rxNodePath)
-
-        rxCanvas.scrollIntoNavigatorView(selectedNode)
-    }
 
     const leafSelectedNode = computed<RxNodeType|null>(({lastValue}) => {
         let current:any = rxCanvas
@@ -231,70 +169,19 @@ export function App({data}: {data: PageNode[]}, {createElement, createRef, useLa
         return current === rxCanvas ? null : current
     })
 
-    const selectedRect = computed<DOMRect|null>(({lastValue}) => {
-        const node = leafSelectedNode()
-        if (!node) {
-            return null
-        } else {
-            // 监听 box
-            Object.values(node!.box).forEach((value) => value.value())
-            // 监听 layout
-            if(node instanceof RxCollection) {
-                Object.values(node!.layout).forEach((value) => value.value())
-            }
-            // 监听 font
-            if(node instanceof RxTextNode) {
-                Object.values(node!.font).forEach((value) => value.value())
-            }
-        }
-
-
-        const domNode = rxCanvas.getCanvasNodeFromRxNode(leafSelectedNode()!)
-
-        return domNode?.getBoundingClientRect()
-    }, undefined, throttleTimeout((recompute: () => void) => {
-        recompute()
-    }, 100))
-
-    const selectedRectStyle = computed<any>(({}) => {
-        const canvasCurrentRect = canvasRef.current?.getBoundingClientRect()
-        if (!selectedRect() || !canvasCurrentRect) {
-            return {
-                display: 'none',
-            }
-        }
-
-        return {
-            position:'absolute',
-            left: selectedRect()?.x! - canvasCurrentRect.left,
-            top: selectedRect()?.y! - canvasCurrentRect.top,
-            width: selectedRect()?.width,
-            height: selectedRect()?.height,
-            outline: '2px solid #9847ff',
-            pointerEvents: 'none',
-            // 斜线背景
-            // background: 'linear-gradient(to bottom right, transparent 50%, #9847ff 50%, #9847ff 55%,transparent 55%)',
-            // backgroundSize: '10px 10px',
-            // backgroundPosition: '0 0, 5px 5px',
-        }
-    })
+    
 
     useLayoutEffect(() => {
-        const firstPage = rxCanvas.children.raw[0][0]
+        const firstPage = rxCanvas.childrenWithSelection.raw[0][0]
         rxCanvas.selectedNode(firstPage);
-        firstPage.selectedNode(firstPage.children.raw[0][0])
+        firstPage.selectedNode(firstPage.childrenWithSelection.raw[0][0])
     })
+    
+   
     
     return (
         <div style={containerStyle} onWheelCapture={onZoom} >
-            <div id={'canvas'} ref={[canvasRef, containerRef]} onclick={onClickCanvas} class={'scope-independent'} style={[canvasStyle, resetCanvasStyle]}>
-                {rxCanvas.children.map(([rxPage, selected]) => (
-                    <div style={{height:2000, width:1400}}>
-                        {renderNode(rxPage, selected, createElement)}
-                    </div>
-                ))}
-                <div style={selectedRectStyle}></div>
-            </div>
+            <Canvas data={data} rxCanvas={rxCanvas} lastWheelEvent={lastWheelEvent}/>
             <LeftPanel canvas={rxCanvas} $root:style={{position:'absolute', left:0, top:0}}/>
             <RightPanel canvas={rxCanvas} selectedNode={leafSelectedNode} $root:style={{position:'absolute', right:0, top:0}}/>
         </div>

@@ -1,5 +1,6 @@
 import { Atom, atom, JSXElement, RxList } from "axii";
 import { AlignType, BoxInfo, FillInfo, FontInfo, GroupNode, IconNode, LayoutInfo, LayoutType, Node, NodeType, PageNode, TextLayoutInfo, TextNode, UnitType, VariableValue } from "../data/types";
+import { RxVariable } from "./RxVariable";
 
 // 支持变量的 Atom 值类型
 export interface AtomVariableValue<T> {
@@ -7,7 +8,12 @@ export interface AtomVariableValue<T> {
   variable: Atom<string | undefined>;
 }
 
-// BoxInfo 的 Atom 版本，所有值都用 AtomVariableValue 包装
+// 将 VariableValue<T> 类型转换为 AtomVariableValue<T> 类型的泛型工具类型
+export type ToAtomVariableValue<T> = {
+  [K in keyof T]: T[K] extends VariableValue<infer U> ? AtomVariableValue<U> : T[K];
+};
+
+// 使用显式接口定义 Atom 版本的信息接口
 export interface AtomBoxInfo {
   width: AtomVariableValue<[number, UnitType]>;
   height: AtomVariableValue<[number, UnitType]>;
@@ -23,7 +29,6 @@ export interface AtomBoxInfo {
   flexBasis: AtomVariableValue<[number, UnitType]>;
 }
 
-// LayoutInfo 的 Atom 版本，所有值都用 AtomVariableValue 包装
 export interface AtomLayoutInfo {
   type: AtomVariableValue<LayoutType>;
   rowGap: AtomVariableValue<[number, UnitType]>;
@@ -31,13 +36,11 @@ export interface AtomLayoutInfo {
   justifyContent: AtomVariableValue<AlignType>;
   alignItems: AtomVariableValue<AlignType>;
   flexWrap: AtomVariableValue<'nowrap' | 'wrap' | 'wrap-reverse'>;
-  // Grid 特有属性
   gridTemplateColumns: AtomVariableValue<string>;
   gridTemplateRows: AtomVariableValue<string>;
   gridAutoFlow: AtomVariableValue<'row' | 'column' | 'dense'>;
 }
 
-// FontInfo 的 Atom 版本，所有值都用 AtomVariableValue 包装
 export interface AtomFontInfo {
   fontSize: AtomVariableValue<[number, UnitType]>;
   fontFamily: AtomVariableValue<string>;
@@ -54,7 +57,6 @@ export interface AtomFontInfo {
   fontStretch: AtomVariableValue<'normal' | 'condensed' | 'expanded'>;
 }
 
-// TextLayoutInfo 的 Atom 版本，所有值都用 AtomVariableValue 包装
 export interface AtomTextLayoutInfo {
   whiteSpace: AtomVariableValue<'normal' | 'nowrap' | 'pre' | 'pre-wrap' | 'pre-line'>;
   textOverflow: AtomVariableValue<'clip' | 'ellipsis'>;
@@ -122,17 +124,21 @@ export abstract class RxNode {
             }
         };
     }
+    select() {
+        this.root!.selectNode(this)
+    }
 }
 
 // 基类，用于 RxCanvas、RxPage 和 RxGroup
 export abstract class RxCollection<T, C extends RxNode> extends RxNode {
-    public children!: RxList<[C, Atom<boolean>]>;
+    public children!: RxList<C>;
+    public childrenWithSelection!: RxList<[C, Atom<boolean>]>;
     public selectedNode = atom<C | null>(null);
-    public folded = atom<boolean>(true);
+    public folded = atom<boolean>(false);
     public layout: AtomLayoutInfo;
     public fills: RxList<FillInfo>;
     
-    constructor( data: PageNode|GroupNode, root: RxCanvas) {
+    constructor(data: PageNode|GroupNode, root: RxCanvas) {
         super(data, root);
         // 初始化 layout 属性，将 data.layout 中的值转换为 AtomVariableValue
         this.layout = {
@@ -173,6 +179,7 @@ export abstract class RxCollection<T, C extends RxNode> extends RxNode {
                 variable: atom(data?.layout?.gridAutoFlow?.variable)
             }
         };
+        
         // 初始化 fills 属性，使用 data.fills 或空数组
         this.fills = new RxList(data?.fills || []);
     }
@@ -325,7 +332,8 @@ export class RxGroup extends RxCollection<GroupNode, RxTextNode | RxIconNode | R
             item.type===NodeType.GROUP ? new RxGroup(item, this, root) : 
             (item.type===NodeType.TEXT ? new RxTextNode(item, this, root) : 
             new RxIconNode(item as IconNode, this, root))
-        )).createSelection(this.selectedNode);
+        ))
+        this.childrenWithSelection = this.children.createSelection(this.selectedNode);
     }
 }
 
@@ -338,7 +346,8 @@ export class RxPage extends RxCollection<PageNode, RxTextNode | RxIconNode | RxG
             item.type===NodeType.GROUP ? new RxGroup(item, this, this.root) : 
             (item.type===NodeType.TEXT ? new RxTextNode(item, this, this.root) : 
             new RxIconNode(item as IconNode, this, this.root))
-        ))).createSelection(this.selectedNode);
+        )))
+        this.childrenWithSelection = this.children.createSelection(this.selectedNode);
     }
 }
 
@@ -351,10 +360,13 @@ export class RxCanvas {
     static rxNodeToCanvasNodeMap = new WeakMap<RxNodeType, HTMLElement>();
     static NavNodeToRxNodeMap = new WeakMap<HTMLElement, RxNodeType>();
     static rxNodeToNavNodeMap = new WeakMap<RxNodeType, HTMLElement>();
-    public children: RxList<[RxPage, Atom<boolean>]>;
+    public children: RxList<RxPage>;
+    public childrenWithSelection: RxList<[RxPage, Atom<boolean>]>;
     public selectedNode = atom<RxPage | null>(null);
-    constructor(public data: PageNode[]) {
-        this.children = (new RxList(data.map(item => new RxPage(item, this)))).createSelection(this.selectedNode);
+    constructor(public data: PageNode[], public rxVariable: RxVariable) {
+
+        this.children = (new RxList(data.map(item => new RxPage(item, this))));
+        this.childrenWithSelection = this.children.createSelection(this.selectedNode);
     }
     
     saveCanvasNode(canvasNode: HTMLElement, rxNode: RxNodeType) {
@@ -406,6 +418,19 @@ export class RxCanvas {
         this.selectedNode(child);
         this.folded(false);
     }
+    selectNode(layer: RxNode) {
+        // 如果当前节点是 RxCollection，则先重置子节点的选中状态
+        if (layer instanceof RxCollection) {
+            layer.switchSelectedNode(null);
+        }
+        // 检查节点的父级是否是 RxCollection，然后调用父级的 switchSelectedNode 方法
+        let current:any = layer;
+        while (current?.parent instanceof RxCollection || current?.parent instanceof RxCanvas) {
+            current.parent.switchSelectedNode(current);
+            current = current.parent;
+        }
+    }
+
     selectFirstInPath(rxNodePath: RxNodeType[]) {
         let parentRxNode: RxCollection<any, any>|RxCanvas = this
 

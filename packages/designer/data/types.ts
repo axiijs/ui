@@ -40,7 +40,7 @@ export enum UnitType {
 
 // 支持变量的值类型
 export interface VariableValue<T> {
-  value: T;
+  value?: T;
   variable?: string;
 }
 
