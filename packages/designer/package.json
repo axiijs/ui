@@ -11,7 +11,7 @@
   },
   "dependencies": {
     "axii": "^3.3.1",
-    "axii-ui": "^2.0.2",
+    "axii-ui": "^2.1.0",
     "axii-ui-theme-inc": "^4.1.1",
     "lucide": "^0.476.0",
     "vanilla-colorful": "^0.7.2"
