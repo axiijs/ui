@@ -1,4 +1,4 @@
-import {atom, autorun, DragPosition, RenderContext, RxDOMDragPosition} from "axii";
+import {atom, autorun, DragState, RenderContext, RxDOMDragState} from "axii";
 import {styleSystem} from "../styleSystem"
 
 export function Demo({}, {createElement, createRef}: RenderContext) {
@@ -53,10 +53,10 @@ export function Demo({}, {createElement, createRef}: RenderContext) {
 
 
     const containerRef = createRef()
-    const rxDragPosition = new RxDOMDragPosition(atom<DragPosition>(null), containerRef)
+    const rxDragPosition = new RxDOMDragState(atom<DragState>(null), {container:containerRef})
 
     const verticalContainerRef = createRef()
-    const rxVerticalDragPosition = new RxDOMDragPosition(atom<DragPosition>(null), verticalContainerRef)
+    const rxVerticalDragPosition = new RxDOMDragState(atom<DragState>(null), {container:verticalContainerRef})
 
     autorun(() => {
         const position = rxDragPosition.value()
