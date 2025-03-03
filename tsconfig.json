@@ -22,7 +22,8 @@
       "axii-ui": ["./packages/components/src/index.ts"],
       "axii-ui-theme-common": ["./packages/theme-common/src/index.ts"],
       "axii-ui-theme-inc": ["./packages/theme-inc/src/index.tsx"],
-      "axii-ui-theme-fallout": ["./packages/theme-fallout/src/index.tsx"]
+      "axii-ui-theme-fallout": ["./packages/theme-fallout/src/index.tsx"],
+      "axii-designer": ["./packages/designer/src/index.tsx"]
     },
     "jsx": "react",
     "jsxFactory": "createElement",
