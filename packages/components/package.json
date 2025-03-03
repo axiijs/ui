@@ -22,7 +22,7 @@
   "author": "",
   "license": "MIT",
   "peerDependencies": {
-    "axii": "^3.0.2",
+    "axii": "^3.3.1",
     "axii-icon-park": "^3.0.0"
   },
   "dependencies": {

@@ -2,12 +2,12 @@ import {
     atom,
     autorun,
     Component,
-    DragPosition,
+    DragState,
     FixedCompatiblePropsType,
     PropsType,
     PropTypes,
     RenderContext,
-    RxDOMDragPosition
+    RxDOMDragState
 } from "axii";
 
 const SliderProptypes= {
@@ -47,7 +47,7 @@ export const Slider: Component = function Slider(props: FixedCompatiblePropsType
     }
 
 
-    const rxDragPosition = new RxDOMDragPosition(atom<DragPosition>(null), containerRef)
+    const rxDragPosition = new RxDOMDragState(atom<DragState>(null), { container: containerRef })
 
     autorun(() => {
         const position = rxDragPosition.value()
