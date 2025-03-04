@@ -1,8 +1,9 @@
-import {atom, Atom, autorun, computed, DragPosition, JSXElement, RenderContext, RxDOMDragState} from "axii";
+import {atom, Atom, autorun, computed, DragState, JSXElement, onKey, RenderContext, RxDOMDragState, RxDOMEventListener, RxList} from "axii";
 import {LayoutType, NodeType, PageNode, UnitType} from "../data/types";
 import { RxCanvas, RxCollection, RxGroup, RxIconNode, RxNodeType, RxPage, RxTextNode } from "./RxPage";
 import { throttleTimeout } from "./util";
-
+import { createTransitionEvent, Machine, MiddlewareNext, State, TransitionEvent } from "statemachine0";
+import { createSingletonModalType, ModalProps } from "./lib/modal";
 
 
 function textAttributesToStyle(node: RxTextNode) {
@@ -117,7 +118,40 @@ function renderPageNode(node: RxPage, selected: Atom<boolean>, createElement: Re
     </div>
 }
 
-export function Canvas({data, rxCanvas, lastWheelEvent}: {data: PageNode[], rxCanvas: RxCanvas, lastWheelEvent: Atom<WheelEvent|null>}, {createElement, createRef, useLayoutEffect}: RenderContext)  {
+
+type NewGroupModalProps = ModalProps & { containerRect: () => DOMRect, rxDragState: RxDOMDragState}
+
+function NewGroupModal({resolve, reject, containerRect, rxDragState}: NewGroupModalProps, {createElement, useLayoutEffect}: RenderContext){
+
+    const dragPosition = rxDragState.value
+
+
+    new RxDOMEventListener(rxDragState, 'dragend', (event: CustomEvent<DragState>) => {
+        resolve(event.detail)
+    });
+
+    const newGroupRectStyle = computed<any>(({lastValue}) => {
+        if (!dragPosition()) {
+            return {
+                display: 'none',
+            }
+        }
+        return {
+            position: 'absolute',
+            left: dragPosition()?.startX,
+            top: dragPosition()?.startY,
+            width: dragPosition()?.clientX! - containerRect().left - dragPosition()?.startX!,
+            height: dragPosition()?.clientY! - containerRect().top - dragPosition()?.startY!,
+            border: '1px solid #9847ff',
+            background: 'rgba(85, 72, 206, 0.5)',
+        }
+    })
+
+    return <div style={newGroupRectStyle}></div>
+}
+
+
+export function Canvas({data, rxCanvas, lastWheelEvent}: {data: PageNode[], rxCanvas: RxCanvas, lastWheelEvent: Atom<WheelEvent|null>}, {createElement, createRef, Fragment}: RenderContext)  {
     // TODO 显示的时候获取一次
     const containerRef = createRef()
     let lastContainerRect:any
@@ -249,9 +283,40 @@ export function Canvas({data, rxCanvas, lastWheelEvent}: {data: PageNode[], rxCa
 
     
 
-    const dragPosition = atom<DragPosition|null>(null)
 
-    const onDragEnd = (lastDragPosition) => {
+    const transitions = [
+        {name:'toInsertion', from: 'initial', to: 'insertion', event: 'keydown', middlewares: [guardInsertionKey]},
+        {name:'toInitial', from: 'insertion', to: 'initial', event: 'keydown', middlewares: [guardExitKey]},
+        {name:'exit', from: 'insertion', to: 'initial', event: 'exit'},
+    ]
+
+
+    const insertionState = new InsertionState('insertion')
+    const machine = new Machine(
+        'initial',
+        transitions,
+        [new InitialState('initial'), insertionState]
+    )
+
+   autorun(() => {
+    console.log('current state', machine.currentState(), insertionState.insertionKey())
+   })
+    
+
+   new RxDOMEventListener(document, 'keydown', (event: CustomEvent<KeyboardEvent>) => {
+        machine.receive(event)
+   })
+
+
+    const SingletonNewGroupModal = createSingletonModalType<DragState>(NewGroupModal)
+
+    const onDragStart = async (event: CustomEvent<DragState>) => {
+        console.log('onDragStart', machine.currentState())
+        if (!(machine.currentState() instanceof InsertionState) || (machine.currentState() as InsertionState).insertionKey() !== 'f') {
+            return
+        }
+        const modal = new SingletonNewGroupModal()
+        const lastDragPosition = await modal.promise
         const rxParentGroup = rxCanvas.getRxNodeFromCanvasNode(lastDragPosition.mouseDownEvent.target as HTMLElement) as RxGroup
         const rxGroup = new RxGroup({
             id: 'group',
@@ -278,38 +343,64 @@ export function Canvas({data, rxCanvas, lastWheelEvent}: {data: PageNode[], rxCa
         rxParentGroup.children.push(rxGroup)
         rxGroup.select()
         rxCanvas.scrollIntoNavigatorView(rxGroup)
+        machine.receive(createTransitionEvent('exit'))
     }
 
-    const rxDragPosition = new RxDOMDragState(dragPosition, {onDragEnd})
-
-    const newGroupRectStyle = computed<any>(({lastValue}) => {
-        if (!dragPosition()) {
-            return {
-                display: 'none',
-            }
-        }
-        return {
-            position: 'absolute',
-            left: dragPosition()?.startX,
-            top: dragPosition()?.startY,
-            width: dragPosition()?.clientX! - containerRect().left - dragPosition()?.startX!,
-            height: dragPosition()?.clientY! - containerRect().top - dragPosition()?.startY!,
-            border: '1px solid #9847ff',
-            background: 'rgba(85, 72, 206, 0.5)',
-        }
-    })
+    const dragPosition = atom<DragState|null>(null)
+    const rxDragState = new RxDOMDragState(dragPosition)
+    rxDragState.addEventListener('dragstart', onDragStart)
 
 
-    
+    const editingModes = (new RxList<string>(['f', 't', 'i'])).createSelection(insertionState.insertionKey)
+
+
     return (
-        <div id={'canvas'} ref={[canvasRef, containerRef, rxDragPosition.ref]} onclick={onClickCanvas} style={[canvasStyle, resetCanvasStyle]}>
-            {rxCanvas.childrenWithSelection.map(([rxPage, selected]) => (
-                <div style={{height:2000, width:1400}}>
-                    {renderNode(rxPage, selected, createElement)}
-                </div>
-            ))}
-            <div style={selectedRectStyle}></div>
-            <div style={newGroupRectStyle}></div>
+        <div>
+            <div id={'canvas'} ref={[canvasRef, containerRef, rxDragState.ref]} onclick={onClickCanvas} style={[canvasStyle, resetCanvasStyle]}>
+                {rxCanvas.childrenWithSelection.map(([rxPage, selected]) => (
+                    <div style={{height:2000, width:1400}}>
+                        {renderNode(rxPage, selected, createElement)}
+                    </div>
+                ))}
+                <div style={selectedRectStyle}></div>
+            {() => SingletonNewGroupModal.instance()?.render({rxDragState, containerRect})}
+                {/* <div style={newGroupRectStyle}></div> */}
+            </div>
+            <div style={{display:'flex', gap: 10, position:'fixed', bottom: 10, left: '50vw'}}>
+                {editingModes.map(([mode, selected]) => (
+                    <div style={() => ({backgroundColor: selected() ? '#9847ff' : 'black', color: 'white', padding: 10, borderRadius: 10})}>{mode}</div>
+                ))}
+            </div>
         </div>
+        
     )
 }
+
+
+function guardInsertionKey(next: MiddlewareNext, e: TransitionEvent) {
+    const event = e as unknown as KeyboardEvent
+    console.log('guardInsertionKey', event.key)
+    next(event.key.toLowerCase() === 'f' || event.key.toLowerCase() === 't' || event.key.toLowerCase() === 'i')
+}
+
+function guardExitKey(next: MiddlewareNext, e: TransitionEvent) {
+    const event = e as unknown as KeyboardEvent
+    next(event.key.toLocaleLowerCase() === 'escape')
+}
+
+
+class InsertionState extends State {
+    insertionKey = atom<'f'|'t'|'i'|null>(null)
+    enter = (prevState: State | null, event: TransitionEvent) => {
+        console.log('enter', event)
+        this.insertionKey((event as unknown as KeyboardEvent).key.toLowerCase())
+    }
+    leave = (event: TransitionEvent) => {
+        console.log('leave', event)
+        this.insertionKey(null)
+    }
+}
+
+class InitialState extends State {
+}
+
