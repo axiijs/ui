@@ -4,7 +4,7 @@ import { RxVariable, VariableType, VariableValueType } from "./RxVariable";
 import { Draft } from "./lib/Draft";
 import { Select} from './lib/Select'
 import { SizeInput } from "./lib/SizeInput";
-import { UnitType } from "../data/types";
+import { GradientValue, UnitType } from "../data/types";
 import { Checkbox } from "./lib/Checkbox";
 import { ColorInput } from "./lib/ColorInput";
 import { GradientEditor } from "./lib/GradientEditor";
@@ -98,6 +98,8 @@ export function VariableEditor({rxCanvas, rxVariable}: VariableEditorProps, {cre
                                     return <Checkbox value={variable.value} $root:onClick={() => variable.value(!variable.value())}/>
                                 } else if(variable.type.raw === 'color') {
                                     return <ColorInput value={variable.value as Atom<string>} />
+                                } else if(variable.type.raw === 'gradient') {
+                                    return <GradientEditor value={variable.value as Atom<GradientValue>} />
                                 }
                             }}
                             </td>
@@ -107,6 +109,5 @@ export function VariableEditor({rxCanvas, rxVariable}: VariableEditorProps, {cre
                 })}
             </tbody>
         </table>
-        <GradientEditor value={atom('linear-gradient(to right, #000000, #ffffff)') as Atom<string>}/>
     </div>
 }

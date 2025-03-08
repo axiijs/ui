@@ -1,5 +1,5 @@
 import { atom, Atom, AutoCleanup, autorun, computed, destroyComputed, RxList, RxMap } from "axii"
-import { SizeValue } from "../data/types"
+import { SizeValue, GradientValue } from "../data/types"
 
 export type VariableType = 'number' | 'size' | 'boolean' | 'string' | 'color' | 'gradient' | 'image'
 
@@ -9,7 +9,7 @@ export type VariableValueType<T extends VariableType> =
     T extends 'boolean' ? boolean :
     T extends 'string' | 'color' ? string :
     T extends 'size' ? SizeValue :
-    T extends 'gradient' ? string :
+    T extends 'gradient' ? GradientValue :
     T extends 'image' ? string :
     never;
 
