@@ -1,7 +1,7 @@
 import {atom, Atom, autorun, computed, DragState, JSXElement, onKey, RenderContext, RxDOMDragState, RxDOMEventListener, RxList} from "axii";
 import {LayoutType, NodeType, PageNode, UnitType} from "../data/types";
 import { RxCanvas, RxCollection, RxGroup, RxIconNode, RxNodeType, RxPage, RxTextNode } from "./RxPage";
-import { throttleTimeout } from "./util";
+import { nextTick, throttleTimeout } from "./util";
 import { createTransitionEvent, Machine, MiddlewareNext, State, TransitionEvent } from "statemachine0";
 import { createSingletonModalType, ModalProps } from "./lib/modal";
 
@@ -74,7 +74,7 @@ function toBoxStyle(node: RxPage|RxGroup|RxTextNode|RxIconNode) {
         ...Object.fromEntries(Object.entries(node.box||{}).map(([key, value]) => {
             return [
                 key, 
-                value.variable() ? node.root!.rxVariable.get(value.variable()!)?.() : value.value()
+                value.variable.source() ? value.variable.source().value() : value.value()
             ]
         })),
     }
@@ -150,8 +150,26 @@ function NewGroupModal({resolve, reject, containerRect, rxDragState}: NewGroupMo
     return <div style={newGroupRectStyle}></div>
 }
 
+type NewTextModalProps = ModalProps & { position: {left: number, top: number, position: string}}
 
-export function Canvas({data, rxCanvas, lastWheelEvent}: {data: PageNode[], rxCanvas: RxCanvas, lastWheelEvent: Atom<WheelEvent|null>}, {createElement, createRef, Fragment}: RenderContext)  {
+function NewTextModal({resolve, reject}: NewTextModalProps, {createElement, useLayoutEffect}: RenderContext){
+    const style = {
+        background: 'transparent',
+        color: 'black',
+        border: '1px solid #9847ff',
+        borderRadius: 0,
+        padding: 0,
+        outline: 'none',
+        minWidth: 50,
+        fieldSizing: 'content',
+    }
+
+    console.log('NewTextModal', style)
+    return <input as="root" type="text" style={style} onFocusout={(e: any) => resolve(e.target.value)}/>
+}
+
+
+export function Canvas({data, rxCanvas, lastWheelEvent}: {data: PageNode[], rxCanvas: RxCanvas, lastWheelEvent: Atom<WheelEvent|null>}, {createElement, createRef, useLayoutEffect}: RenderContext)  {
     // TODO 显示的时候获取一次
     const containerRef = createRef()
     let lastContainerRect:any
@@ -207,22 +225,7 @@ export function Canvas({data, rxCanvas, lastWheelEvent}: {data: PageNode[], rxCa
 
     const canvasRef = createRef()
 
-    const onClickCanvas = (event: MouseEvent) => {
-        const rxNodePath: (RxPage|RxGroup|RxTextNode|RxIconNode)[] = []
-        let current = event.target
-        while (current && current !== canvasRef.current) {
-            const rxNode = rxCanvas.getRxNodeFromCanvasNode(current as HTMLElement)
-            if (rxNode) {
-                rxNodePath.push(rxNode)
-            }
-            current = (current as HTMLElement).parentElement
-        }
-        rxNodePath.reverse()
-
-        const selectedNode = rxCanvas.selectFirstInPath(rxNodePath)
-
-        rxCanvas.scrollIntoNavigatorView(selectedNode)
-    }
+    
 
     const leafSelectedNode = computed<RxNodeType|null>(({lastValue}) => {
         let current:any = rxCanvas
@@ -239,14 +242,23 @@ export function Canvas({data, rxCanvas, lastWheelEvent}: {data: PageNode[], rxCa
             return null
         } else {
             // 监听 box
-            Object.values(node!.box).forEach((value) => value.value() && value.variable())
+            Object.values(node!.box).forEach((value) => {
+                value.value();
+                value.variable.source()?.value()
+            })
             // 监听 layout
             if(node instanceof RxCollection) {
-                Object.values(node!.layout).forEach((value) => value.value() && value.variable())
+                Object.values(node!.layout).forEach((value) => {
+                    value.value();
+                    value.variable.source()?.value()
+                })
             }
             // 监听 font
             if(node instanceof RxTextNode) {
-                Object.values(node!.font).forEach((value) => value.value() && value.variable())
+                Object.values(node!.font).forEach((value) => {
+                    value.value();
+                    value.variable.source()?.value()
+                })
             }
         }
 
@@ -256,7 +268,7 @@ export function Canvas({data, rxCanvas, lastWheelEvent}: {data: PageNode[], rxCa
         return domNode?.getBoundingClientRect()
     }, undefined, throttleTimeout((recompute: () => void) => {
         recompute()
-    }, 100))
+    }, 200))
 
     const selectedRectStyle = computed<any>(({}) => {
         const canvasCurrentRect = canvasRef.current?.getBoundingClientRect()
@@ -288,6 +300,7 @@ export function Canvas({data, rxCanvas, lastWheelEvent}: {data: PageNode[], rxCa
         {name:'toInsertion', from: 'initial', to: 'insertion', event: 'keydown', middlewares: [guardInsertionKey]},
         {name:'toInitial', from: 'insertion', to: 'initial', event: 'keydown', middlewares: [guardExitKey]},
         {name:'exit', from: 'insertion', to: 'initial', event: 'exit'},
+        // {name:'focusout', from: 'insertion', to: 'initial', event: 'focusout'},
     ]
 
 
@@ -303,9 +316,9 @@ export function Canvas({data, rxCanvas, lastWheelEvent}: {data: PageNode[], rxCa
    })
     
 
-   new RxDOMEventListener(document, 'keydown', (event: CustomEvent<KeyboardEvent>) => {
+    new RxDOMEventListener(document, 'keydown', (event: CustomEvent<KeyboardEvent>) => {
         machine.receive(event)
-   })
+    })
 
 
     const SingletonNewGroupModal = createSingletonModalType<DragState>(NewGroupModal)
@@ -315,7 +328,8 @@ export function Canvas({data, rxCanvas, lastWheelEvent}: {data: PageNode[], rxCa
         if (!(machine.currentState() instanceof InsertionState) || (machine.currentState() as InsertionState).insertionKey() !== 'f') {
             return
         }
-        const modal = new SingletonNewGroupModal()
+        canvasRef.current!.focus()
+        const modal = new SingletonNewGroupModal({rxDragState, containerRect})
         const lastDragPosition = await modal.promise
         const rxParentGroup = rxCanvas.getRxNodeFromCanvasNode(lastDragPosition.mouseDownEvent.target as HTMLElement) as RxGroup
         const rxGroup = new RxGroup({
@@ -354,17 +368,83 @@ export function Canvas({data, rxCanvas, lastWheelEvent}: {data: PageNode[], rxCa
     const editingModes = (new RxList<string>(['f', 't', 'i'])).createSelection(insertionState.insertionKey)
 
 
+    const SingletonNewTextModal = createSingletonModalType<string>(NewTextModal)
+    const textInputRef = createRef()
+    
+
+    const onClickCanvas = async (event: MouseEvent) => {
+        console.log('onClickCanvas', machine.currentState())
+        if (machine.currentState() instanceof InsertionState) {
+            if((machine.currentState() as InsertionState).insertionKey() === 't') {
+                canvasRef.current!.focus()
+
+                const position = {
+                    position: 'absolute',
+                    left: event.clientX - containerRect().left,
+                    top: event.clientY - containerRect().top,
+                }
+
+                const modal = new SingletonNewTextModal({'$root:ref': textInputRef, '$root:style': position})
+                await nextTick(()=>{})
+                textInputRef.current!.focus()
+                const lastText = await modal.promise
+                console.log('lastText', lastText)
+                const rxParentGroup = rxCanvas.getRxNodeFromCanvasNode(event.target as HTMLElement) as RxGroup
+                const rxText = new RxTextNode({
+                    id: 'text',
+                    name: 'newText',
+                    type: NodeType.TEXT,
+                    content: {
+                        value: lastText,
+                    }
+                }, rxParentGroup, rxCanvas)
+                rxParentGroup.children.push(rxText)
+                rxText.select()
+                rxCanvas.scrollIntoNavigatorView(rxText)
+                machine.receive(createTransitionEvent('exit'))
+            } else if((machine.currentState() as InsertionState).insertionKey() === 'i') {
+                canvasRef.current!.focus()
+                console.log('i')
+            }
+
+        } else {
+            const rxNodePath: (RxPage|RxGroup|RxTextNode|RxIconNode)[] = []
+            let current = event.target
+            while (current && current !== canvasRef.current) {
+                const rxNode = rxCanvas.getRxNodeFromCanvasNode(current as HTMLElement)
+                if (rxNode) {
+                    rxNodePath.push(rxNode)
+                }
+                current = (current as HTMLElement).parentElement
+            }
+            rxNodePath.reverse()
+    
+            const selectedNode = rxCanvas.selectFirstInPath(rxNodePath)
+    
+            rxCanvas.scrollIntoNavigatorView(selectedNode)
+        }
+    }
+
+
+    useLayoutEffect(() => {
+        const firstPage = rxCanvas.childrenWithSelection.raw[0][0]
+        rxCanvas.selectedNode(firstPage);
+        firstPage.selectedNode(firstPage.childrenWithSelection.raw[0][0])
+    })
+    
+   
+
     return (
         <div>
-            <div id={'canvas'} ref={[canvasRef, containerRef, rxDragState.ref]} onclick={onClickCanvas} style={[canvasStyle, resetCanvasStyle]}>
+            <div tabindex="0" onFocusout={machine.receive} id={'canvas'} ref={[canvasRef, containerRef, rxDragState.ref]} onclick={onClickCanvas} style={[canvasStyle, resetCanvasStyle]}>
                 {rxCanvas.childrenWithSelection.map(([rxPage, selected]) => (
                     <div style={{height:2000, width:1400}}>
                         {renderNode(rxPage, selected, createElement)}
                     </div>
                 ))}
                 <div style={selectedRectStyle}></div>
-            {() => SingletonNewGroupModal.instance()?.render({rxDragState, containerRect})}
-                {/* <div style={newGroupRectStyle}></div> */}
+            {() => SingletonNewGroupModal.instance()?.render()}
+            {() => SingletonNewTextModal.instance()?.render()}
             </div>
             <div style={{display:'flex', gap: 10, position:'fixed', bottom: 10, left: '50vw'}}>
                 {editingModes.map(([mode, selected]) => (

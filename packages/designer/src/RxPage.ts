@@ -1,11 +1,11 @@
-import { Atom, atom, JSXElement, RxList } from "axii";
+import { Atom, atom, computed, destroyComputed, JSXElement, RxList, RxMap } from "axii";
 import { AlignType, BoxInfo, FillInfo, FontInfo, GroupNode, IconNode, LayoutInfo, LayoutType, Node, NodeType, PageNode, TextLayoutInfo, TextNode, UnitType, VariableValue } from "../data/types";
-import { RxVariable } from "./RxVariable";
+import { RxVariable, RxVariableRef, VariableType } from "./RxVariable";
 
 // 支持变量的 Atom 值类型
 export interface AtomVariableValue<T> {
   value: Atom<T | null>;
-  variable: Atom<string | undefined>;
+  variable: RxVariableRef<VariableType>;
 }
 
 // 将 VariableValue<T> 类型转换为 AtomVariableValue<T> 类型的泛型工具类型
@@ -76,56 +76,62 @@ export abstract class RxNode {
         this.box = {
             width: {
                 value: atom(data.box?.width?.value || null),
-                variable: atom(data.box?.width?.variable)
+                variable: new RxVariableRef(this.root.rxVariable, data.box?.width?.variable || '')
             },
             height: {
                 value: atom(data?.box?.height?.value || null),
-                variable: atom(data?.box?.height?.variable)
+                variable: new RxVariableRef(this.root.rxVariable, data?.box?.height?.variable || '')
             },
             minWidth: {
                 value: atom(data?.box?.minWidth?.value || null),
-                variable: atom(data?.box?.minWidth?.variable)
+                variable: new RxVariableRef(this.root.rxVariable, data?.box?.minWidth?.variable || '')
             },
             maxWidth: {
                 value: atom(data?.box?.maxWidth?.value || null),
-                variable: atom(data?.box?.maxWidth?.variable)
+                variable: new RxVariableRef(this.root.rxVariable, data?.box?.maxWidth?.variable || '')
             },
             minHeight: {
                 value: atom(data?.box?.minHeight?.value || null),
-                variable: atom(data?.box?.minHeight?.variable)
+                variable: new RxVariableRef(this.root.rxVariable, data?.box?.minHeight?.variable || '')
             },
             maxHeight: {
                 value: atom(data?.box?.maxHeight?.value || null),
-                variable: atom(data?.box?.maxHeight?.variable)
+                variable: new RxVariableRef(this.root.rxVariable, data?.box?.maxHeight?.variable || '')
             },
             padding: {
                 value: atom(data?.box?.padding?.value || null),
-                variable: atom(data?.box?.padding?.variable)
+                variable: new RxVariableRef(this.root.rxVariable, data?.box?.padding?.variable || '')
             },
             margin: {
                 value: atom(data?.box?.margin?.value || null),
-                variable: atom(data?.box?.margin?.variable)
+                variable: new RxVariableRef(this.root.rxVariable, data?.box?.margin?.variable || '')
             },
             overflow: {
                 value: atom(data?.box?.overflow?.value || null),
-                variable: atom(data?.box?.overflow?.variable)
+                variable: new RxVariableRef(this.root.rxVariable, data?.box?.overflow?.variable || '')
             },
             flexGrow: {
                 value: atom(data?.box?.flexGrow?.value || null),
-                variable: atom(data?.box?.flexGrow?.variable)
+                variable: new RxVariableRef(this.root.rxVariable, data?.box?.flexGrow?.variable || '')
             },
             flexShrink: {
                 value: atom(data?.box?.flexShrink?.value || null),
-                variable: atom(data?.box?.flexShrink?.variable)
+                variable: new RxVariableRef(this.root.rxVariable, data?.box?.flexShrink?.variable || '')
             },
             flexBasis: {
                 value: atom(data?.box?.flexBasis?.value || null),
-                variable: atom(data?.box?.flexBasis?.variable)
+                variable: new RxVariableRef(this.root.rxVariable, data?.box?.flexBasis?.variable || '')
             }
         };
     }
     select() {
         this.root!.selectNode(this)
+    }
+    destroy() {
+        Object.values(this.box).forEach(value => {
+            destroyComputed(value.value);
+            value.variable.destroy();
+        });
     }
 }
 
@@ -144,39 +150,39 @@ export abstract class RxCollection<T, C extends RxNode> extends RxNode {
         this.layout = {
             type: {
                 value: atom(data?.layout?.type?.value || LayoutType.COLUMN),
-                variable: atom(data?.layout?.type?.variable)
+                variable: new RxVariableRef(this.root.rxVariable, data?.layout?.type?.variable || '')
             },
             rowGap: {
                 value: atom(data?.layout?.rowGap?.value || null),
-                variable: atom(data?.layout?.rowGap?.variable)
+                variable: new RxVariableRef(this.root.rxVariable, data?.layout?.rowGap?.variable || '')
             },
             columnGap: {
                 value: atom(data?.layout?.columnGap?.value || null),
-                variable: atom(data?.layout?.columnGap?.variable)
+                variable: new RxVariableRef(this.root.rxVariable, data?.layout?.columnGap?.variable || '')
             },
             justifyContent: {
                 value: atom(data?.layout?.justifyContent?.value || null),
-                variable: atom(data?.layout?.justifyContent?.variable)
+                variable: new RxVariableRef(this.root.rxVariable, data?.layout?.justifyContent?.variable || '')
             },
             alignItems: {
                 value: atom(data?.layout?.alignItems?.value || null),
-                variable: atom(data?.layout?.alignItems?.variable)
+                variable: new RxVariableRef(this.root.rxVariable, data?.layout?.alignItems?.variable || '')
             },
             flexWrap: {
                 value: atom(data?.layout?.flexWrap?.value || null),
-                variable: atom(data?.layout?.flexWrap?.variable)
+                variable: new RxVariableRef(this.root.rxVariable, data?.layout?.flexWrap?.variable || '')
             },
             gridTemplateColumns: {
                 value: atom(data?.layout?.gridTemplateColumns?.value || null),
-                variable: atom(data?.layout?.gridTemplateColumns?.variable)
+                variable: new RxVariableRef(this.root.rxVariable, data?.layout?.gridTemplateColumns?.variable || '')
             },
             gridTemplateRows: {
                 value: atom(data?.layout?.gridTemplateRows?.value || null),
-                variable: atom(data?.layout?.gridTemplateRows?.variable)
+                variable: new RxVariableRef(this.root.rxVariable, data?.layout?.gridTemplateRows?.variable || '')
             },
             gridAutoFlow: {
                 value: atom(data?.layout?.gridAutoFlow?.value || null),
-                variable: atom(data?.layout?.gridAutoFlow?.variable)
+                variable: new RxVariableRef(this.root.rxVariable, data?.layout?.gridAutoFlow?.variable || '')
             }
         };
         
@@ -199,6 +205,13 @@ export abstract class RxCollection<T, C extends RxNode> extends RxNode {
         this.selectedNode(child);
         this.folded(false);
     }
+    destroy() {
+        super.destroy();
+        Object.values(this.layout).forEach(value => {
+            destroyComputed(value.value);
+            value.variable.destroy();
+        });
+    }
 }
 
 export class RxTextNode extends RxNode {
@@ -212,96 +225,107 @@ export class RxTextNode extends RxNode {
         // 初始化 content 属性，将 data.content 转换为 AtomVariableValue
         this.content = {
             value: atom(data?.content?.value || null),
-            variable: atom(data?.content?.variable)
+            variable: new RxVariableRef(this.root.rxVariable, data?.content?.variable || '')
         };
         
         // 初始化 font 属性，将 data.font 中的值转换为 AtomVariableValue
         this.font = {
             fontSize: {
                 value: atom(data?.font?.fontSize?.value || null),
-                variable: atom(data?.font?.fontSize?.variable)
+                variable: new RxVariableRef(this.root.rxVariable, data?.font?.fontSize?.variable || '')
             },
             fontFamily: {
                 value: atom(data?.font?.fontFamily?.value || null),
-                variable: atom(data?.font?.fontFamily?.variable)
+                variable: new RxVariableRef(this.root.rxVariable, data?.font?.fontFamily?.variable || '')
             },
             fontWeight: {
                 value: atom(data?.font?.fontWeight?.value || null),
-                variable: atom(data?.font?.fontWeight?.variable)
+                variable: new RxVariableRef(this.root.rxVariable, data?.font?.fontWeight?.variable || '')
             },
             fontStyle: {
                 value: atom(data?.font?.fontStyle?.value || null),
-                variable: atom(data?.font?.fontStyle?.variable)
+                variable: new RxVariableRef(this.root.rxVariable, data?.font?.fontStyle?.variable || '')
             },
             textDecoration: {
                 value: atom(data?.font?.textDecoration?.value || null),
-                variable: atom(data?.font?.textDecoration?.variable)
+                variable: new RxVariableRef(this.root.rxVariable, data?.font?.textDecoration?.variable || '')
             },
             textAlign: {
                 value: atom(data?.font?.textAlign?.value || null),
-                variable: atom(data?.font?.textAlign?.variable)
+                variable: new RxVariableRef(this.root.rxVariable, data?.font?.textAlign?.variable || '')
             },
             color: {
                 value: atom(data?.font?.color?.value || null),
-                variable: atom(data?.font?.color?.variable)
+                variable: new RxVariableRef(this.root.rxVariable, data?.font?.color?.variable || '')
             },
             lineHeight: {
                 value: atom(data?.font?.lineHeight?.value || null),
-                variable: atom(data?.font?.lineHeight?.variable)
+                variable: new RxVariableRef(this.root.rxVariable, data?.font?.lineHeight?.variable || '')
             },
             letterSpacing: {
                 value: atom(data?.font?.letterSpacing?.value || null),
-                variable: atom(data?.font?.letterSpacing?.variable)
+                variable: new RxVariableRef(this.root.rxVariable, data?.font?.letterSpacing?.variable || '')
             },
             wordSpacing: {
                 value: atom(data?.font?.wordSpacing?.value || null),
-                variable: atom(data?.font?.wordSpacing?.variable)
+                variable: new RxVariableRef(this.root.rxVariable, data?.font?.wordSpacing?.variable || '')
             },
             textTransform: {
                 value: atom(data?.font?.textTransform?.value || null),
-                variable: atom(data?.font?.textTransform?.variable)
+                variable: new RxVariableRef(this.root.rxVariable, data?.font?.textTransform?.variable || '')
             },
             fontVariant: {
                 value: atom(data?.font?.fontVariant?.value || null),
-                variable: atom(data?.font?.fontVariant?.variable)
+                variable: new RxVariableRef(this.root.rxVariable, data?.font?.fontVariant?.variable || '')
             },
             fontStretch: {
                 value: atom(data?.font?.fontStretch?.value || null),
-                variable: atom(data?.font?.fontStretch?.variable)
+                variable: new RxVariableRef(this.root.rxVariable, data?.font?.fontStretch?.variable || '')
             }
         };
         
-        // 初始化 textLayout 属性，将 data.textLayout 中的值转换为 AtomVariableValue
+        // 初始化 textLayout 属性
         this.textLayout = {
             whiteSpace: {
                 value: atom(data?.textLayout?.whiteSpace?.value || null),
-                variable: atom(data?.textLayout?.whiteSpace?.variable)
+                variable: new RxVariableRef(this.root.rxVariable, data?.textLayout?.whiteSpace?.variable || '')
             },
             textOverflow: {
                 value: atom(data?.textLayout?.textOverflow?.value || null),
-                variable: atom(data?.textLayout?.textOverflow?.variable)
+                variable: new RxVariableRef(this.root.rxVariable, data?.textLayout?.textOverflow?.variable || '')
             },
             wordBreak: {
                 value: atom(data?.textLayout?.wordBreak?.value || null),
-                variable: atom(data?.textLayout?.wordBreak?.variable)
+                variable: new RxVariableRef(this.root.rxVariable, data?.textLayout?.wordBreak?.variable || '')
             },
             overflowWrap: {
                 value: atom(data?.textLayout?.overflowWrap?.value || null),
-                variable: atom(data?.textLayout?.overflowWrap?.variable)
+                variable: new RxVariableRef(this.root.rxVariable, data?.textLayout?.overflowWrap?.variable || '')
             },
             hyphens: {
                 value: atom(data?.textLayout?.hyphens?.value || null),
-                variable: atom(data?.textLayout?.hyphens?.variable)
+                variable: new RxVariableRef(this.root.rxVariable, data?.textLayout?.hyphens?.variable || '')
             },
             direction: {
                 value: atom(data?.textLayout?.direction?.value || null),
-                variable: atom(data?.textLayout?.direction?.variable)
+                variable: new RxVariableRef(this.root.rxVariable, data?.textLayout?.direction?.variable || '')
             },
             textIndent: {
                 value: atom(data?.textLayout?.textIndent?.value || null),
-                variable: atom(data?.textLayout?.textIndent?.variable)
+                variable: new RxVariableRef(this.root.rxVariable, data?.textLayout?.textIndent?.variable || '')
             }
         };
+    }
+    destroy() {
+        super.destroy();
+        Object.values(this.font).forEach(value => {
+            destroyComputed(value.value);
+            value.variable.destroy();
+        });
+        Object.values(this.textLayout).forEach(value => {
+            destroyComputed(value.value);
+            value.variable.destroy();
+        });
     }
 }
 
@@ -315,13 +339,24 @@ export class RxIconNode extends RxNode {
         // 初始化 size 和 color 属性，将 data 中的值转换为 AtomVariableValue
         this.size = {
             value: atom(data?.size?.value || null),
-            variable: atom(data?.size?.variable)
+            variable: new RxVariableRef(this.root.rxVariable, data?.size?.variable || '')
         };
         
         this.color = {
             value: atom(data?.color?.value || null),
-            variable: atom(data?.color?.variable)
+            variable: new RxVariableRef(this.root.rxVariable, data?.color?.variable || '')
         };
+    }
+    destroy() {
+        super.destroy();
+        Object.values(this.size).forEach(value => {
+            destroyComputed(value.value);
+            value.variable.destroy();
+        });
+        Object.values(this.color).forEach(value => {
+            destroyComputed(value.value);
+            value.variable.destroy();
+        });
     }
 }
 
@@ -334,6 +369,9 @@ export class RxGroup extends RxCollection<GroupNode, RxTextNode | RxIconNode | R
             new RxIconNode(item as IconNode, this, root))
         ))
         this.childrenWithSelection = this.children.createSelection(this.selectedNode);
+    }
+    destroy() {
+        super.destroy();
     }
 }
 
@@ -349,6 +387,9 @@ export class RxPage extends RxCollection<PageNode, RxTextNode | RxIconNode | RxG
         )))
         this.childrenWithSelection = this.children.createSelection(this.selectedNode);
     }
+    destroy() {
+        super.destroy();
+    }
 }
 
 // 定义 RxNodeType 类型，包含所有节点类型
@@ -363,10 +404,19 @@ export class RxCanvas {
     public children: RxList<RxPage>;
     public childrenWithSelection: RxList<[RxPage, Atom<boolean>]>;
     public selectedNode = atom<RxPage | null>(null);
-    constructor(public data: PageNode[], public rxVariable: RxVariable) {
+    public leafSelectedNode: Atom<RxNodeType|null>
+    constructor(public data: PageNode[], public rxVariable: RxVariable<VariableType>) {
 
         this.children = (new RxList(data.map(item => new RxPage(item, this))));
         this.childrenWithSelection = this.children.createSelection(this.selectedNode);
+        this.leafSelectedNode = computed<RxNodeType|null>(({}) => {
+            let current:any = this
+            // 遍历选中节点链，直到找到叶子节点
+            while(current && current.selectedNode && current.selectedNode()) {
+                current = current.selectedNode()
+            }
+            return current === this ? null : current
+        })
     }
     
     saveCanvasNode(canvasNode: HTMLElement, rxNode: RxNodeType) {

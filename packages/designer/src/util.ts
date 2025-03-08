@@ -110,7 +110,10 @@ export function scheduleNextTick<T>(callback: (...args: any[]) => T) {
 }
 
 export function nextTick<T>(callback: (...args: any[]) => T) {
-  setTimeout(() => {
-    callback()
-  }, 0)
+  return new Promise((resolve) => {
+    setTimeout(() => {
+      callback()
+      resolve(true)
+    }, 0)
+  })
 }

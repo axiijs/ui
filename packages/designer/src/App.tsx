@@ -7,6 +7,8 @@ import { throttleTimeout } from "./util";
 import { Canvas } from "./Canvas";
 import { RxVariable, VariableData } from "./RxVariable";
 import { Machine } from "statemachine0";
+import { Router } from "router0";
+import { VariableEditor } from "./VariableEditor";
 
 
 
@@ -52,33 +54,25 @@ export function App({data, vars}: {data: PageNode[], vars: VariableData<any>[]},
     const rxVariable = new RxVariable(vars)
     const rxCanvas = new RxCanvas(data, rxVariable)
 
-
-    const leafSelectedNode = computed<RxNodeType|null>(({lastValue}) => {
-        let current:any = rxCanvas
-        // 遍历选中节点链，直到找到叶子节点
-        while(current && current.selectedNode && current.selectedNode()) {
-            current = current.selectedNode()
-        }
-        return current === rxCanvas ? null : current
-    })
-
-    
-
-    useLayoutEffect(() => {
-        const firstPage = rxCanvas.childrenWithSelection.raw[0][0]
-        rxCanvas.selectedNode(firstPage);
-        firstPage.selectedNode(firstPage.childrenWithSelection.raw[0][0])
-    })
-    
-   
-    
-
+    const router = new Router([{
+        path: '/',
+        redirect: '/canvas',
+    }, {
+        path: '/canvas',
+        handler: () => <Canvas data={data} rxCanvas={rxCanvas} lastWheelEvent={lastWheelEvent}/>
+    }, {
+        path: '/variable',
+        handler: () => <VariableEditor rxCanvas={rxCanvas} rxVariable={rxVariable}/>
+    }])
     
     return (
         <div style={containerStyle} onWheelCapture={onZoom} >
-            <Canvas data={data} rxCanvas={rxCanvas} lastWheelEvent={lastWheelEvent}/>
-            <LeftPanel canvas={rxCanvas} $root:style={{position:'absolute', left:0, top:0}}/>
-            <RightPanel canvas={rxCanvas} selectedNode={leafSelectedNode} $root:style={{position:'absolute', right:0, top:0}}/>
+            {() => {
+                const handler = router.handler()
+                return handler ? handler() : null
+            }}
+            <LeftPanel canvas={rxCanvas} router={router} $root:style={{position:'absolute', left:0, top:0}}/>
+            <RightPanel canvas={rxCanvas} $root:style={{position:'absolute', right:0, top:0}}/>
         </div>
     )
 }

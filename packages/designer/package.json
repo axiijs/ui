@@ -10,11 +10,12 @@
     "vite": "^6.1.1"
   },
   "dependencies": {
-    "axii": "^3.4.2",
+    "axii": "^3.5.0",
     "axii-ui": "^2.1.0",
     "axii-ui-theme-inc": "^4.1.1",
     "lucide": "^0.476.0",
-    "statemachine0": "^2.3.0",
+    "router0": "^2.0.2",
+    "statemachine0": "^2.3.1",
     "vanilla-colorful": "^0.7.2"
   }
 }

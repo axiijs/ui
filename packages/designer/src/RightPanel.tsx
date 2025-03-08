@@ -10,10 +10,10 @@ import { FontInfoEditor } from "./editors/FontInfoEditor";
 
 type RightPanelProps = {
     canvas: RxCanvas
-    selectedNode: Atom<RxNodeType|null>
 }
 
-export function RightPanel({canvas, selectedNode}: RightPanelProps, {createElement}: RenderContext) {
+export function RightPanel({canvas}: RightPanelProps, {createElement}: RenderContext) {
+    const selectedNode = canvas.leafSelectedNode
     const containerStyle = {
         width: '320px',
         height: '100%',

@@ -1,9 +1,9 @@
 
 import { atom, RenderContext } from 'axii';
-import { ColorPicker } from '../lib/ColorPicker';
+import { ColorInput } from '../lib/ColorInput';
 
 export function FillEditor({node}: {node: Node}, {createElement}: RenderContext) {
     return <div>
-        <ColorPicker value={atom('')} />
+        <ColorInput value={atom('')} />
     </div>
 }
