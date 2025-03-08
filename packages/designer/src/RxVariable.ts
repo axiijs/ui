@@ -1,14 +1,16 @@
 import { atom, Atom, AutoCleanup, autorun, computed, destroyComputed, RxList, RxMap } from "axii"
-import { UnitType } from "../data/types"
+import { SizeValue } from "../data/types"
 
-export type VariableType = 'number' | 'size' | 'boolean' | 'string' | 'color'
+export type VariableType = 'number' | 'size' | 'boolean' | 'string' | 'color' | 'gradient' | 'image'
 
 // Define a type that maps VariableType to its corresponding value type
 export type VariableValueType<T extends VariableType> = 
     T extends 'number' ? number :
     T extends 'boolean' ? boolean :
     T extends 'string' | 'color' ? string :
-    T extends 'size' ? [number, UnitType] :
+    T extends 'size' ? SizeValue :
+    T extends 'gradient' ? string :
+    T extends 'image' ? string :
     never;
 
 export type VariableData<T extends VariableType> = {

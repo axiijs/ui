@@ -38,6 +38,17 @@ export enum UnitType {
   PERCENT = "%"
 }
 
+export type SizeValue = [number, UnitType]
+
+export type GradientValue = {
+  type: 'linear'|'radial'|'conic',
+  attributes: {[k:string]: any},
+  stops: {
+    color: string
+    position: number
+  }[]
+}
+
 // 支持变量的值类型
 export interface VariableValue<T> {
   value?: T;
@@ -46,25 +57,25 @@ export interface VariableValue<T> {
 
 // 盒模型信息接口
 export interface BoxInfo {
-  width?: VariableValue<[number, UnitType]>; 
-  height?: VariableValue<[number, UnitType]>;
-  minWidth?: VariableValue<[number, UnitType]>;
-  maxWidth?: VariableValue<[number, UnitType]>;
-  minHeight?: VariableValue<[number, UnitType]>;
-  maxHeight?: VariableValue<[number, UnitType]>;
-  padding?: VariableValue<[[number, UnitType], [number, UnitType], [number, UnitType], [number, UnitType]]>; // [top, right, bottom, left]
-  margin?: VariableValue<[[number, UnitType], [number, UnitType], [number, UnitType], [number, UnitType]]>; // [top, right, bottom, left]
+  width?: VariableValue<SizeValue>; 
+  height?: VariableValue<SizeValue>;
+  minWidth?: VariableValue<SizeValue>;
+  maxWidth?: VariableValue<SizeValue>;
+  minHeight?: VariableValue<SizeValue>;
+  maxHeight?: VariableValue<SizeValue>;
+  padding?: VariableValue<SizeValue[]>; // [top, right, bottom, left]
+  margin?: VariableValue<SizeValue[]>; // [top, right, bottom, left]
   overflow?: VariableValue<'visible' | 'hidden' | 'scroll' | 'auto'>;
   flexGrow?: VariableValue<number>;
   flexShrink?: VariableValue<number>;
-  flexBasis?: VariableValue<[number, UnitType]>;
+  flexBasis?: VariableValue<SizeValue>;
 }
 
 // 布局信息接口
 export interface LayoutInfo {
   type: VariableValue<LayoutType>;
-  rowGap?: VariableValue<[number, UnitType]>;
-  columnGap?: VariableValue<[number, UnitType]>;
+  rowGap?: VariableValue<SizeValue>;
+  columnGap?: VariableValue<SizeValue>;
   justifyContent?: VariableValue<AlignType>;
   alignItems?: VariableValue<AlignType>;
   flexWrap?: VariableValue<'nowrap' | 'wrap' | 'wrap-reverse'>;
@@ -77,14 +88,14 @@ export interface LayoutInfo {
 // 外观信息接口
 export interface AppearanceInfo {
   opacity?: VariableValue<[number, string]>; // 0-1
-  borderRadius?: VariableValue<[number, UnitType]>;
+  borderRadius?: VariableValue<SizeValue>;
   visibility?: VariableValue<'visible' | 'hidden'>;
   zIndex?: VariableValue<[number, string]>;
 }
 
 // 描边信息接口
 export interface StrokeInfo {
-  width: VariableValue<[number, UnitType]>;
+  width: VariableValue<SizeValue>;
   style: VariableValue<'solid' | 'dashed' | 'dotted' | 'double'>;
   color: VariableValue<string>;
 }
@@ -92,35 +103,35 @@ export interface StrokeInfo {
 // 填充信息接口
 export interface FillInfo {
   type: VariableValue<'color' | 'gradient' | 'image'>;
-  value: VariableValue<string>; // 颜色值、渐变值或图片URL
+  value: VariableValue<string|GradientValue>; // 颜色值、渐变值
 }
 
 // 效果信息接口
 export interface EffectInfo {
   type: VariableValue<'shadow' | 'blur'>;
   // 阴影属性
-  offsetX?: VariableValue<[number, UnitType]>;
-  offsetY?: VariableValue<[number, UnitType]>;
-  blur?: VariableValue<[number, UnitType]>;
-  spread?: VariableValue<[number, UnitType]>;
+  offsetX?: VariableValue<SizeValue>;
+  offsetY?: VariableValue<SizeValue>;
+  blur?: VariableValue<SizeValue>;
+  spread?: VariableValue<SizeValue>;
   color?: VariableValue<string>;
   inset?: VariableValue<boolean>;
   // 模糊属性
-  blurAmount?: VariableValue<[number, UnitType]>;
+  blurAmount?: VariableValue<SizeValue>;
 }
 
 // 字体信息接口
 export interface FontInfo {
-  fontSize?: VariableValue<[number, UnitType]>;
+  fontSize?: VariableValue<SizeValue>;
   fontFamily?: VariableValue<string>;
   fontWeight?: VariableValue<number>;
   fontStyle?: VariableValue<'normal' | 'italic'>;
   textDecoration?: VariableValue<'none' | 'underline' | 'line-through'>;
   textAlign?: VariableValue<'left' | 'center' | 'right' | 'justify'>;
   color?: VariableValue<string>;
-  lineHeight?: VariableValue<[number, UnitType]>;
-  letterSpacing?: VariableValue<[number, UnitType]>;
-  wordSpacing?: VariableValue<[number, UnitType]>;
+  lineHeight?: VariableValue<SizeValue>;
+  letterSpacing?: VariableValue<SizeValue>;
+  wordSpacing?: VariableValue<SizeValue>;
   textTransform?: VariableValue<'none' | 'capitalize' | 'uppercase' | 'lowercase'>;
   fontVariant?: VariableValue<'normal' | 'small-caps'>;
   fontStretch?: VariableValue<'normal' | 'condensed' | 'expanded'>;
@@ -134,7 +145,7 @@ export interface TextLayoutInfo {
   overflowWrap?: VariableValue<'normal' | 'break-word'>;
   hyphens?: VariableValue<'none' | 'manual' | 'auto'>;
   direction?: VariableValue<'ltr' | 'rtl'>;
-  textIndent?: VariableValue<[number, UnitType]>;
+  textIndent?: VariableValue<SizeValue>;
 }
 
 // 基础节点接口
@@ -143,8 +154,8 @@ export interface BaseNode {
   type: NodeType;
   name: string;
   position?: {
-    x: [number, UnitType];
-    y: [number, UnitType];
+    x: SizeValue;
+    y: SizeValue;
   };
 }
 
@@ -161,7 +172,7 @@ export interface TextNode extends BaseNode {
 export interface IconNode extends BaseNode {
   type: NodeType.ICON;
   iconName: string;
-  size?: VariableValue<[number, UnitType]>;
+  size?: VariableValue<SizeValue>;
   color?: VariableValue<string>;
   box?: BoxInfo;
 }
