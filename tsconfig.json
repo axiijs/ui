@@ -7,7 +7,7 @@
     "newLine": "LF",
     "useDefineForClassFields": false,
     "module": "esnext",
-    "moduleResolution": "node16",
+    "moduleResolution": "bundler",
     "allowJs": false,
     "strict": true,
     "noUnusedLocals": true,
@@ -30,8 +30,6 @@
     "jsxFragmentFactory": "Fragment"
   },
   "include": [
-    "global.d.ts",
-    "__tests__",
-    "playground"
+    "packages/**/*",
   ]
 }
